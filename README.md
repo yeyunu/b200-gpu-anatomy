@@ -108,6 +108,94 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ![计算受限、内存受限与数据重用](gpu-explainer-06-bounds.png)
 
+## 4. 第二章后半章：网络、机架运营与路线图
+
+[打开 19 节交互式图册](https://yeyunu.github.io/b200-gpu-anatomy/chapter2-visual-atlas.html)
+
+图册按书中的小节顺序拆成三组。每张图都给出一条主线：硬件是什么、数据怎样流动，以及阅读时真正需要记住什么。
+
+### A. 超大规模网络
+
+#### 01. Ultrascale Networking Treating Many GPUs as One
+
+![把 72 个 GPU 组织成一台机架级超级计算机](ch2-01-ultrascale-networking.png)
+
+#### 02. NVLink and NVSwitch
+
+![NVLink 与 NVSwitch 的连接关系](ch2-02-nvlink-nvswitch.png)
+
+#### 03. Multi-GPU Programming
+
+![多 GPU 编程中的地址、同步与硬件路径](ch2-03-multi-gpu-programming.png)
+
+#### 04. In-Network Aggregations with NVIDIA SHARP
+
+![SHARP 在交换网络中完成聚合](ch2-04-nvidia-sharp.png)
+
+#### 05. Multirack and Storage Communication
+
+![多机架、DPU、NIC 与共享存储通信](ch2-05-multirack-storage.png)
+
+#### 06. Preintegrated Rack Appliance
+
+![NVL72 预集成机架的组成与现场接入](ch2-06-preintegrated-rack.png)
+
+#### 07. Co-Packaged Optics: Future of Networking Hardware
+
+![共封装光学缩短交换芯片到光引擎的电路径](ch2-07-co-packaged-optics.png)
+
+### B. 机架运营
+
+#### 08. Compute Density and Power Requirements
+
+![NVL72 的约 130 kW 功耗构成与冗余供电](ch2-08-power-density.png)
+
+#### 09. Liquid Cooling Versus Air Cooling
+
+![冷板、机架水路、CDU 与设施水路组成的液冷闭环](ch2-09-liquid-vs-air-cooling.png)
+
+#### 10. Performance Monitoring and Utilization in Practice
+
+![沿等待链排查 GPU 利用率、网络、温度与功耗](ch2-10-monitoring-utilization.png)
+
+#### 11. Sharing and Scheduling
+
+![SLURM 或 Kubernetes 的 GPU 分配与单卡 MIG 切分](ch2-11-sharing-scheduling.png)
+
+#### 12. ROI of Upgrading Your Hardware
+
+![用总拥有成本而非单卡价格判断硬件升级回报](ch2-12-upgrade-roi.png)
+
+### C. NVIDIA 路线图与本章总结
+
+#### 13. A Glimpse into the Future: NVIDIA's Roadmap
+
+![从 Blackwell 到 Feynman 的书中路线图](ch2-13-nvidia-roadmap.png)
+
+#### 14. Blackwell Ultra and Grace Blackwell Ultra
+
+![B200 与 B300 的书中规格对比](ch2-14-blackwell-ultra.png)
+
+#### 15. Vera Rubin Superchip (2026)
+
+![Vera CPU 与两块 Rubin GPU 的超级芯片构想](ch2-15-vera-rubin.png)
+
+#### 16. Rubin Ultra and Vera Rubin Ultra (2027)
+
+![书中对四 die Rubin Ultra 与更大 NVL 系统的展望](ch2-16-rubin-ultra.png)
+
+#### 17. Feynman GPU (2028) and Doubling Something Every Year
+
+![把 Feynman 的远期趋势与未确认规格分开阅读](ch2-17-feynman.png)
+
+#### 18. Key Takeaways
+
+![第二章的六层系统检查表](ch2-18-key-takeaways.png)
+
+#### 19. Conclusion
+
+![从芯片、超级芯片、机架、基础设施到有效工作的协同设计](ch2-19-conclusion.png)
+
 ## 说明
 
-这些图用于帮助理解硬件组成关系，并非 NVIDIA 官方芯片版图，图中部件的位置和面积不代表真实物理布局。规格数字参考《AI Systems Performance Engineering》第二章，实际产品配置和可用容量可能有所不同。
+这些图用于帮助理解硬件组成关系，并非 NVIDIA 官方芯片版图，图中部件的位置和面积不代表真实物理布局。规格数字参考《AI Systems Performance Engineering》第二章，实际产品配置和可用容量可能有所不同。Vera Rubin、Rubin Ultra 与 Feynman 图中的远期数字按书中措辞标为路线图、预期或推测，不代表已经发布的最终产品规格。

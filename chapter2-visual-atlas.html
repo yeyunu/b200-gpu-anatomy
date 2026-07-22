@@ -1,0 +1,1861 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Chapter2 Visual Atlas</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" title="Chapter2 Visual Atlas" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Chapter2 Visual Atlas&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(--background) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 12.5px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--viz-font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;chapter2-atlas&quot;&gt;
+  &lt;div class=&quot;viz-controls&quot; aria-label=&quot;章节选择&quot;&gt;
+    &lt;label class=&quot;form-label&quot; for=&quot;chapter2-section&quot;&gt;选择小节&lt;/label&gt;
+    &lt;select id=&quot;chapter2-section&quot; class=&quot;form-select&quot;&gt;
+      &lt;optgroup label=&quot;超大规模网络&quot;&gt;
+        &lt;option value=&quot;network-overview&quot;&gt;01 超大规模网络：把许多 GPU 当成一个整体&lt;/option&gt;
+        &lt;option value=&quot;nvlink-nvswitch&quot;&gt;02 NVLink 与 NVSwitch&lt;/option&gt;
+        &lt;option value=&quot;multi-gpu&quot;&gt;03 多 GPU 编程&lt;/option&gt;
+        &lt;option value=&quot;sharp&quot;&gt;04 NVIDIA SHARP 网络内聚合&lt;/option&gt;
+        &lt;option value=&quot;multirack&quot;&gt;05 多机架与存储通信&lt;/option&gt;
+        &lt;option value=&quot;appliance&quot;&gt;06 预集成机架设备&lt;/option&gt;
+        &lt;option value=&quot;cpo&quot;&gt;07 共封装光学：网络硬件的未来&lt;/option&gt;
+      &lt;/optgroup&gt;
+      &lt;optgroup label=&quot;机架运营&quot;&gt;
+        &lt;option value=&quot;power&quot;&gt;08 计算密度与功耗要求&lt;/option&gt;
+        &lt;option value=&quot;cooling&quot;&gt;09 液冷与风冷&lt;/option&gt;
+        &lt;option value=&quot;monitoring&quot;&gt;10 性能监控与利用率实践&lt;/option&gt;
+        &lt;option value=&quot;scheduling&quot;&gt;11 共享与调度&lt;/option&gt;
+        &lt;option value=&quot;roi&quot;&gt;12 硬件升级的投资回报率&lt;/option&gt;
+      &lt;/optgroup&gt;
+      &lt;optgroup label=&quot;路线图与总结&quot;&gt;
+        &lt;option value=&quot;roadmap&quot;&gt;13 NVIDIA 路线图概览&lt;/option&gt;
+        &lt;option value=&quot;b300&quot;&gt;14 Blackwell Ultra 与 Grace Blackwell Ultra&lt;/option&gt;
+        &lt;option value=&quot;vera-rubin&quot;&gt;15 Vera Rubin Superchip（2026）&lt;/option&gt;
+        &lt;option value=&quot;rubin-ultra&quot;&gt;16 Rubin Ultra 与 Vera Rubin Ultra（2027）&lt;/option&gt;
+        &lt;option value=&quot;feynman&quot;&gt;17 Feynman GPU（2028）与“每年翻倍”&lt;/option&gt;
+        &lt;option value=&quot;takeaways&quot;&gt;18 本章关键要点&lt;/option&gt;
+        &lt;option value=&quot;conclusion&quot;&gt;19 结论：从芯片到 AI 工厂的协同设计&lt;/option&gt;
+      &lt;/optgroup&gt;
+    &lt;/select&gt;
+  &lt;/div&gt;
+  &lt;div id=&quot;chapter2-stage&quot;&gt;
+    &lt;svg id=&quot;chapter2-svg&quot; viewBox=&quot;0 0 1200 720&quot; role=&quot;img&quot; aria-labelledby=&quot;chapter2-svg-title chapter2-svg-desc&quot;&gt;&lt;/svg&gt;
+    &lt;div id=&quot;chapter2-detail&quot; class=&quot;text-small&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
+&lt;/div&gt;
+
+&lt;style&gt;
+  #chapter2-atlas {
+    color: var(--foreground);
+    width: 100%;
+  }
+  #chapter2-atlas .viz-controls {
+    margin-bottom: 0.75rem;
+  }
+  #chapter2-atlas .form-select {
+    min-width: min(100%, 34rem);
+  }
+  #chapter2-stage {
+    width: 100%;
+  }
+  #chapter2-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: inherit;
+  }
+  #chapter2-detail {
+    color: var(--muted-foreground);
+    min-height: 1.5rem;
+    padding-top: 0.35rem;
+    text-align: center;
+  }
+  #chapter2-svg .scene-title {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 1.32);
+    font-weight: 500;
+  }
+  #chapter2-svg .scene-kicker,
+  #chapter2-svg .label {
+    fill: var(--muted-foreground);
+    font-size: calc(var(--font-size-base) * 0.82);
+    font-weight: 400;
+  }
+  #chapter2-svg .node-title {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 0.94);
+    font-weight: 500;
+  }
+  #chapter2-svg .body {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 0.79);
+    font-weight: 400;
+  }
+  #chapter2-svg .metric {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 1.08);
+    font-weight: 500;
+  }
+  #chapter2-svg .tiny {
+    fill: var(--muted-foreground);
+    font-size: calc(var(--font-size-base) * 0.68);
+    font-weight: 400;
+  }
+  #chapter2-svg .struct {
+    fill: var(--card);
+    stroke: var(--border);
+    stroke-width: 1.5;
+  }
+  #chapter2-svg .soft {
+    fill: var(--muted);
+    stroke: var(--border);
+    stroke-width: 1.2;
+  }
+  #chapter2-svg .s1 {
+    fill: color-mix(in srgb, var(--viz-series-1) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-1) 72%, var(--border));
+    stroke-width: 1.6;
+  }
+  #chapter2-svg .s2 {
+    fill: color-mix(in srgb, var(--viz-series-2) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-2) 72%, var(--border));
+    stroke-width: 1.6;
+  }
+  #chapter2-svg .s3 {
+    fill: color-mix(in srgb, var(--viz-series-3) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-3) 72%, var(--border));
+    stroke-width: 1.6;
+  }
+  #chapter2-svg .s4 {
+    fill: color-mix(in srgb, var(--viz-series-4) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-4) 72%, var(--border));
+    stroke-width: 1.6;
+  }
+  #chapter2-svg .s5 {
+    fill: color-mix(in srgb, var(--viz-series-5) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-5) 72%, var(--border));
+    stroke-width: 1.6;
+  }
+  #chapter2-svg .s6 {
+    fill: color-mix(in srgb, var(--viz-series-6) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-6) 72%, var(--border));
+    stroke-width: 1.6;
+  }
+  #chapter2-svg .line {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 2;
+  }
+  #chapter2-svg .flow1 {
+    fill: none;
+    stroke: var(--viz-series-1);
+    stroke-width: 3;
+    marker-end: url(#atlas-arrow-1);
+  }
+  #chapter2-svg .flow2 {
+    fill: none;
+    stroke: var(--viz-series-2);
+    stroke-width: 3;
+    marker-end: url(#atlas-arrow-2);
+  }
+  #chapter2-svg .flow3 {
+    fill: none;
+    stroke: var(--viz-series-3);
+    stroke-width: 3;
+    marker-end: url(#atlas-arrow-3);
+  }
+  #chapter2-svg .dash {
+    stroke-dasharray: 7 6;
+  }
+  #chapter2-svg .badge {
+    fill: var(--primary);
+    stroke: none;
+  }
+  #chapter2-svg .badge-text {
+    fill: var(--primary-foreground);
+    font-size: calc(var(--font-size-base) * 0.7);
+    font-weight: 500;
+  }
+  #chapter2-svg .warning {
+    fill: color-mix(in srgb, var(--destructive) 12%, transparent);
+    stroke: color-mix(in srgb, var(--destructive) 65%, var(--border));
+    stroke-width: 1.4;
+  }
+  @media (max-width: 520px) {
+    #chapter2-atlas .viz-controls {
+      align-items: stretch;
+    }
+    #chapter2-atlas .form-select {
+      min-width: 100%;
+    }
+  }
+&lt;/style&gt;
+
+&lt;script&gt;
+(() =&gt; {
+  const root = document.getElementById(&#x27;chapter2-atlas&#x27;);
+  const select = document.getElementById(&#x27;chapter2-section&#x27;);
+  const svg = document.getElementById(&#x27;chapter2-svg&#x27;);
+  const detail = document.getElementById(&#x27;chapter2-detail&#x27;);
+
+  const sections = {
+    &#x27;network-overview&#x27;: {
+      group: &#x27;超大规模网络 · 1 / 7&#x27;,
+      title: &#x27;把 72 个 GPU 组织成“一台机器”&#x27;,
+      detail: &#x27;记忆主线：超级芯片解决单节点算力，NVLink + NVSwitch 解决 72 GPU 的高速协作。&#x27;,
+      draw: drawNetworkOverview
+    },
+    &#x27;nvlink-nvswitch&#x27;: {
+      group: &#x27;超大规模网络 · 2 / 7&#x27;,
+      title: &#x27;NVLink 是高速公路，NVSwitch 是立交枢纽&#x27;,
+      detail: &#x27;单 GPU 的 18 条 NVLink 5 分别接到 18 个 NVSwitch；任意两块 GPU 只经过一个交换级。&#x27;,
+      draw: drawNvlink
+    },
+    &#x27;multi-gpu&#x27;: {
+      group: &#x27;超大规模网络 · 3 / 7&#x27;,
+      title: &#x27;多 GPU 编程：能直接访问，不等于自动一致&#x27;,
+      detail: &#x27;统一地址视图让访问更直接；NCCL / NVSHMEM 仍负责同步、排序和集合通信。&#x27;,
+      draw: drawMultiGpu
+    },
+    &#x27;sharp&#x27;: {
+      group: &#x27;超大规模网络 · 4 / 7&#x27;,
+      title: &#x27;SHARP：让交换机顺手完成“求和”&#x27;,
+      detail: &#x27;梯度归约在 NVSwitch 的 SHARP 引擎中合并，减少网络流量，也让 GPU 少做通信杂活。&#x27;,
+      draw: drawSharp
+    },
+    &#x27;multirack&#x27;: {
+      group: &#x27;超大规模网络 · 5 / 7&#x27;,
+      title: &#x27;出机架以后：DPU + NIC 接管数据搬运&#x27;,
+      detail: &#x27;机架内优先走 NVLink；跨机架或访问存储走 InfiniBand / Ethernet，并用 GPUDirect RDMA 直达显存。&#x27;,
+      draw: drawMultirack
+    },
+    &#x27;appliance&#x27;: {
+      group: &#x27;超大规模网络 · 6 / 7&#x27;,
+      title: &#x27;预集成机架：交付的是一整台 AI 超级计算机&#x27;,
+      detail: &#x27;18 个计算节点、9 个交换托盘、供电、液冷和管理软件在交付前已装配与验证。&#x27;,
+      draw: drawAppliance
+    },
+    &#x27;cpo&#x27;: {
+      group: &#x27;超大规模网络 · 7 / 7&#x27;,
+      title: &#x27;共封装光学：把光引擎搬到交换芯片旁边&#x27;,
+      detail: &#x27;缩短高速电信号路径，用更低功耗把 800 Gb/s、1.6 Tb/s 乃至更高速率送到更多机架。&#x27;,
+      draw: drawCpo
+    },
+    &#x27;power&#x27;: {
+      group: &#x27;机架运营 · 1 / 5&#x27;,
+      title: &#x27;130 kW：高密度算力首先是一道供电题&#x27;,
+      detail: &#x27;约 110 kW 用于 18 个计算节点，约 20 kW 用于 NVSwitch、网络与冷却；双路供电避免单点故障。&#x27;,
+      draw: drawPower
+    },
+    &#x27;cooling&#x27;: {
+      group: &#x27;机架运营 · 2 / 5&#x27;,
+      title: &#x27;液冷闭环：让热量沿着水路离开芯片&#x27;,
+      detail: &#x27;冷板贴住 CPU / GPU / NVSwitch，CDU 再把机架水路的热量交给数据中心水路。&#x27;,
+      draw: drawCooling
+    },
+    &#x27;monitoring&#x27;: {
+      group: &#x27;机架运营 · 3 / 5&#x27;,
+      title: &#x27;监控不是看“快不快”，而是找“在等谁”&#x27;,
+      detail: &#x27;GPU 利用率、NVLink、存储、温度和功耗要一起看，才能定位数据供给、同步或通信瓶颈。&#x27;,
+      draw: drawMonitoring
+    },
+    &#x27;scheduling&#x27;: {
+      group: &#x27;机架运营 · 4 / 5&#x27;,
+      title: &#x27;共享与调度：把 72 GPU 切成合适的工作单元&#x27;,
+      detail: &#x27;SLURM / Kubernetes 分配 GPU 组；MIG 可把单卡硬件隔离成最多 7 个小实例。&#x27;,
+      draw: drawScheduling
+    },
+    &#x27;roi&#x27;: {
+      group: &#x27;机架运营 · 5 / 5&#x27;,
+      title: &#x27;升级 ROI：比较完成同一工作需要的总成本&#x27;,
+      detail: &#x27;书中 100×H100 对 50×Blackwell 是示意案例；真实回报必须代入价格、利用率、电价和迁移成本。&#x27;,
+      draw: drawRoi
+    },
+    &#x27;roadmap&#x27;: {
+      group: &#x27;路线图与总结 · 1 / 7&#x27;,
+      title: &#x27;路线图的规律：每代把一个关键维度大幅推高&#x27;,
+      detail: &#x27;从 B200 到 Feynman，主线是更多显存、更高算力、更快互连和更紧密的系统集成。&#x27;,
+      draw: drawRoadmap
+    },
+    &#x27;b300&#x27;: {
+      group: &#x27;路线图与总结 · 2 / 7&#x27;,
+      title: &#x27;Blackwell Ultra：同一机架形态的“加量升级”&#x27;,
+      detail: &#x27;书中给出的对比：B300 约 288 GB HBM、1.5× AI 计算，并保持 NVLink 5 机架互连。&#x27;,
+      draw: drawB300
+    },
+    &#x27;vera-rubin&#x27;: {
+      group: &#x27;路线图与总结 · 3 / 7&#x27;,
+      title: &#x27;Vera Rubin：CPU 与 GPU 一起换代&#x27;,
+      detail: &#x27;书中路线图/预期：1×Vera CPU + 2×Rubin GPU，并迈向更快内存与 NVLink 6。&#x27;,
+      draw: drawVeraRubin
+    },
+    &#x27;rubin-ultra&#x27;: {
+      group: &#x27;路线图与总结 · 4 / 7&#x27;,
+      title: &#x27;Rubin Ultra：从双 die 继续走向四 die&#x27;,
+      detail: &#x27;本节大量数字属于书中报告与推测，不应当作已经发布的最终规格。&#x27;,
+      draw: drawRubinUltra
+    },
+    &#x27;feynman&#x27;: {
+      group: &#x27;路线图与总结 · 5 / 7&#x27;,
+      title: &#x27;Feynman：信息越远，越要区分趋势与规格&#x27;,
+      detail: &#x27;2 nm、HBM5、更多 die 等均是书中“likely / perhaps”式展望；真正要记的是推理需求推动低精度与互连继续演进。&#x27;,
+      draw: drawFeynman
+    },
+    &#x27;takeaways&#x27;: {
+      group: &#x27;路线图与总结 · 6 / 7&#x27;,
+      title: &#x27;本章关键要点：一切围绕“别让算力等数据”&#x27;,
+      detail: &#x27;芯片、内存、互连、机架、液冷和软件共同决定有效吞吐，而不是只看 GPU 峰值 FLOPS。&#x27;,
+      draw: drawTakeaways
+    },
+    &#x27;conclusion&#x27;: {
+      group: &#x27;路线图与总结 · 7 / 7&#x27;,
+      title: &#x27;结论：性能来自端到端协同设计&#x27;,
+      detail: &#x27;性能工程师的任务，是让软件与算法匹配这套硬件，使每个 FLOP、每个字节和每瓦功耗都产生有效工作。&#x27;,
+      draw: drawConclusion
+    }
+  };
+
+  function defs(title, desc) {
+    return `&lt;title id=&quot;chapter2-svg-title&quot;&gt;${esc(title)}&lt;/title&gt;
+      &lt;desc id=&quot;chapter2-svg-desc&quot;&gt;${esc(desc)}&lt;/desc&gt;
+      &lt;defs&gt;
+        &lt;marker id=&quot;atlas-arrow-1&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-1)&quot;/&gt;&lt;/marker&gt;
+        &lt;marker id=&quot;atlas-arrow-2&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-2)&quot;/&gt;&lt;/marker&gt;
+        &lt;marker id=&quot;atlas-arrow-3&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-3)&quot;/&gt;&lt;/marker&gt;
+      &lt;/defs&gt;`;
+  }
+
+  function header(section) {
+    return `&lt;text x=&quot;48&quot; y=&quot;42&quot; class=&quot;scene-kicker&quot;&gt;${esc(section.group)}&lt;/text&gt;
+      &lt;text x=&quot;48&quot; y=&quot;76&quot; class=&quot;scene-title&quot;&gt;${esc(section.title)}&lt;/text&gt;`;
+  }
+
+  function box(x, y, w, h, title, lines = [], cls = &#x27;struct&#x27;) {
+    const body = lines.map((line, i) =&gt; `&lt;text x=&quot;${x + 18}&quot; y=&quot;${y + 56 + i * 23}&quot; class=&quot;body&quot;&gt;${esc(line)}&lt;/text&gt;`).join(&#x27;&#x27;);
+    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;16&quot; class=&quot;${cls}&quot;/&gt;
+      &lt;text x=&quot;${x + 18}&quot; y=&quot;${y + 30}&quot; class=&quot;node-title&quot;&gt;${esc(title)}&lt;/text&gt;${body}`;
+  }
+
+  function pill(x, y, w, text) {
+    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;28&quot; rx=&quot;14&quot; class=&quot;badge&quot;/&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${y + 19}&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot;&gt;${esc(text)}&lt;/text&gt;`;
+  }
+
+  function arrow(x1, y1, x2, y2, label = &#x27;&#x27;, cls = &#x27;flow1&#x27;) {
+    const lx = (x1 + x2) / 2;
+    const ly = (y1 + y2) / 2 - 10;
+    return `&lt;path d=&quot;M ${x1} ${y1} L ${x2} ${y2}&quot; class=&quot;${cls}&quot;/&gt;${label ? `&lt;text x=&quot;${lx}&quot; y=&quot;${ly}&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;${esc(label)}&lt;/text&gt;` : &#x27;&#x27;}`;
+  }
+
+  function gpu(x, y, label, cls = &#x27;s1&#x27;) {
+    return `&lt;g&gt;&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;76&quot; height=&quot;58&quot; rx=&quot;10&quot; class=&quot;${cls}&quot;/&gt;
+      &lt;rect x=&quot;${x + 14}&quot; y=&quot;${y + 13}&quot; width=&quot;48&quot; height=&quot;24&quot; rx=&quot;5&quot; class=&quot;soft&quot;/&gt;
+      &lt;text x=&quot;${x + 38}&quot; y=&quot;${y + 51}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;${esc(label)}&lt;/text&gt;&lt;/g&gt;`;
+  }
+
+  function chip(x, y, w, h, title, sub, cls = &#x27;s1&#x27;) {
+    const pins = Array.from({length: 5}, (_, i) =&gt; `&lt;line x1=&quot;${x - 8}&quot; y1=&quot;${y + 14 + i * ((h - 28) / 4)}&quot; x2=&quot;${x}&quot; y2=&quot;${y + 14 + i * ((h - 28) / 4)}&quot; class=&quot;line&quot;/&gt;&lt;line x1=&quot;${x + w}&quot; y1=&quot;${y + 14 + i * ((h - 28) / 4)}&quot; x2=&quot;${x + w + 8}&quot; y2=&quot;${y + 14 + i * ((h - 28) / 4)}&quot; class=&quot;line&quot;/&gt;`).join(&#x27;&#x27;);
+    return `&lt;g&gt;${pins}&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;14&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${y + h / 2 - 5}&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;${esc(title)}&lt;/text&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${y + h / 2 + 21}&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;${esc(sub)}&lt;/text&gt;&lt;/g&gt;`;
+  }
+
+  function metric(x, y, value, label, cls = &#x27;s2&#x27;) {
+    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;170&quot; height=&quot;78&quot; rx=&quot;14&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + 85}&quot; y=&quot;${y + 34}&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;${esc(value)}&lt;/text&gt;&lt;text x=&quot;${x + 85}&quot; y=&quot;${y + 59}&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;${esc(label)}&lt;/text&gt;`;
+  }
+
+  function footerNote(text, warning = false) {
+    return `&lt;rect x=&quot;48&quot; y=&quot;650&quot; width=&quot;1104&quot; height=&quot;46&quot; rx=&quot;12&quot; class=&quot;${warning ? &#x27;warning&#x27; : &#x27;soft&#x27;}&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;679&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`;
+  }
+
+  function drawNetworkOverview(section) {
+    let nodes = &#x27;&#x27;;
+    for (let r = 0; r &lt; 6; r++) {
+      for (let c = 0; c &lt; 3; c++) {
+        const x = 85 + c * 112;
+        const y = 150 + r * 70;
+        nodes += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;96&quot; height=&quot;52&quot; rx=&quot;8&quot; class=&quot;${r % 2 ? &#x27;s2&#x27; : &#x27;s1&#x27;}&quot;/&gt;&lt;text x=&quot;${x + 48}&quot; y=&quot;${y + 22}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;节点 ${r * 3 + c + 1}&lt;/text&gt;&lt;text x=&quot;${x + 48}&quot; y=&quot;${y + 40}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;4 GPU + 2 CPU&lt;/text&gt;`;
+      }
+    }
+    let switches = &#x27;&#x27;;
+    for (let i = 0; i &lt; 9; i++) {
+      switches += `&lt;rect x=&quot;500&quot; y=&quot;${132 + i * 52}&quot; width=&quot;180&quot; height=&quot;34&quot; rx=&quot;8&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;590&quot; y=&quot;${154 + i * 52}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;NVSwitch 托盘 ${i + 1} · 2 芯片&lt;/text&gt;`;
+    }
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;48&quot; y=&quot;108&quot; width=&quot;390&quot; height=&quot;500&quot; rx=&quot;20&quot; class=&quot;struct&quot;/&gt;
+      &lt;text x=&quot;243&quot; y=&quot;136&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;18 个计算节点&lt;/text&gt;${nodes}
+      ${switches}
+      &lt;path d=&quot;M 438 355 C 470 355 470 355 500 355&quot; class=&quot;flow1&quot;/&gt;
+      &lt;path d=&quot;M 680 355 C 730 355 730 355 770 355&quot; class=&quot;flow1&quot;/&gt;
+      &lt;rect x=&quot;770&quot; y=&quot;188&quot; width=&quot;382&quot; height=&quot;334&quot; rx=&quot;24&quot; class=&quot;s1&quot;/&gt;
+      &lt;text x=&quot;961&quot; y=&quot;232&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;GB200 / GB300 NVL72&lt;/text&gt;
+      &lt;text x=&quot;961&quot; y=&quot;282&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;72 GPU&lt;/text&gt;
+      &lt;text x=&quot;961&quot; y=&quot;316&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;18 节点 × 4 Blackwell GPU&lt;/text&gt;
+      &lt;text x=&quot;961&quot; y=&quot;376&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;36 Grace CPU&lt;/text&gt;
+      &lt;text x=&quot;961&quot; y=&quot;410&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;18 节点 × 2 Grace CPU&lt;/text&gt;
+      &lt;text x=&quot;961&quot; y=&quot;468&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;同一 NVLink 高速域内协作&lt;/text&gt;
+      ${pill(847, 488, 228, &#x27;像一台机架级超级计算机&#x27;)}
+      ${footerNote(&#x27;结构主线：1 个超级芯片 = 1 Grace CPU + 2 Blackwell GPU；整机架共有 36 个超级芯片。&#x27;)}`;
+  }
+
+  function drawNvlink(section) {
+    let ports = &#x27;&#x27;;
+    for (let i = 0; i &lt; 18; i++) {
+      const angle = (Math.PI * 2 * i) / 18;
+      const x1 = 232 + Math.cos(angle) * 72;
+      const y1 = 346 + Math.sin(angle) * 72;
+      const x2 = 232 + Math.cos(angle) * 98;
+      const y2 = 346 + Math.sin(angle) * 98;
+      ports += `&lt;line x1=&quot;${x1.toFixed(1)}&quot; y1=&quot;${y1.toFixed(1)}&quot; x2=&quot;${x2.toFixed(1)}&quot; y2=&quot;${y2.toFixed(1)}&quot; class=&quot;line&quot;/&gt;`;
+    }
+    let sw = &#x27;&#x27;;
+    for (let i = 0; i &lt; 18; i++) {
+      const col = i % 6;
+      const row = Math.floor(i / 6);
+      const x = 510 + col * 72;
+      const y = 242 + row * 86;
+      sw += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;52&quot; height=&quot;52&quot; rx=&quot;8&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;${x + 26}&quot; y=&quot;${y + 32}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;S${i + 1}&lt;/text&gt;`;
+    }
+    return `${defs(section.title, section.detail)}${header(section)}
+      ${ports}${chip(155, 269, 154, 154, &#x27;Blackwell GPU&#x27;, &#x27;18 × NVLink 5&#x27;, &#x27;s1&#x27;)}
+      ${metric(92, 478, &#x27;1.8 TB/s&#x27;, &#x27;每 GPU 双向总带宽&#x27;, &#x27;s1&#x27;)}
+      &lt;text x=&quot;704&quot; y=&quot;136&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;NVLink Switch System · 18 个 NVSwitch&lt;/text&gt;${sw}
+      &lt;path d=&quot;M 318 326 C 405 230 430 226 510 268&quot; class=&quot;flow1&quot;/&gt;
+      &lt;path d=&quot;M 318 366 C 405 466 430 450 510 440&quot; class=&quot;flow1&quot;/&gt;
+      ${gpu(1012, 204, &#x27;GPU B&#x27;, &#x27;s2&#x27;)}${gpu(1012, 422, &#x27;GPU C&#x27;, &#x27;s2&#x27;)}
+      &lt;path d=&quot;M 942 268 C 972 268 982 248 1012 238&quot; class=&quot;flow2&quot;/&gt;
+      &lt;path d=&quot;M 942 440 C 972 440 982 458 1012 456&quot; class=&quot;flow2&quot;/&gt;
+      &lt;text x=&quot;960&quot; y=&quot;338&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;一次交换&lt;/text&gt;
+      &lt;text x=&quot;960&quot; y=&quot;370&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;GPU → NVSwitch → GPU&lt;/text&gt;
+      ${pill(602, 528, 204, &#x27;9 托盘 × 2 芯片&#x27;)}
+      ${footerNote(&#x27;“全互连”不是 72 张卡两两拉线，而是每张 GPU 的 18 条链路分别接入 18 个交换芯片。&#x27;)}`;
+  }
+
+  function drawMultiGpu(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      ${box(48, 126, 268, 182, &#x27;编程接口&#x27;, [&#x27;NCCL：集合通信&#x27;, &#x27;NVSHMEM：PGAS / 单边访问&#x27;, &#x27;Peer-to-Peer：直接读写&#x27;], &#x27;s2&#x27;)}
+      ${box(466, 126, 268, 182, &#x27;统一地址视图&#x27;, [&#x27;GPU A 可访问 GPU B 显存&#x27;, &#x27;不必先搬到 CPU 内存&#x27;, &#x27;但跨 GPU 缓存并非全局一致&#x27;], &#x27;s1&#x27;)}
+      ${box(884, 126, 268, 182, &#x27;硬件数据路径&#x27;, [&#x27;机架内：NVLink / NVSwitch&#x27;, &#x27;跨主机：GPUDirect RDMA&#x27;, &#x27;NIC 直接 DMA 到 GPU 显存&#x27;], &#x27;s3&#x27;)}
+      ${arrow(316, 217, 454, 217, &#x27;同步与排序&#x27;, &#x27;flow2&#x27;)}${arrow(734, 217, 872, 217, &#x27;映射到链路&#x27;, &#x27;flow1&#x27;)}
+      ${gpu(164, 400, &#x27;GPU A&#x27;, &#x27;s1&#x27;)}${gpu(386, 400, &#x27;GPU B&#x27;, &#x27;s1&#x27;)}${gpu(790, 400, &#x27;GPU C&#x27;, &#x27;s2&#x27;)}
+      &lt;rect x=&quot;594&quot; y=&quot;386&quot; width=&quot;112&quot; height=&quot;86&quot; rx=&quot;14&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;650&quot; y=&quot;420&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;NIC / DPU&lt;/text&gt;&lt;text x=&quot;650&quot; y=&quot;448&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;RDMA 直通&lt;/text&gt;
+      ${arrow(240, 429, 374, 429, &#x27;NVLink&#x27;, &#x27;flow1&#x27;)}${arrow(462, 429, 582, 429, &#x27;显存直达&#x27;, &#x27;flow3&#x27;)}${arrow(706, 429, 778, 429, &#x27;跨主机&#x27;, &#x27;flow2&#x27;)}
+      &lt;rect x=&quot;170&quot; y=&quot;522&quot; width=&quot;860&quot; height=&quot;88&quot; rx=&quot;16&quot; class=&quot;warning&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;554&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;关键边界：能互相访问 ≠ 缓存自动保持一致&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;584&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;CPU–GPU 的 NVLink-C2C 可以缓存一致；GPU–GPU 仍要靠 NCCL / NVSHMEM 做同步与顺序保证。&lt;/text&gt;
+      ${footerNote(&#x27;优化原则：把高频通信尽量留在单个 NVL72 机架内，跨机架链路只用于必须的扩展。&#x27;)}`;
+  }
+
+  function drawSharp(section) {
+    const gs = [120, 340, 780, 1000].map((x, i) =&gt; gpu(x, 142, `GPU ${i + 1}`, i &lt; 2 ? &#x27;s1&#x27; : &#x27;s2&#x27;)).join(&#x27;&#x27;);
+    return `${defs(section.title, section.detail)}${header(section)}${gs}
+      &lt;text x=&quot;600&quot; y=&quot;124&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;每张 GPU 产生局部梯度&lt;/text&gt;
+      ${arrow(158, 210, 510, 336, &#x27;局部结果&#x27;, &#x27;flow1&#x27;)}${arrow(378, 210, 548, 326, &#x27;&#x27;, &#x27;flow1&#x27;)}
+      ${arrow(818, 210, 652, 326, &#x27;&#x27;, &#x27;flow2&#x27;)}${arrow(1038, 210, 690, 336, &#x27;局部结果&#x27;, &#x27;flow2&#x27;)}
+      &lt;rect x=&quot;466&quot; y=&quot;306&quot; width=&quot;268&quot; height=&quot;154&quot; rx=&quot;24&quot; class=&quot;s3&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;344&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;NVSwitch 内的 SHARP 引擎&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;382&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;Σ&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;421&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;在网络中完成聚合 / 归约&lt;/text&gt;
+      ${arrow(600, 460, 600, 540, &#x27;聚合结果&#x27;, &#x27;flow3&#x27;)}
+      &lt;rect x=&quot;430&quot; y=&quot;540&quot; width=&quot;340&quot; height=&quot;70&quot; rx=&quot;16&quot; class=&quot;s1&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;568&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;更少的数据穿越链路&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;594&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;更低延迟 · GPU 腾出时间继续计算&lt;/text&gt;
+      ${footerNote(&#x27;把“所有结果都送回某张 GPU 再求和”，改成“数据经过交换网络时就分层合并”。&#x27;)}`;
+  }
+
+  function drawMultirack(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      ${box(48, 146, 270, 354, &#x27;NVL72 机架 A&#x27;, [&#x27;机架内：72 GPU&#x27;, &#x27;NVLink / NVSwitch&#x27;, &#x27;高频集合通信留在这里&#x27;], &#x27;s1&#x27;)}
+      &lt;rect x=&quot;92&quot; y=&quot;310&quot; width=&quot;182&quot; height=&quot;78&quot; rx=&quot;14&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;183&quot; y=&quot;341&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;BlueField-3 DPU&lt;/text&gt;&lt;text x=&quot;183&quot; y=&quot;368&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;网络 / 存储 / 安全卸载&lt;/text&gt;
+      &lt;rect x=&quot;92&quot; y=&quot;406&quot; width=&quot;182&quot; height=&quot;58&quot; rx=&quot;12&quot; class=&quot;s2&quot;/&gt;&lt;text x=&quot;183&quot; y=&quot;441&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;4 × ConnectX-8 · 800 Gb/s&lt;/text&gt;
+      &lt;path d=&quot;M 318 345 C 400 345 405 345 466 345&quot; class=&quot;flow1&quot;/&gt;
+      &lt;rect x=&quot;466&quot; y=&quot;246&quot; width=&quot;268&quot; height=&quot;198&quot; rx=&quot;26&quot; class=&quot;s2&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;287&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;外部网络 Fabric&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;326&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;3.2 Tbit/s / 节点&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;359&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;Quantum-X800 InfiniBand&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;387&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;或 Spectrum-X800 Ethernet&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;421&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;GPUDirect RDMA：不经 CPU 主存中转&lt;/text&gt;
+      &lt;path d=&quot;M 734 312 C 795 250 806 232 870 232&quot; class=&quot;flow2&quot;/&gt;
+      &lt;path d=&quot;M 734 378 C 795 440 806 462 870 462&quot; class=&quot;flow3&quot;/&gt;
+      ${box(870, 146, 282, 178, &#x27;NVL72 机架 B&#x27;, [&#x27;跨机架训练 / 推理&#x27;, &#x27;带宽与延迟低于机架内&#x27;, &#x27;要减少边界流量&#x27;], &#x27;s1&#x27;)}
+      ${box(870, 386, 282, 152, &#x27;共享存储&#x27;, [&#x27;NVMe-oF / 并行文件系统&#x27;, &#x27;DPU 直接把数据送入 GPU 显存&#x27;], &#x27;s3&#x27;)}
+      ${metric(387, 510, &#x27;57.6 Tbit/s&#x27;, &#x27;18 节点的机架外总线速率&#x27;, &#x27;s2&#x27;)}
+      ${footerNote(&#x27;快慢层级：GPU 本地内存 → 机架内 NVLink → 机架外 InfiniBand / Ethernet。越往外越要减少通信。&#x27;)}`;
+  }
+
+  function drawAppliance(section) {
+    let trays = &#x27;&#x27;;
+    for (let i = 0; i &lt; 18; i++) {
+      const col = i % 2;
+      const row = Math.floor(i / 2);
+      const x = 108 + col * 142;
+      const y = 144 + row * 44;
+      trays += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;126&quot; height=&quot;30&quot; rx=&quot;6&quot; class=&quot;${i % 2 ? &#x27;s2&#x27; : &#x27;s1&#x27;}&quot;/&gt;&lt;text x=&quot;${x + 63}&quot; y=&quot;${y + 20}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;计算托盘 ${i + 1}&lt;/text&gt;`;
+    }
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;70&quot; y=&quot;112&quot; width=&quot;320&quot; height=&quot;500&quot; rx=&quot;20&quot; class=&quot;struct&quot;/&gt;
+      &lt;text x=&quot;230&quot; y=&quot;138&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;单柜预集成 NVL72&lt;/text&gt;${trays}
+      &lt;rect x=&quot;466&quot; y=&quot;126&quot; width=&quot;304&quot; height=&quot;454&quot; rx=&quot;22&quot; class=&quot;soft&quot;/&gt;
+      &lt;text x=&quot;618&quot; y=&quot;162&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;交付前已完成&lt;/text&gt;
+      ${box(500, 184, 236, 68, &#x27;NVLink 内部布线&#x27;, [], &#x27;s1&#x27;)}
+      ${box(500, 270, 236, 68, &#x27;9 个 NVSwitch 托盘&#x27;, [], &#x27;s3&#x27;)}
+      ${box(500, 356, 236, 68, &#x27;供电分配 + 液冷管路&#x27;, [], &#x27;s2&#x27;)}
+      ${box(500, 442, 236, 96, &#x27;管理软件&#x27;, [&#x27;Base Command Manager&#x27;, &#x27;SLURM / Kubernetes&#x27;], &#x27;s4&#x27;)}
+      &lt;text x=&quot;926&quot; y=&quot;164&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;现场只需接入&lt;/text&gt;
+      ${chip(838, 202, 176, 80, &#x27;电力&#x27;, &#x27;高容量双路供电&#x27;, &#x27;s2&#x27;)}
+      ${chip(838, 334, 176, 80, &#x27;水路&#x27;, &#x27;设施冷却回路&#x27;, &#x27;s3&#x27;)}
+      ${chip(838, 466, 176, 80, &#x27;网络&#x27;, &#x27;InfiniBand / Ethernet&#x27;, &#x27;s1&#x27;)}
+      ${arrow(770, 242, 826, 242, &#x27;&#x27;, &#x27;flow2&#x27;)}${arrow(770, 374, 826, 374, &#x27;&#x27;, &#x27;flow3&#x27;)}${arrow(770, 506, 826, 506, &#x27;&#x27;, &#x27;flow1&#x27;)}
+      ${pill(820, 574, 212, &#x27;到场 → 接线 → 上电&#x27;)}
+      ${footerNote(&#x27;预集成的价值不是“少买几根线”，而是把复杂系统的装配、验证和运维边界标准化。&#x27;)}`;
+  }
+
+  function drawCpo(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;text x=&quot;278&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;传统可插拔光模块&lt;/text&gt;
+      ${chip(108, 214, 176, 128, &#x27;交换 ASIC&#x27;, &#x27;高速电信号先走较远&#x27;, &#x27;s1&#x27;)}
+      ${chip(384, 214, 176, 128, &#x27;光模块&#x27;, &#x27;再转换为光信号&#x27;, &#x27;s2&#x27;)}
+      ${arrow(292, 278, 372, 278, &#x27;较长电路径&#x27;, &#x27;flow1&#x27;)}
+      &lt;path d=&quot;M 560 278 C 628 278 638 278 692 278&quot; class=&quot;flow2 dash&quot;/&gt;
+      &lt;text x=&quot;828&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;Co-Packaged Optics（CPO）&lt;/text&gt;
+      &lt;rect x=&quot;692&quot; y=&quot;182&quot; width=&quot;432&quot; height=&quot;256&quot; rx=&quot;28&quot; class=&quot;s3&quot;/&gt;
+      ${chip(732, 236, 180, 132, &#x27;交换 ASIC&#x27;, &#x27;交换硅芯片&#x27;, &#x27;s1&#x27;)}
+      ${chip(960, 252, 112, 100, &#x27;光引擎&#x27;, &#x27;紧贴芯片&#x27;, &#x27;s2&#x27;)}
+      ${arrow(920, 302, 948, 302, &#x27;短&#x27;, &#x27;flow3&#x27;)}
+      &lt;path d=&quot;M 1072 285 C 1116 244 1128 212 1152 202&quot; class=&quot;flow2&quot;/&gt;
+      &lt;path d=&quot;M 1072 302 C 1116 302 1128 302 1152 302&quot; class=&quot;flow2&quot;/&gt;
+      &lt;path d=&quot;M 1072 319 C 1116 360 1128 390 1152 400&quot; class=&quot;flow2&quot;/&gt;
+      ${metric(172, 468, &#x27;800 Gb/s+&#x27;, &#x27;链路速率持续上升&#x27;, &#x27;s2&#x27;)}
+      ${metric(410, 468, &#x27;更长电路径&#x27;, &#x27;功耗与信号完整性压力&#x27;, &#x27;s1&#x27;)}
+      ${metric(700, 468, &#x27;更短电路径&#x27;, &#x27;CPO 的核心价值&#x27;, &#x27;s3&#x27;)}
+      ${metric(938, 468, &#x27;更多机架&#x27;, &#x27;面向 AI Factory 扩展&#x27;, &#x27;s4&#x27;)}
+      ${footerNote(&#x27;核心因果：速率越高，电信号越难走远；把光电转换贴近交换芯片，就能更省电地扩展跨机架带宽。&#x27;)}`;
+  }
+
+  function drawPower(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;60&quot; y=&quot;132&quot; width=&quot;238&quot; height=&quot;440&quot; rx=&quot;22&quot; class=&quot;struct&quot;/&gt;
+      &lt;text x=&quot;179&quot; y=&quot;166&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;冗余供电&lt;/text&gt;
+      ${box(90, 202, 178, 92, &#x27;Feed A&#x27;, [&#x27;可独立承担全负载&#x27;], &#x27;s1&#x27;)}
+      ${box(90, 322, 178, 92, &#x27;Feed B&#x27;, [&#x27;任一路故障仍能运行&#x27;], &#x27;s2&#x27;)}
+      &lt;rect x=&quot;90&quot; y=&quot;462&quot; width=&quot;178&quot; height=&quot;68&quot; rx=&quot;12&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;179&quot; y=&quot;491&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;PDU / AC→DC&lt;/text&gt;&lt;text x=&quot;179&quot; y=&quot;516&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;监控浪涌与电流&lt;/text&gt;
+      ${arrow(179, 294, 179, 450, &#x27;&#x27;, &#x27;flow1&#x27;)}${arrow(179, 414, 179, 450, &#x27;&#x27;, &#x27;flow2&#x27;)}
+      &lt;text x=&quot;615&quot; y=&quot;140&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;NVL72 满载功耗构成&lt;/text&gt;
+      &lt;rect x=&quot;420&quot; y=&quot;180&quot; width=&quot;390&quot; height=&quot;344&quot; rx=&quot;24&quot; class=&quot;soft&quot;/&gt;
+      &lt;rect x=&quot;470&quot; y=&quot;374&quot; width=&quot;290&quot; height=&quot;110&quot; rx=&quot;14&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;615&quot; y=&quot;425&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;约 20 kW&lt;/text&gt;&lt;text x=&quot;615&quot; y=&quot;457&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;NVSwitch + 网络 + 冷却&lt;/text&gt;
+      &lt;rect x=&quot;470&quot; y=&quot;214&quot; width=&quot;290&quot; height=&quot;160&quot; rx=&quot;14&quot; class=&quot;s1&quot;/&gt;&lt;text x=&quot;615&quot; y=&quot;280&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;约 110 kW&lt;/text&gt;&lt;text x=&quot;615&quot; y=&quot;316&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;18 节点 × 约 6 kW&lt;/text&gt;&lt;text x=&quot;615&quot; y=&quot;346&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;Grace Blackwell Superchips&lt;/text&gt;
+      &lt;text x=&quot;615&quot; y=&quot;562&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;≈ 130 kW / 机架&lt;/text&gt;
+      &lt;rect x=&quot;864&quot; y=&quot;168&quot; width=&quot;288&quot; height=&quot;370&quot; rx=&quot;22&quot; class=&quot;s2&quot;/&gt;
+      &lt;text x=&quot;1008&quot; y=&quot;209&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;规模放大&lt;/text&gt;
+      &lt;text x=&quot;1008&quot; y=&quot;270&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;8 个机架&lt;/text&gt;
+      &lt;text x=&quot;1008&quot; y=&quot;308&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;576 GPU&lt;/text&gt;
+      &lt;path d=&quot;M 920 355 L 1096 355&quot; class=&quot;line&quot;/&gt;
+      &lt;text x=&quot;1008&quot; y=&quot;414&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;接近 1 MW&lt;/text&gt;
+      &lt;text x=&quot;1008&quot; y=&quot;452&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;设施级电力规划问题&lt;/text&gt;
+      &lt;text x=&quot;1008&quot; y=&quot;492&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;还要考虑瞬态功耗与保护&lt;/text&gt;
+      ${footerNote(&#x27;130 kW 是上限级别，不是每时每刻的固定功耗；实际值随负载、功率上限和冷却效率变化。&#x27;)}`;
+  }
+
+  function drawCooling(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;48&quot; y=&quot;132&quot; width=&quot;284&quot; height=&quot;420&quot; rx=&quot;22&quot; class=&quot;warning&quot;/&gt;
+      &lt;text x=&quot;190&quot; y=&quot;170&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;只靠风冷&lt;/text&gt;
+      &lt;path d=&quot;M 92 232 C 132 196 170 266 210 230 S 286 262 310 222&quot; class=&quot;flow1 dash&quot;/&gt;
+      &lt;path d=&quot;M 92 302 C 132 266 170 336 210 300 S 286 332 310 292&quot; class=&quot;flow1 dash&quot;/&gt;
+      &lt;path d=&quot;M 92 372 C 132 336 170 406 210 370 S 286 402 310 362&quot; class=&quot;flow1 dash&quot;/&gt;
+      &lt;text x=&quot;190&quot; y=&quot;452&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;130 kW 热量&lt;/text&gt;
+      &lt;text x=&quot;190&quot; y=&quot;488&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;风量、噪声、效率都难以承受&lt;/text&gt;
+      &lt;text x=&quot;190&quot; y=&quot;520&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;高密度机架不现实&lt;/text&gt;
+      &lt;rect x=&quot;384&quot; y=&quot;132&quot; width=&quot;768&quot; height=&quot;420&quot; rx=&quot;24&quot; class=&quot;s3&quot;/&gt;
+      &lt;text x=&quot;768&quot; y=&quot;170&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;液冷闭环&lt;/text&gt;
+      ${chip(430, 226, 168, 112, &#x27;GPU / CPU&#x27;, &#x27;冷板贴住发热源&#x27;, &#x27;s1&#x27;)}
+      ${chip(430, 376, 168, 96, &#x27;NVSwitch&#x27;, &#x27;交换芯片冷板&#x27;, &#x27;s2&#x27;)}
+      &lt;rect x=&quot;680&quot; y=&quot;252&quot; width=&quot;174&quot; height=&quot;170&quot; rx=&quot;18&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;767&quot; y=&quot;292&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;机架内水路&lt;/text&gt;&lt;text x=&quot;767&quot; y=&quot;328&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;软管 · 歧管 · 泵&lt;/text&gt;&lt;text x=&quot;767&quot; y=&quot;362&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;供水 / 回水&lt;/text&gt;&lt;text x=&quot;767&quot; y=&quot;394&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;传感器与漏液检测&lt;/text&gt;
+      &lt;rect x=&quot;930&quot; y=&quot;252&quot; width=&quot;174&quot; height=&quot;170&quot; rx=&quot;18&quot; class=&quot;s4&quot;/&gt;&lt;text x=&quot;1017&quot; y=&quot;292&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;CDU&lt;/text&gt;&lt;text x=&quot;1017&quot; y=&quot;328&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;热交换器&lt;/text&gt;&lt;text x=&quot;1017&quot; y=&quot;362&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;连接设施水路&lt;/text&gt;&lt;text x=&quot;1017&quot; y=&quot;394&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;把热送出机架&lt;/text&gt;
+      ${arrow(598, 282, 668, 304, &#x27;热水&#x27;, &#x27;flow1&#x27;)}${arrow(598, 424, 668, 382, &#x27;热水&#x27;, &#x27;flow2&#x27;)}${arrow(854, 337, 918, 337, &#x27;换热&#x27;, &#x27;flow3&#x27;)}
+      &lt;path d=&quot;M 930 444 C 850 520 550 520 514 480&quot; class=&quot;flow2&quot;/&gt;&lt;text x=&quot;738&quot; y=&quot;520&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;冷却液返回冷板&lt;/text&gt;
+      ${metric(420, 566, &#x27;50–70°C&#x27;, &#x27;书中给出的 GPU 负载温区&#x27;, &#x27;s1&#x27;)}${metric(650, 566, &#x27;更少降频&#x27;, &#x27;冷板直接带走热量&#x27;, &#x27;s3&#x27;)}${metric(880, 566, &#x27;更高能效&#x27;, &#x27;水的携热能力远胜空气&#x27;, &#x27;s4&#x27;)}
+      ${footerNote(&#x27;液冷不是“让芯片泡在水里”，而是让冷却液在密闭冷板与管路中循环。&#x27;)}`;
+  }
+
+  function drawMonitoring(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;48&quot; y=&quot;126&quot; width=&quot;1104&quot; height=&quot;456&quot; rx=&quot;22&quot; class=&quot;struct&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;160&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;DCGM + DPU / NIC / 存储遥测：沿着等待链排查&lt;/text&gt;
+      ${box(78, 198, 194, 116, &#x27;GPU 利用率&#x27;, [&#x27;理想：训练时接近持续繁忙&#x27;, &#x27;若约 50%：一半时间在等待&#x27;], &#x27;s1&#x27;)}
+      ${box(294, 198, 194, 116, &#x27;显存 / 温度&#x27;, [&#x27;容量是否顶满&#x27;, &#x27;过热是否触发降频&#x27;], &#x27;s2&#x27;)}
+      ${box(510, 198, 194, 116, &#x27;NVLink 吞吐&#x27;, [&#x27;若长期饱和&#x27;, &#x27;通信可能成为瓶颈&#x27;], &#x27;s3&#x27;)}
+      ${box(726, 198, 194, 116, &#x27;NIC / DPU&#x27;, [&#x27;RDMA、包处理、错误率&#x27;, &#x27;跨机架链路是否堵塞&#x27;], &#x27;s4&#x27;)}
+      ${box(942, 198, 180, 116, &#x27;功耗 / 时钟&#x27;, [&#x27;性能 / W&#x27;, &#x27;是否需要功率上限&#x27;], &#x27;s5&#x27;)}
+      &lt;path d=&quot;M 176 314 L 176 386 L 600 386&quot; class=&quot;line&quot;/&gt;&lt;path d=&quot;M 391 314 L 391 366 L 600 366&quot; class=&quot;line&quot;/&gt;&lt;path d=&quot;M 607 314 L 607 386&quot; class=&quot;line&quot;/&gt;&lt;path d=&quot;M 823 314 L 823 366 L 600 366&quot; class=&quot;line&quot;/&gt;&lt;path d=&quot;M 1032 314 L 1032 386 L 600 386&quot; class=&quot;line&quot;/&gt;
+      &lt;rect x=&quot;424&quot; y=&quot;386&quot; width=&quot;352&quot; height=&quot;136&quot; rx=&quot;20&quot; class=&quot;s1&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;424&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;定位 GPU 为什么空闲&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;458&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;数据加载慢？同步等待？通信饱和？温度降频？&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;492&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;找到等待源，再决定优化代码、网络、存储或功率。&lt;/text&gt;
+      ${metric(104, 602, &#x27;利用率低&#x27;, &#x27;先查“在等谁”&#x27;, &#x27;s1&#x27;)}${metric(327, 602, &#x27;链路饱和&#x27;, &#x27;减少或重叠通信&#x27;, &#x27;s3&#x27;)}${metric(550, 602, &#x27;温度过高&#x27;, &#x27;检查冷却与降频&#x27;, &#x27;s2&#x27;)}${metric(773, 602, &#x27;功耗过高&#x27;, &#x27;优化性能 / 瓦&#x27;, &#x27;s5&#x27;)}${metric(996, 602, &#x27;存储慢&#x27;, &#x27;检查数据管线&#x27;, &#x27;s4&#x27;)}`;
+  }
+
+  function drawScheduling(section) {
+    let cells = &#x27;&#x27;;
+    for (let i = 0; i &lt; 72; i++) {
+      const col = i % 18;
+      const row = Math.floor(i / 18);
+      const x = 62 + col * 40;
+      const y = 182 + row * 44;
+      const cls = i &lt; 8 ? &#x27;s1&#x27; : i &lt; 24 ? &#x27;s2&#x27; : &#x27;s3&#x27;;
+      cells += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;32&quot; height=&quot;32&quot; rx=&quot;6&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + 16}&quot; y=&quot;${y + 21}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;${i + 1}&lt;/text&gt;`;
+    }
+    let mig = &#x27;&#x27;;
+    for (let i = 0; i &lt; 7; i++) {
+      const x = 842 + (i % 4) * 68;
+      const y = 384 + Math.floor(i / 4) * 74;
+      mig += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;56&quot; height=&quot;56&quot; rx=&quot;10&quot; class=&quot;${i % 2 ? &#x27;s4&#x27; : &#x27;s2&#x27;}&quot;/&gt;&lt;text x=&quot;${x + 28}&quot; y=&quot;${y + 34}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;MIG ${i + 1}&lt;/text&gt;`;
+    }
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;text x=&quot;414&quot; y=&quot;142&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;机架级：调度器分配 GPU 组&lt;/text&gt;${cells}
+      ${pill(68, 382, 180, &#x27;任务 A · 8 GPU&#x27;)}${pill(272, 382, 180, &#x27;任务 B · 16 GPU&#x27;)}${pill(476, 382, 220, &#x27;任务 C · 48 GPU&#x27;)}
+      &lt;text x=&quot;414&quot; y=&quot;440&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;SLURM / Kubernetes：按作业规模切分 72 张 GPU&lt;/text&gt;
+      &lt;path d=&quot;M 760 146 L 760 564&quot; class=&quot;line&quot;/&gt;
+      &lt;text x=&quot;976&quot; y=&quot;142&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;单卡级：MIG 硬件隔离&lt;/text&gt;
+      ${chip(888, 190, 176, 132, &#x27;1× Blackwell GPU&#x27;, &#x27;180 GB 可用显存（书中）&#x27;, &#x27;s1&#x27;)}
+      ${arrow(976, 322, 976, 370, &#x27;切分&#x27;, &#x27;flow1&#x27;)}${mig}
+      &lt;text x=&quot;976&quot; y=&quot;526&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;最多 7 个独立实例&lt;/text&gt;
+      &lt;text x=&quot;976&quot; y=&quot;554&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;各自拥有专用显存与 SM 配额&lt;/text&gt;
+      ${footerNote(&#x27;调度目标不是“切得越碎越好”，而是让作业获得足够资源，同时减少昂贵 GPU 的空闲时间。&#x27;)}`;
+  }
+
+  function drawRoi(section) {
+    let oldGpus = &#x27;&#x27;;
+    for (let i = 0; i &lt; 20; i++) {
+      const x = 94 + (i % 10) * 30;
+      const y = 222 + Math.floor(i / 10) * 38;
+      oldGpus += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;22&quot; height=&quot;22&quot; rx=&quot;4&quot; class=&quot;s2&quot;/&gt;`;
+    }
+    let newGpus = &#x27;&#x27;;
+    for (let i = 0; i &lt; 10; i++) {
+      const x = 758 + (i % 5) * 52;
+      const y = 222 + Math.floor(i / 5) * 54;
+      newGpus += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;40&quot; height=&quot;38&quot; rx=&quot;6&quot; class=&quot;s1&quot;/&gt;`;
+    }
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;48&quot; y=&quot;128&quot; width=&quot;478&quot; height=&quot;338&quot; rx=&quot;22&quot; class=&quot;soft&quot;/&gt;
+      &lt;text x=&quot;287&quot; y=&quot;170&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;旧方案：100 × H100（书中案例）&lt;/text&gt;${oldGpus}
+      &lt;text x=&quot;287&quot; y=&quot;344&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;约 70 kW&lt;/text&gt;
+      &lt;text x=&quot;287&quot; y=&quot;378&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;更多服务器 · CPU · 内存 · 网络端口&lt;/text&gt;
+      &lt;text x=&quot;287&quot; y=&quot;414&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;图中 1 个小方块代表 5 张 GPU&lt;/text&gt;
+      &lt;path d=&quot;M 538 296 C 596 244 626 244 684 296&quot; class=&quot;flow1&quot;/&gt;
+      &lt;text x=&quot;611&quot; y=&quot;238&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;完成相同工作&lt;/text&gt;
+      &lt;rect x=&quot;696&quot; y=&quot;128&quot; width=&quot;456&quot; height=&quot;338&quot; rx=&quot;22&quot; class=&quot;s1&quot;/&gt;
+      &lt;text x=&quot;924&quot; y=&quot;170&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;升级方案：50 × Blackwell（示意）&lt;/text&gt;${newGpus}
+      &lt;text x=&quot;924&quot; y=&quot;344&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;约 50 kW&lt;/text&gt;
+      &lt;text x=&quot;924&quot; y=&quot;378&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;更少设备 · 更简单模型切分&lt;/text&gt;
+      &lt;text x=&quot;924&quot; y=&quot;414&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;书中假设单卡吞吐超过 2×&lt;/text&gt;
+      ${box(84, 502, 312, 112, &#x27;成本输入&#x27;, [&#x27;采购价 · 电价 · 设施改造&#x27;, &#x27;迁移成本 · 折旧周期&#x27;], &#x27;s2&#x27;)}
+      ${box(444, 502, 312, 112, &#x27;利用率输入&#x27;, [&#x27;每天运行多久 · 任务是否饱和&#x27;, &#x27;软件能否用上低精度优势&#x27;], &#x27;s3&#x27;)}
+      ${box(804, 502, 312, 112, &#x27;结果输出&#x27;, [&#x27;总拥有成本 · 性能 / 美元&#x27;, &#x27;性能 / 瓦 · 回收期&#x27;], &#x27;s1&#x27;)}
+      ${arrow(396, 558, 432, 558, &#x27;&#x27;, &#x27;flow2&#x27;)}${arrow(756, 558, 792, 558, &#x27;&#x27;, &#x27;flow3&#x27;)}
+      ${footerNote(&#x27;“1–2 年回本”只是书中的可能情形；没有真实价格与使用率，就不能把示例直接当结论。&#x27;, true)}`;
+  }
+
+  function drawRoadmap(section) {
+    const items = [
+      {x:70, year:&#x27;2024&#x27;, name:&#x27;Blackwell B200&#x27;, sub:&#x27;双 die · NVLink 5&#x27;, cls:&#x27;s1&#x27;},
+      {x:286, year:&#x27;2025&#x27;, name:&#x27;Blackwell Ultra&#x27;, sub:&#x27;更多 HBM / 算力&#x27;, cls:&#x27;s2&#x27;},
+      {x:502, year:&#x27;2026&#x27;, name:&#x27;Vera Rubin&#x27;, sub:&#x27;新 CPU + 新 GPU&#x27;, cls:&#x27;s3&#x27;},
+      {x:718, year:&#x27;2027&#x27;, name:&#x27;Rubin Ultra&#x27;, sub:&#x27;书中推测四 die&#x27;, cls:&#x27;s4&#x27;},
+      {x:934, year:&#x27;2028&#x27;, name:&#x27;Feynman&#x27;, sub:&#x27;远期展望&#x27;, cls:&#x27;s5&#x27;}
+    ];
+    const marks = items.map((it, i) =&gt; `${i &lt; items.length - 1 ? `&lt;path d=&quot;M ${it.x + 170} 342 L ${items[i + 1].x - 16} 342&quot; class=&quot;flow1&quot;/&gt;` : &#x27;&#x27;}&lt;rect x=&quot;${it.x}&quot; y=&quot;220&quot; width=&quot;170&quot; height=&quot;244&quot; rx=&quot;22&quot; class=&quot;${it.cls}&quot;/&gt;&lt;text x=&quot;${it.x + 85}&quot; y=&quot;259&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;${it.year}&lt;/text&gt;&lt;text x=&quot;${it.x + 85}&quot; y=&quot;306&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;${it.name}&lt;/text&gt;&lt;text x=&quot;${it.x + 85}&quot; y=&quot;376&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${it.sub}&lt;/text&gt;&lt;circle cx=&quot;${it.x + 85}&quot; cy=&quot;430&quot; r=&quot;9&quot; class=&quot;badge&quot;/&gt;`).join(&#x27;&#x27;);
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;line x1=&quot;90&quot; y1=&quot;342&quot; x2=&quot;1110&quot; y2=&quot;342&quot; class=&quot;line&quot;/&gt;${marks}
+      ${pill(98, 504, 164, &#x27;显存容量 ↑&#x27;)}${pill(310, 504, 164, &#x27;低精度算力 ↑&#x27;)}${pill(522, 504, 164, &#x27;互连带宽 ↑&#x27;)}${pill(734, 504, 164, &#x27;封装 die 数 ↑&#x27;)}${pill(946, 504, 164, &#x27;系统集成度 ↑&#x27;)}
+      &lt;rect x=&quot;188&quot; y=&quot;570&quot; width=&quot;824&quot; height=&quot;54&quot; rx=&quot;14&quot; class=&quot;warning&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;603&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;越靠近 2028，越应把数字视为书中路线图与推测；趋势比具体规格更值得记。&lt;/text&gt;
+      ${footerNote(&#x27;“每年翻倍”不是每项指标都翻倍，而是每代选择算力、显存、互连或 die 数中的关键一项大幅提升。&#x27;)}`;
+  }
+
+  function drawB300(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;text x=&quot;307&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;B200&lt;/text&gt;
+      ${chip(168, 176, 278, 238, &#x27;Blackwell B200&#x27;, &#x27;GB200 中的 GPU&#x27;, &#x27;s2&#x27;)}
+      &lt;rect x=&quot;202&quot; y=&quot;246&quot; width=&quot;210&quot; height=&quot;82&quot; rx=&quot;14&quot; class=&quot;s1&quot;/&gt;&lt;text x=&quot;307&quot; y=&quot;281&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;180 GB&lt;/text&gt;&lt;text x=&quot;307&quot; y=&quot;310&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;书中可用 HBM&lt;/text&gt;
+      &lt;text x=&quot;307&quot; y=&quot;462&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;1.0×&lt;/text&gt;&lt;text x=&quot;307&quot; y=&quot;492&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;AI 计算基线&lt;/text&gt;
+      &lt;path d=&quot;M 480 314 L 690 314&quot; class=&quot;flow1&quot;/&gt;&lt;text x=&quot;585&quot; y=&quot;292&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;Drop-in upgrade&lt;/text&gt;
+      &lt;text x=&quot;893&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;B300 / Blackwell Ultra&lt;/text&gt;
+      ${chip(754, 176, 278, 238, &#x27;Blackwell Ultra B300&#x27;, &#x27;GB300 中的 GPU&#x27;, &#x27;s1&#x27;)}
+      &lt;rect x=&quot;788&quot; y=&quot;230&quot; width=&quot;210&quot; height=&quot;108&quot; rx=&quot;14&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;893&quot; y=&quot;274&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;288 GB&lt;/text&gt;&lt;text x=&quot;893&quot; y=&quot;305&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;约 +50% HBM 容量&lt;/text&gt;
+      &lt;text x=&quot;893&quot; y=&quot;462&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;1.5×&lt;/text&gt;&lt;text x=&quot;893&quot; y=&quot;492&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;书中 AI 计算性能&lt;/text&gt;
+      ${metric(96, 538, &#x27;72 GPU&#x27;, &#x27;NVL72 机架形态不变&#x27;, &#x27;s2&#x27;)}${metric(318, 538, &#x27;≈20.7 TB&#x27;, &#x27;72 × 288 GB HBM&#x27;, &#x27;s3&#x27;)}${metric(540, 538, &#x27;≈18 TB&#x27;, &#x27;36 × 500 GB CPU DDR&#x27;, &#x27;s4&#x27;)}${metric(762, 538, &#x27;≈38 TB&#x27;, &#x27;书中合计快速内存&#x27;, &#x27;s1&#x27;)}${metric(984, 538, &#x27;NVLink 5&#x27;, &#x27;机架内互连代际不变&#x27;, &#x27;s5&#x27;)}
+      ${footerNote(&#x27;B300 是同一 Blackwell / NVL72 系统思路的扩展：更多显存、更高算力、注意力与低精度加速增强。&#x27;)}`;
+  }
+
+  function drawVeraRubin(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;70&quot; y=&quot;142&quot; width=&quot;532&quot; height=&quot;388&quot; rx=&quot;26&quot; class=&quot;s3&quot;/&gt;
+      &lt;text x=&quot;336&quot; y=&quot;180&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;VR200 Superchip（书中路线图）&lt;/text&gt;
+      ${chip(236, 216, 200, 126, &#x27;Vera CPU&#x27;, &#x27;Grace 的继任者&#x27;, &#x27;s2&#x27;)}
+      ${chip(116, 390, 184, 102, &#x27;Rubin GPU 1&#x27;, &#x27;Blackwell 的继任者&#x27;, &#x27;s1&#x27;)}
+      ${chip(372, 390, 184, 102, &#x27;Rubin GPU 2&#x27;, &#x27;Blackwell 的继任者&#x27;, &#x27;s1&#x27;)}
+      ${arrow(300, 342, 224, 380, &#x27;C2C&#x27;, &#x27;flow2&#x27;)}${arrow(372, 342, 464, 380, &#x27;C2C&#x27;, &#x27;flow2&#x27;)}
+      &lt;text x=&quot;336&quot; y=&quot;516&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;延续 1 CPU + 2 GPU 的超级芯片结构&lt;/text&gt;
+      &lt;rect x=&quot;666&quot; y=&quot;142&quot; width=&quot;486&quot; height=&quot;388&quot; rx=&quot;26&quot; class=&quot;soft&quot;/&gt;
+      &lt;text x=&quot;909&quot; y=&quot;180&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;书中“expected / speculation”指标&lt;/text&gt;
+      ${metric(704, 214, &#x27;LPDDR6&#x27;, &#x27;CPU 内存约 1 TB/s&#x27;, &#x27;s2&#x27;)}${metric(914, 214, &#x27;13–14 TB/s&#x27;, &#x27;Rubin HBM 带宽&#x27;, &#x27;s1&#x27;)}
+      ${metric(704, 326, &#x27;NVLink 6&#x27;, &#x27;预期链路带宽继续提高&#x27;, &#x27;s3&#x27;)}${metric(914, 326, &#x27;≈2×&#x27;, &#x27;多项指标的代际目标&#x27;, &#x27;s4&#x27;)}
+      &lt;rect x=&quot;704&quot; y=&quot;448&quot; width=&quot;380&quot; height=&quot;50&quot; rx=&quot;12&quot; class=&quot;warning&quot;/&gt;&lt;text x=&quot;894&quot; y=&quot;479&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;这些不是已确认最终规格，读趋势即可&lt;/text&gt;
+      ${pill(118, 568, 192, &#x27;CPU 与 GPU 同步换代&#x27;)}${pill(354, 568, 192, &#x27;内存带宽继续上升&#x27;)}${pill(666, 568, 192, &#x27;互连代际继续升级&#x27;)}${pill(902, 568, 192, &#x27;更大 NVLink 域&#x27;)}
+      ${footerNote(&#x27;需要记住的是架构方向：超级芯片形态延续，同时 CPU、GPU、内存与互连一起升级。&#x27;, true)}`;
+  }
+
+  function drawRubinUltra(section) {
+    let dies = &#x27;&#x27;;
+    [[220,220],[390,220],[220,374],[390,374]].forEach((p, i) =&gt; { dies += chip(p[0], p[1], 132, 104, `Die ${i + 1}`, &#x27;Rubin&#x27;, i % 2 ? &#x27;s2&#x27; : &#x27;s1&#x27;); });
+    let hbm = &#x27;&#x27;;
+    for (let i = 0; i &lt; 16; i++) {
+      const x = 138 + (i % 8) * 58;
+      const y = i &lt; 8 ? 174 : 506;
+      hbm += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;44&quot; height=&quot;34&quot; rx=&quot;6&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;${x + 22}&quot; y=&quot;${y + 22}&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;HBM&lt;/text&gt;`;
+    }
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;84&quot; y=&quot;126&quot; width=&quot;600&quot; height=&quot;484&quot; rx=&quot;28&quot; class=&quot;warning&quot;/&gt;
+      &lt;text x=&quot;384&quot; y=&quot;158&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;R300 / Rubin Ultra（书中报告与推测）&lt;/text&gt;${dies}${hbm}
+      &lt;text x=&quot;384&quot; y=&quot;570&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;四 die + 16 HBM 堆栈 ≈ 1 TB / 模块&lt;/text&gt;
+      &lt;rect x=&quot;742&quot; y=&quot;148&quot; width=&quot;410&quot; height=&quot;154&quot; rx=&quot;20&quot; class=&quot;s2&quot;/&gt;
+      &lt;text x=&quot;947&quot; y=&quot;188&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;Vera Rubin NVL144&lt;/text&gt;
+      &lt;text x=&quot;947&quot; y=&quot;232&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;144 GPU dies / 机架&lt;/text&gt;
+      &lt;text x=&quot;947&quot; y=&quot;268&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;36 模块 × 4 dies&lt;/text&gt;
+      &lt;path d=&quot;M 947 302 L 947 382&quot; class=&quot;flow1&quot;/&gt;
+      &lt;rect x=&quot;742&quot; y=&quot;382&quot; width=&quot;410&quot; height=&quot;154&quot; rx=&quot;20&quot; class=&quot;s4&quot;/&gt;
+      &lt;text x=&quot;947&quot; y=&quot;422&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;Vera Rubin NVL576&lt;/text&gt;
+      &lt;text x=&quot;947&quot; y=&quot;466&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;更大系统规模&lt;/text&gt;
+      &lt;text x=&quot;947&quot; y=&quot;502&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;跨机架继续扩展&lt;/text&gt;
+      ${pill(792, 570, 310, &#x27;推测越具体，越要等待官方确认&#x27;)}
+      ${footerNote(&#x27;本节最值得记的是多 die 与更大系统域的方向；“1 TB、NVL576”等数字属于书中前瞻，不是既成事实。&#x27;, true)}`;
+  }
+
+  function drawFeynman(section) {
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;rect x=&quot;56&quot; y=&quot;132&quot; width=&quot;1088&quot; height=&quot;430&quot; rx=&quot;28&quot; class=&quot;warning&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;172&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;2028 Feynman：书中明确说“details are scarce”&lt;/text&gt;
+      &lt;circle cx=&quot;600&quot; cy=&quot;338&quot; r=&quot;136&quot; class=&quot;s5&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;324&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;Feynman&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;360&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;真正规格尚不清楚&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;394&quot; text-anchor=&quot;middle&quot; class=&quot;tiny&quot;&gt;因此外围只写“可能 / 预计”&lt;/text&gt;
+      ${box(92, 214, 220, 104, &#x27;可能：2 nm&#x27;, [&#x27;更先进制程&#x27;], &#x27;s1&#x27;)}
+      ${box(92, 378, 220, 104, &#x27;可能：HBM5&#x27;, [&#x27;更大、更快显存&#x27;], &#x27;s2&#x27;)}
+      ${box(888, 214, 220, 104, &#x27;也许：更多 dies&#x27;, [&#x27;书中举例可能从 4 到 8&#x27;], &#x27;s3&#x27;)}
+      ${box(888, 378, 220, 104, &#x27;可能：封装内光互连&#x27;, [&#x27;继续提高 NVLink 吞吐&#x27;], &#x27;s4&#x27;)}
+      ${arrow(312, 266, 460, 310, &#x27;&#x27;, &#x27;flow1&#x27;)}${arrow(312, 430, 460, 378, &#x27;&#x27;, &#x27;flow2&#x27;)}${arrow(888, 266, 740, 310, &#x27;&#x27;, &#x27;flow3&#x27;)}${arrow(888, 430, 740, 378, &#x27;&#x27;, &#x27;flow1&#x27;)}
+      ${pill(172, 588, 220, &#x27;推理计算需求爆发&#x27;)}${pill(490, 588, 220, &#x27;更多低精度格式&#x27;)}${pill(808, 588, 220, &#x27;更多片上内存 / 带宽&#x27;)}
+      ${footerNote(&#x27;阅读远期路线图的方法：记“推理负载推动低精度、内存与互连升级”，不要背尚未确认的工艺或 die 数。&#x27;, true)}`;
+  }
+
+  function drawTakeaways(section) {
+    const items = [
+      {x:84,y:134,t:&#x27;超级芯片&#x27;,s:&#x27;Grace + Blackwell&#x27;,c:&#x27;s1&#x27;},
+      {x:84,y:300,t:&#x27;统一 / 一致内存&#x27;,s:&#x27;减少显式搬运&#x27;,c:&#x27;s2&#x27;},
+      {x:84,y:466,t:&#x27;现代软件栈&#x27;,s:&#x27;FP8 / FP4 / 调度&#x27;,c:&#x27;s3&#x27;},
+      {x:916,y:134,t:&#x27;NVLink / NVSwitch&#x27;,s:&#x27;72 GPU 高速协作&#x27;,c:&#x27;s4&#x27;},
+      {x:916,y:300,t:&#x27;高密度 NVL72&#x27;,s:&#x27;机架级 AI 超算&#x27;,c:&#x27;s5&#x27;},
+      {x:916,y:466,t:&#x27;液冷与供电&#x27;,s:&#x27;约 130 kW 级别&#x27;,c:&#x27;s6&#x27;}
+    ];
+    const boxes = items.map(it =&gt; box(it.x,it.y,200,112,it.t,[it.s],it.c)).join(&#x27;&#x27;);
+    return `${defs(section.title, section.detail)}${header(section)}${boxes}
+      &lt;circle cx=&quot;600&quot; cy=&quot;354&quot; r=&quot;164&quot; class=&quot;s1&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;302&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;本章的共同目标&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;352&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;让 GPU 持续有数据可算&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;395&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;减少等待 · 提高有效吞吐&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;432&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;提高性能 / 瓦与性能 / 美元&lt;/text&gt;
+      &lt;path d=&quot;M 284 190 C 390 190 426 236 470 276&quot; class=&quot;flow1&quot;/&gt;&lt;path d=&quot;M 284 356 L 424 356&quot; class=&quot;flow2&quot;/&gt;&lt;path d=&quot;M 284 522 C 390 522 426 474 470 432&quot; class=&quot;flow3&quot;/&gt;
+      &lt;path d=&quot;M 916 190 C 810 190 774 236 730 276&quot; class=&quot;flow1&quot;/&gt;&lt;path d=&quot;M 916 356 L 776 356&quot; class=&quot;flow2&quot;/&gt;&lt;path d=&quot;M 916 522 C 810 522 774 474 730 432&quot; class=&quot;flow3&quot;/&gt;
+      ${footerNote(&#x27;不要把这章背成一串产品参数：用“计算、内存、互连、供电、冷却、软件”六层检查表来理解系统。&#x27;)}`;
+  }
+
+  function drawConclusion(section) {
+    const steps = [
+      {x:56,w:170,t:&#x27;芯片&#x27;,s:&#x27;CPU · GPU · HBM&#x27;,c:&#x27;s1&#x27;},
+      {x:246,w:170,t:&#x27;超级芯片&#x27;,s:&#x27;C2C · 统一内存&#x27;,c:&#x27;s2&#x27;},
+      {x:436,w:170,t:&#x27;NVL72 机架&#x27;,s:&#x27;NVLink · NVSwitch&#x27;,c:&#x27;s3&#x27;},
+      {x:626,w:170,t:&#x27;基础设施&#x27;,s:&#x27;供电 · 液冷 · 网络&#x27;,c:&#x27;s4&#x27;},
+      {x:816,w:170,t:&#x27;软件系统&#x27;,s:&#x27;调度 · 通信 · 监控&#x27;,c:&#x27;s5&#x27;},
+      {x:1006,w:138,t:&#x27;有效工作&#x27;,s:&#x27;Goodput&#x27;,c:&#x27;s6&#x27;}
+    ];
+    const flow = steps.map((it, i) =&gt; `${box(it.x,230,it.w,156,it.t,[it.s],it.c)}${i &lt; steps.length - 1 ? arrow(it.x + it.w + 6,308,steps[i+1].x - 12,308,&#x27;&#x27;,&#x27;flow1&#x27;) : &#x27;&#x27;}`).join(&#x27;&#x27;);
+    return `${defs(section.title, section.detail)}${header(section)}
+      &lt;text x=&quot;600&quot; y=&quot;150&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;任何一层不匹配，峰值算力都会变成等待时间&lt;/text&gt;${flow}
+      &lt;rect x=&quot;112&quot; y=&quot;458&quot; width=&quot;976&quot; height=&quot;132&quot; rx=&quot;24&quot; class=&quot;s1&quot;/&gt;
+      &lt;text x=&quot;600&quot; y=&quot;498&quot; text-anchor=&quot;middle&quot; class=&quot;node-title&quot;&gt;性能工程师的工作&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;540&quot; text-anchor=&quot;middle&quot; class=&quot;metric&quot;&gt;把软件、算法与硬件共同设计&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;572&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;让每个 FLOP、每个字节、每瓦功耗都尽量转化为用户真正需要的吞吐&lt;/text&gt;
+      ${footerNote(&#x27;这章的终点不是“认识 NVL72”，而是建立端到端视角：性能瓶颈可能出现在任何一层。&#x27;)}`;
+  }
+
+  function esc(value) {
+    return String(value).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, ch =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#039;&#x27;}[ch]));
+  }
+
+  function render(id, updateHash = true) {
+    const section = sections[id] || sections[&#x27;network-overview&#x27;];
+    select.value = id in sections ? id : &#x27;network-overview&#x27;;
+    svg.innerHTML = section.draw(section);
+    detail.textContent = section.detail;
+    if (updateHash &amp;&amp; window.location.hash !== `#${select.value}`) {
+      history.replaceState(null, &#x27;&#x27;, `#${select.value}`);
+    }
+  }
+
+  select.addEventListener(&#x27;change&#x27;, () =&gt; render(select.value));
+  window.addEventListener(&#x27;hashchange&#x27;, () =&gt; render(window.location.hash.slice(1), false));
+  const initial = window.location.hash.slice(1);
+  render(initial in sections ? initial : &#x27;network-overview&#x27;, false);
+})();
+&lt;/script&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>
