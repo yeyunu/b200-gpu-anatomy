@@ -53,7 +53,23 @@
 - 典型统一内存 SoC：CPU 和 GPU 共享同一份物理内存，但各自仍有缓存。
 - Grace Blackwell GB200：CPU 的 LPDDR5X 与 GPU 的 HBM 物理分离，通过统一地址空间和缓存一致性互连协作。
 
-![CPU/GPU 内存与缓存架构对比](cpu-gpu-memory-map.png)
+### 状态 1：初始值 `x=10`
+
+CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 的数据。
+
+![CPU/GPU 内存架构初始状态](cpu-gpu-memory-map.png)
+
+### 状态 2：CPU 将 `x` 写成 20
+
+传统独立显卡仍保留旧副本；统一内存 SoC 和 GB200 会通过缓存一致性机制使 GPU 的旧缓存失效。
+
+![CPU 写入后的内存与缓存状态](cpu-gpu-memory-map-step-2.png)
+
+### 状态 3：GPU 再次读取 `x`
+
+传统独立显卡需要显式复制、迁移或同步才能读到 20；统一内存 SoC 和 GB200 可以重新取得最新值。
+
+![GPU 重新读取后的内存与缓存状态](cpu-gpu-memory-map-step-3.png)
 
 ## 说明
 
