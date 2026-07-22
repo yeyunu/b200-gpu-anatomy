@@ -1,0 +1,1500 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="referrer" content="no-referrer">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
+<title>Gpu Sm Warp Memory Explainer</title>
+<style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
+</head>
+<body>
+<iframe sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" title="Gpu Sm Warp Memory Explainer" srcdoc="&lt;!doctype html&gt;
+&lt;html lang=&quot;en&quot;&gt;
+&lt;head&gt;
+&lt;meta charset=&quot;utf-8&quot;&gt;
+&lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
+&lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
+&lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
+&lt;title&gt;Gpu Sm Warp Memory Explainer&lt;/title&gt;
+&lt;style&gt;:root {
+  color-scheme: light dark;
+  background-color: var(--background) !important;
+
+  /* Agent-facing contract; keep in sync with SKILL.md. */
+  --background: light-dark(rgb(255 255 255), rgb(24 24 24));
+  --foreground: light-dark(rgb(26 28 31), rgb(255 255 255));
+  --card: color-mix(in oklab, var(--foreground) 5%, transparent);
+  --card-foreground: var(--foreground);
+  --popover: light-dark(rgb(255 255 255), rgb(45 45 45));
+  --popover-foreground: var(--foreground);
+  --primary: light-dark(rgb(51 156 255), rgb(131 195 255));
+  --primary-foreground: light-dark(rgb(255 255 255), rgb(13 13 13));
+  --secondary: light-dark(rgb(255 255 255 / 96%), rgb(54 54 54 / 96%));
+  --secondary-foreground: var(--foreground);
+  --muted: color-mix(in srgb, var(--foreground) 10%, transparent);
+  --muted-foreground: light-dark(
+    rgb(26 28 31 / 49.4%),
+    rgb(255 255 255 / 49.8%)
+  );
+  --accent: light-dark(rgb(229 242 255), rgb(13 39 63));
+  --accent-foreground: var(--primary);
+  --destructive: light-dark(rgb(226 85 7), rgb(255 133 73));
+  --border: light-dark(rgb(26 28 31 / 8%), rgb(255 255 255 / 8.2%));
+  --input: light-dark(
+    rgb(26 28 31 / 11.8%),
+    color-mix(in oklab, rgb(0 0 0) 10%, transparent)
+  );
+  --ring: light-dark(rgb(51 156 255), rgb(131 195 255 / 76%));
+  --font-size-base: 14px;
+  --viz-series-1: var(--primary);
+  --viz-series-2: light-dark(rgb(243 136 59), rgb(245 154 86));
+  --viz-series-3: light-dark(rgb(93 201 119), rgb(116 213 139));
+  --viz-series-4: light-dark(rgb(235 119 177), rgb(240 143 192));
+  --viz-series-5: light-dark(rgb(155 121 236), rgb(170 145 239));
+  --viz-series-6: light-dark(rgb(58 185 177), rgb(90 203 194));
+
+  /* Internal implementation variables; not part of the agent contract. */
+  --font-sans: -apple-system, system-ui, &quot;Segoe UI&quot;, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, &quot;SF Mono&quot;, Menlo, Consolas, &quot;Liberation Mono&quot;,
+    monospace;
+  --font-size-normal: max(11px, var(--font-size-base));
+  --font-size-tooltip: calc(var(--font-size-base) - 1px);
+  --font-size-small: max(11px, calc(var(--font-size-base) - 2px));
+  --font-size-h1: calc(var(--font-size-normal) * 1.7142857143);
+  --font-size-h2: calc(var(--font-size-normal) * 1.4285714286);
+  --font-size-h3: calc(var(--font-size-normal) * 1.2857142857);
+  --font-weight-normal: 430;
+  --font-weight-medium: 500;
+  --line-height-normal: calc(var(--font-size-normal) * 1.5);
+  --line-height-tooltip: calc(var(--font-size-tooltip) * 1.4285714286);
+  --line-height-small: calc(var(--font-size-small) + 4px);
+  --radius: 12.5px;
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-2xl: calc(var(--radius) * 1.6);
+  --radius-full: 9999px;
+  --shadow-sm: 0 1px 2px -1px rgb(0 0 0 / 8%);
+  --checkmark-image: url(&quot;data:image/svg+xml,%3Csvg xmlns=&#x27;http://www.w3.org/2000/svg&#x27; viewBox=&#x27;0 0 17 17&#x27;%3E%3Cpath d=&#x27;M12.8961 3.64101C13.1297 3.41418 13.4984 3.37523 13.7779 3.56581C14.0571 3.75635 14.1554 4.11331 14.0299 4.41347L13.9615 4.53847L7.71151 13.7045C7.59411 13.8767 7.4063 13.9877 7.19881 14.0072C6.99136 14.0267 6.78564 13.9533 6.63826 13.806L2.88826 10.056L2.79842 9.9457C2.6192 9.67407 2.64927 9.30496 2.88826 9.06581C3.12738 8.82669 3.49647 8.79676 3.76815 8.97597L3.8785 9.06581L7.03084 12.2182L12.8053 3.74941L12.8961 3.64101Z&#x27;/%3E%3C/svg%3E&quot;);
+
+  /* Legacy aliases; not part of the current agent contract. */
+  --viz-bg: transparent;
+  --viz-panel: var(--card);
+  --viz-border: var(--border);
+  --viz-text: var(--foreground);
+  --viz-muted: var(--muted-foreground);
+  --viz-accent: var(--primary);
+  --viz-accent-text: var(--primary-foreground);
+  --viz-accent-bg: var(--accent);
+  --viz-font-size: var(--font-size-base);
+  --viz-warning: var(--destructive);
+  --color-background-primary: var(--background);
+  --color-text-primary: var(--foreground);
+  --color-border-secondary: var(--border);
+}
+
+:root[data-theme=&quot;light&quot;] {
+  color-scheme: light;
+}
+
+:root[data-theme=&quot;dark&quot;] {
+  color-scheme: dark;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html &gt; body {
+  margin: 0;
+  padding: 5px;
+  color: var(--foreground);
+  background: transparent !important;
+  font-family: var(--font-sans);
+  font-size: var(--font-size-normal);
+  font-weight: var(--font-weight-normal);
+  line-height: var(--line-height-normal);
+}
+
+a {
+  color: color-mix(in srgb, var(--viz-accent) 80%, var(--viz-text) 20%);
+  cursor: pointer;
+  font-weight: var(--viz-font-weight-medium);
+  text-decoration: none;
+  text-underline-offset: 2px;
+}
+
+a:is(:hover, :focus-visible) {
+  text-decoration-line: underline;
+  text-decoration-style: dashed;
+  text-decoration-thickness: 0.5px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p {
+  margin-block: 0;
+}
+
+h1 {
+  font-size: var(--font-size-h1);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h2 {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.3;
+}
+
+b,
+strong,
+th {
+  font-weight: var(--font-weight-medium);
+}
+
+code:not(pre code) {
+  display: inline;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 0.92em;
+  overflow-wrap: anywhere;
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  word-break: break-word;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: thin;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--foreground);
+  font: inherit;
+  text-align: start;
+}
+
+.table :is(th, td) {
+  padding-block: 10px;
+  padding-inline: 0 24px;
+  overflow-wrap: anywhere;
+  border-bottom: 1px solid var(--border);
+  text-align: start;
+  vertical-align: top;
+}
+
+.table-responsive &gt; .table :is(th, td) {
+  overflow-wrap: break-word;
+}
+
+.table :is(th, td):last-child {
+  padding-inline-end: 0;
+}
+
+.table :is(caption, thead th) {
+  font-weight: 600;
+}
+
+.table thead th {
+  padding-block: 8px;
+  border-bottom-color: color-mix(in srgb, var(--foreground) 16%, transparent);
+}
+
+.table tbody tr:last-child :is(th, td) {
+  border-bottom: 0;
+}
+
+.table.table-sm :is(th, td) {
+  padding-block: 6px;
+}
+
+.table.table-sm :is(th, td):not(:last-child) {
+  padding-inline-end: 16px;
+}
+
+.table :is(.text-end, [align=&quot;right&quot;]) {
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+.table :is(.text-center, [align=&quot;center&quot;]) {
+  text-align: center;
+}
+
+.table .text-nowrap {
+  white-space: nowrap;
+}
+
+#widget {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0;
+  background: transparent !important;
+}
+
+.card {
+  min-width: 0;
+  padding: 12px;
+  overflow: hidden;
+  overflow-wrap: break-word;
+  border-radius: var(--radius-2xl);
+  corner-shape: superellipse(1.5);
+  color: var(--card-foreground);
+  background: var(--card);
+}
+
+#widget &gt; :not(.card) {
+  width: 100% !important;
+  max-width: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.tooltip {
+  position: fixed;
+  z-index: 50;
+  top: 0;
+  left: 0;
+  width: max-content;
+  max-width: min(
+    20rem,
+    var(--tooltip-available-width, calc(100vw - 10px)),
+    calc(100vw - 10px)
+  );
+  max-height: min(
+    var(--tooltip-available-height, calc(100vh - 10px)),
+    calc(100vh - 10px)
+  );
+  padding: 4px 8px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--popover-foreground);
+  background: var(--popover);
+  box-shadow: none;
+  font-size: var(--font-size-tooltip);
+  line-height: var(--line-height-tooltip);
+  overflow-wrap: break-word;
+  white-space: normal;
+  pointer-events: none;
+  user-select: none;
+}
+
+.viz-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(max(180px, 24%), 1fr));
+  gap: 10px;
+}
+
+.viz-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.viz-stat-value {
+  font-size: var(--font-size-h2);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.25;
+}
+
+.viz-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+}
+
+.viz-badge {
+  padding: 3px 8px;
+  border-radius: var(--radius-full);
+  color: var(--accent-foreground);
+  background: var(--accent);
+  font-weight: var(--font-weight-medium);
+}
+
+small,
+.text-small,
+.viz-badge {
+  font-size: var(--font-size-small);
+  line-height: var(--line-height-small);
+}
+
+.text-muted {
+  color: var(--muted-foreground);
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.viz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+}
+
+.viz-controls &gt; .form-label {
+  display: grid;
+  min-width: min(100%, 260px);
+  flex: 1 1 280px;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 2px 12px;
+  margin-bottom: 0;
+}
+
+.viz-controls &gt; .form-label &gt; :is(.form-control, .form-range, .form-select) {
+  grid-column: 1 / -1;
+}
+
+.btn,
+.form-check-input,
+.form-control,
+.form-range,
+.form-select {
+  font: inherit;
+}
+
+.btn {
+  appearance: button;
+  display: inline-flex;
+  inline-size: fit-content;
+  max-inline-size: 100%;
+  min-height: 28px;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  margin: 0;
+  padding: 0 8px;
+  -webkit-app-region: no-drag;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: var(--cursor-interaction, pointer);
+  text-align: center;
+  text-decoration: none;
+  white-space: nowrap;
+  user-select: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+.btn:is(.btn-block, .viz-tile) {
+  inline-size: 100%;
+}
+
+.btn.viz-tile {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  white-space: normal;
+}
+
+a.btn {
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.btn:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn-primary {
+  border-color: transparent;
+  color: var(--primary-foreground);
+  background: var(--foreground);
+  background-clip: padding-box;
+}
+
+.btn-primary .text-muted {
+  color: color-mix(in srgb, var(--primary-foreground) 50%, transparent);
+}
+
+.btn-primary:not(:disabled):hover {
+  background: color-mix(in srgb, var(--foreground) 80%, transparent);
+  background-clip: padding-box;
+}
+
+.btn-ghost {
+  border-color: transparent;
+  color: var(--muted-foreground);
+  background: transparent;
+}
+
+.btn-ghost:not(:disabled):hover {
+  color: var(--foreground);
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+[data-lucide] {
+  stroke-width: 1.6;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--foreground);
+}
+
+.form-control {
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  padding: 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background: var(--secondary);
+}
+
+.form-control::placeholder {
+  color: var(--muted-foreground);
+}
+
+.form-control[type=&quot;file&quot;] {
+  padding: 0;
+  overflow: hidden;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control[type=&quot;file&quot;]::file-selector-button {
+  min-height: 26px;
+  margin-right: 8px;
+  padding: 0 8px;
+  border: 0;
+  border-right: 1px solid var(--input);
+  color: var(--secondary-foreground);
+  background: var(--secondary);
+  cursor: inherit;
+  font: inherit;
+}
+
+.form-control[type=&quot;file&quot;]:not(:disabled):hover::file-selector-button {
+  background: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-control-color[type=&quot;color&quot;] {
+  width: 40px;
+  height: 28px;
+  padding: 3px;
+  cursor: var(--cursor-interaction, pointer);
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch-wrapper {
+  padding: 0;
+}
+
+.form-control-color[type=&quot;color&quot;]::-webkit-color-swatch {
+  border: 0;
+  border-radius: calc(var(--radius-lg) - 4px);
+  corner-shape: superellipse(1.5);
+}
+
+textarea.form-control {
+  height: auto;
+  min-height: 72px;
+  padding: 8px 10px;
+  resize: vertical;
+}
+
+.form-control:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-control:disabled,
+.form-select:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.form-select {
+  appearance: none;
+  display: block;
+  width: 100%;
+  min-height: 28px;
+  margin: 0;
+  padding: 0 32px 0 8px;
+  outline: none;
+  border: 1px solid var(--input);
+  border-radius: var(--radius-lg);
+  corner-shape: superellipse(1.5);
+  color: var(--foreground);
+  background-color: var(--secondary);
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted-foreground) 50%),
+    linear-gradient(135deg, var(--muted-foreground) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 50%,
+    calc(100% - 10px) 50%;
+  background-repeat: no-repeat;
+  background-size: 4px 4px;
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-select:not(:disabled):hover {
+  background-color: color-mix(in srgb, var(--foreground) 6%, var(--secondary));
+}
+
+.form-select:focus-visible {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-check {
+  display: flex;
+  min-height: 20px;
+  align-items: center;
+  gap: 6px;
+}
+
+.form-check-input {
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  flex: 0 0 auto;
+  margin: 0;
+  border: 1px solid var(--input);
+  color: var(--primary-foreground);
+  background-color: transparent;
+  cursor: var(--cursor-interaction, default);
+  transition:
+    background-color 150ms,
+    border-color 150ms,
+    box-shadow 150ms;
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;] {
+  border-color: var(--input);
+  border-radius: var(--radius-sm);
+  corner-shape: superellipse(1.5);
+  background-color: var(--secondary);
+  box-shadow: var(--shadow-sm);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input:not(:disabled):not(:checked):hover {
+  background-color: var(--card);
+}
+
+.form-check:not(.form-switch) .form-check-input[type=&quot;checkbox&quot;]:checked {
+  border-color: var(--primary);
+  background-color: var(--primary);
+}
+
+.form-check:not(.form-switch)
+  .form-check-input[type=&quot;checkbox&quot;]:checked::before {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background: var(--primary-foreground);
+  content: &quot;&quot;;
+  mask: var(--checkmark-image) center / 12px 12px no-repeat;
+}
+
+.form-check-input[type=&quot;radio&quot;] {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+}
+
+.form-check-input[type=&quot;radio&quot;]:checked {
+  border: 2px solid var(--primary);
+  background:
+    radial-gradient(circle, var(--primary-foreground) 0 2.5px, transparent 3px),
+    var(--primary);
+}
+
+.form-check:not(.form-switch) .form-check-input:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled {
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form-check:not(.form-switch) .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+}
+
+.form-switch .form-check-input:disabled,
+.form-switch .form-check-input:disabled + .form-check-label {
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.form-check-label {
+  color: var(--foreground);
+  cursor: var(--cursor-interaction, default);
+}
+
+.form-switch .form-check-input {
+  position: relative;
+  width: 32px;
+  height: 20px;
+  border: 0;
+  border-radius: var(--radius-full);
+  background: var(--muted);
+  box-shadow: none;
+  transition: background-color 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input::before {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  width: 16px;
+  height: 16px;
+  box-sizing: border-box;
+  border: 1px solid light-dark(var(--primary-foreground), var(--foreground));
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+  box-shadow: var(--shadow-sm);
+  content: &quot;&quot;;
+  transform: translate(2px, -50%);
+  transition: transform 200ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.form-switch .form-check-input:checked {
+  background: var(--primary);
+}
+
+.form-switch .form-check-input:checked::before {
+  transform: translate(14px, -50%);
+}
+
+.form-switch .form-check-input:focus-visible {
+  box-shadow: 0 0 0 2px var(--ring);
+}
+
+.form-range {
+  appearance: none;
+  display: block;
+  width: 100%;
+  height: 28px;
+  flex: 1;
+  margin: 0;
+  padding: 0;
+  outline: none;
+  border: 0;
+  accent-color: var(--primary);
+  background: linear-gradient(
+      color-mix(in srgb, var(--foreground) 7%, transparent),
+      color-mix(in srgb, var(--foreground) 7%, transparent)
+    )
+    center / 100% 2px no-repeat;
+}
+
+.form-range::-webkit-slider-runnable-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-webkit-slider-thumb {
+  appearance: none;
+  width: 20px;
+  height: 20px;
+  margin-top: 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-webkit-slider-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range::-moz-range-track {
+  height: 28px;
+  background: transparent;
+}
+
+.form-range::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-full);
+  background: light-dark(var(--primary-foreground), var(--foreground));
+}
+
+.form-range:focus-visible::-moz-range-thumb {
+  border-color: var(--ring);
+  box-shadow: inset 0 0 0 1px var(--ring);
+}
+
+.form-range:disabled {
+  cursor: not-allowed;
+  opacity: 0.4;
+}
+
+.btn:not(.btn-primary, .viz-tile):is(
+    [aria-pressed=&quot;true&quot;],
+    [aria-selected=&quot;true&quot;],
+    .is-selected
+  ) {
+  border-color: var(--primary);
+  color: var(--primary-foreground);
+  background: var(--primary);
+}
+
+.btn.viz-tile:is([aria-pressed=&quot;true&quot;], [aria-selected=&quot;true&quot;], .is-selected) {
+  border-color: var(--primary);
+  box-shadow: inset 0 0 0 1px var(--primary);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+#widget &gt; svg {
+  width: 100%;
+}
+
+.text-warning,
+.text-destructive {
+  color: var(--destructive);
+}
+
+html&gt;body{padding:0}&lt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;div id=&quot;gpu-sm-warp-memory-explainer&quot;&gt;
+  &lt;style&gt;
+    #gpu-sm-warp-memory-explainer {
+      width: 100%;
+      color: var(--foreground);
+      display: grid;
+      gap: 12px;
+    }
+    #gpu-sm-warp-memory-explainer .diagram {
+      display: block;
+      width: 100%;
+      height: auto;
+      color: var(--foreground);
+    }
+    #gpu-sm-warp-memory-explainer .frame {
+      fill: color-mix(in srgb, var(--card) 72%, transparent);
+      stroke: var(--border);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .blue {
+      fill: color-mix(in srgb, var(--viz-series-1) 18%, transparent);
+      stroke: var(--viz-series-1);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .green {
+      fill: color-mix(in srgb, var(--viz-series-2) 18%, transparent);
+      stroke: var(--viz-series-2);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .orange {
+      fill: color-mix(in srgb, var(--viz-series-3) 18%, transparent);
+      stroke: var(--viz-series-3);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .pink {
+      fill: color-mix(in srgb, var(--viz-series-4) 18%, transparent);
+      stroke: var(--viz-series-4);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .purple {
+      fill: color-mix(in srgb, var(--viz-series-5) 18%, transparent);
+      stroke: var(--viz-series-5);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .teal {
+      fill: color-mix(in srgb, var(--viz-series-6) 18%, transparent);
+      stroke: var(--viz-series-6);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .cache {
+      fill: color-mix(in srgb, var(--viz-series-1) 13%, var(--muted));
+      stroke: var(--viz-series-1);
+      stroke-width: 2;
+    }
+    #gpu-sm-warp-memory-explainer .label {
+      fill: var(--foreground);
+      font-size: calc(var(--font-size-base) * 1.1);
+      font-weight: 500;
+      text-anchor: middle;
+    }
+    #gpu-sm-warp-memory-explainer .small {
+      fill: var(--muted-foreground);
+      font-size: calc(var(--font-size-base) * 0.9);
+      font-weight: 400;
+      text-anchor: middle;
+    }
+    #gpu-sm-warp-memory-explainer .left {
+      fill: var(--foreground);
+      font-size: calc(var(--font-size-base) * 0.98);
+      font-weight: 500;
+      text-anchor: start;
+    }
+    #gpu-sm-warp-memory-explainer .path {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      marker-end: url(#gpu-arrow);
+    }
+    #gpu-sm-warp-memory-explainer .dashed {
+      fill: none;
+      stroke: var(--muted-foreground);
+      stroke-width: 2;
+      stroke-dasharray: 6 5;
+    }
+    #gpu-sm-warp-memory-explainer .thread {
+      fill: var(--viz-series-1);
+      stroke: var(--background);
+      stroke-width: 1;
+    }
+    #gpu-sm-warp-memory-explainer .thread-muted {
+      fill: var(--muted);
+      stroke: var(--border);
+      stroke-width: 1;
+    }
+    #gpu-sm-warp-memory-explainer .timeline-compute {
+      fill: color-mix(in srgb, var(--viz-series-2) 28%, transparent);
+      stroke: var(--viz-series-2);
+      stroke-width: 1;
+    }
+    #gpu-sm-warp-memory-explainer .timeline-wait {
+      fill: color-mix(in srgb, var(--muted) 72%, transparent);
+      stroke: var(--border);
+      stroke-width: 1;
+    }
+    #gpu-sm-warp-memory-explainer .status-line { color: var(--muted-foreground); }
+  &lt;/style&gt;
+
+  &lt;div class=&quot;viz-controls&quot; role=&quot;group&quot; aria-label=&quot;选择图解步骤&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-gpu-view=&quot;hierarchy&quot; aria-pressed=&quot;true&quot;&gt;① GPU 层级&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;sm&quot; aria-pressed=&quot;false&quot;&gt;② SM 内部&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;simt&quot; aria-pressed=&quot;false&quot;&gt;③ Warp / SIMT&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;latency&quot; aria-pressed=&quot;false&quot;&gt;④ 延迟隐藏&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;memory&quot; aria-pressed=&quot;false&quot;&gt;⑤ 内存层级&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;bounds&quot; aria-pressed=&quot;false&quot;&gt;⑥ 性能瓶颈&lt;/button&gt;
+  &lt;/div&gt;
+
+  &lt;svg class=&quot;diagram&quot; viewBox=&quot;0 0 720 490&quot; role=&quot;img&quot; aria-labelledby=&quot;gpu-explainer-title gpu-explainer-desc&quot;&gt;
+    &lt;title id=&quot;gpu-explainer-title&quot;&gt;GPU 的 SM、Warp、线程、延迟隐藏和内存层级&lt;/title&gt;
+    &lt;desc id=&quot;gpu-explainer-desc&quot;&gt;六步交互图解，依次展示 GPU 到线程的层级、SM 内部结构、SIMT 和分支发散、Warp 延迟隐藏、GPU 内存层级，以及计算受限和内存受限的区别。&lt;/desc&gt;
+    &lt;defs&gt;
+      &lt;marker id=&quot;gpu-arrow&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;9&quot; refY=&quot;5&quot; markerWidth=&quot;6&quot; markerHeight=&quot;6&quot; orient=&quot;auto-start-reverse&quot;&gt;
+        &lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;currentColor&quot;&gt;&lt;/path&gt;
+      &lt;/marker&gt;
+    &lt;/defs&gt;
+
+    &lt;g data-gpu-panel=&quot;hierarchy&quot;&gt;
+      &lt;rect class=&quot;frame&quot; x=&quot;25&quot; y=&quot;32&quot; width=&quot;670&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;硬件调度层级：一张 GPU 有许多 SM，每个 Warp 固定 32 个线程&lt;/text&gt;
+
+      &lt;rect class=&quot;blue&quot; x=&quot;48&quot; y=&quot;102&quot; width=&quot;155&quot; height=&quot;245&quot; rx=&quot;14&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;126&quot; y=&quot;132&quot;&gt;整张 GPU&lt;/text&gt;
+      &lt;g id=&quot;hierarchy-sm-grid&quot;&gt;&lt;/g&gt;
+      &lt;text class=&quot;small&quot; x=&quot;126&quot; y=&quot;326&quot;&gt;大量 SM 并行工作&lt;/text&gt;
+
+      &lt;path class=&quot;path&quot; d=&quot;M 208 225 L 245 225&quot;&gt;&lt;/path&gt;
+
+      &lt;rect class=&quot;green&quot; x=&quot;252&quot; y=&quot;102&quot; width=&quot;175&quot; height=&quot;245&quot; rx=&quot;14&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;340&quot; y=&quot;132&quot;&gt;放大一个 SM&lt;/text&gt;
+      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;156&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;189&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;222&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;255&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;174&quot;&gt;Warp 0 · 32线程&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;207&quot;&gt;Warp 1 · 32线程&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;240&quot;&gt;Warp 2 · 32线程&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;273&quot;&gt;还有许多 Warp&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;316&quot;&gt;调度器选择可运行 Warp&lt;/text&gt;
+
+      &lt;path class=&quot;path&quot; d=&quot;M 432 225 L 469 225&quot;&gt;&lt;/path&gt;
+
+      &lt;rect class=&quot;purple&quot; x=&quot;476&quot; y=&quot;102&quot; width=&quot;195&quot; height=&quot;245&quot; rx=&quot;14&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;574&quot; y=&quot;132&quot;&gt;放大一个 Warp&lt;/text&gt;
+      &lt;g id=&quot;hierarchy-thread-grid&quot;&gt;&lt;/g&gt;
+      &lt;text class=&quot;small&quot; x=&quot;574&quot; y=&quot;265&quot;&gt;32 个线程执行同一条指令&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;574&quot; y=&quot;289&quot;&gt;但处理各自的数据&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;574&quot; y=&quot;319&quot;&gt;Thread 0 … Thread 31&lt;/text&gt;
+
+      &lt;rect class=&quot;orange&quot; x=&quot;55&quot; y=&quot;376&quot; width=&quot;610&quot; height=&quot;38&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;401&quot;&gt;Kernel → Grid → Thread Block → Warp → Thread&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;软件创建 Block；Block 被分配给 SM；SM 再按 32 个线程组成 Warp&lt;/text&gt;
+    &lt;/g&gt;
+
+    &lt;g data-gpu-panel=&quot;sm&quot; style=&quot;display:none&quot;&gt;
+      &lt;rect class=&quot;green&quot; x=&quot;38&quot; y=&quot;32&quot; width=&quot;644&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;一个 SM：既有计算单元，也有线程调度和片上存储&lt;/text&gt;
+
+      &lt;rect class=&quot;teal&quot; x=&quot;65&quot; y=&quot;95&quot; width=&quot;250&quot; height=&quot;67&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;190&quot; y=&quot;122&quot;&gt;Warp 调度器&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;190&quot; y=&quot;147&quot;&gt;从驻留 Warp 中选择已就绪者&lt;/text&gt;
+
+      &lt;rect class=&quot;purple&quot; x=&quot;342&quot; y=&quot;95&quot; width=&quot;313&quot; height=&quot;67&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;499&quot; y=&quot;122&quot;&gt;大量 Warp 的执行状态&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;499&quot; y=&quot;147&quot;&gt;有的计算、有的等待、有的已就绪&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 315 128 L 338 128&quot;&gt;&lt;/path&gt;
+
+      &lt;rect class=&quot;blue&quot; x=&quot;65&quot; y=&quot;195&quot; width=&quot;135&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;133&quot; y=&quot;225&quot;&gt;CUDA Core&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;133&quot; y=&quot;252&quot;&gt;FP32 / INT32 等&lt;/text&gt;
+
+      &lt;rect class=&quot;pink&quot; x=&quot;218&quot; y=&quot;195&quot; width=&quot;135&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;286&quot; y=&quot;225&quot;&gt;Tensor Core&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;286&quot; y=&quot;252&quot;&gt;矩阵乘加&lt;/text&gt;
+
+      &lt;rect class=&quot;orange&quot; x=&quot;371&quot; y=&quot;195&quot; width=&quot;135&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;439&quot; y=&quot;225&quot;&gt;Load / Store&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;439&quot; y=&quot;252&quot;&gt;读取和写入数据&lt;/text&gt;
+
+      &lt;rect class=&quot;frame&quot; x=&quot;524&quot; y=&quot;195&quot; width=&quot;131&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;590&quot; y=&quot;225&quot;&gt;特殊函数&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;590&quot; y=&quot;252&quot;&gt;指数、倒数等&lt;/text&gt;
+
+      &lt;rect class=&quot;cache&quot; x=&quot;65&quot; y=&quot;310&quot; width=&quot;180&quot; height=&quot;82&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;155&quot; y=&quot;341&quot;&gt;寄存器&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;155&quot; y=&quot;367&quot;&gt;每个线程自己的数据&lt;/text&gt;
+
+      &lt;rect class=&quot;orange&quot; x=&quot;270&quot; y=&quot;310&quot; width=&quot;180&quot; height=&quot;82&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;341&quot;&gt;Shared Memory&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;367&quot;&gt;同一 Block 的线程共享&lt;/text&gt;
+
+      &lt;rect class=&quot;purple&quot; x=&quot;475&quot; y=&quot;310&quot; width=&quot;180&quot; height=&quot;82&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;565&quot; y=&quot;341&quot;&gt;L1 Cache&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;565&quot; y=&quot;367&quot;&gt;SM 附近的自动缓存&lt;/text&gt;
+
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;SM 同时保存很多 Warp；调度器把它们送到不同执行单元，并尽量使用片上数据&lt;/text&gt;
+    &lt;/g&gt;
+
+    &lt;g data-gpu-panel=&quot;simt&quot; style=&quot;display:none&quot;&gt;
+      &lt;rect class=&quot;purple&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;SIMT：一个 Warp 的 32 个线程，同步执行同一条指令&lt;/text&gt;
+
+      &lt;rect class=&quot;frame&quot; x=&quot;55&quot; y=&quot;95&quot; width=&quot;610&quot; height=&quot;120&quot; rx=&quot;12&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;left&quot; x=&quot;75&quot; y=&quot;125&quot;&gt;同一条指令：&lt;/text&gt;
+      &lt;text class=&quot;label&quot; x=&quot;400&quot; y=&quot;125&quot;&gt;C[i] = A[i] + B[i]&lt;/text&gt;
+      &lt;g id=&quot;simt-thread-grid&quot;&gt;&lt;/g&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;198&quot;&gt;线程编号 i 不同，所以 32 个线程处理 32 组不同数据&lt;/text&gt;
+
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;255&quot;&gt;出现分支时：同一个 Warp 可能分两轮执行&lt;/text&gt;
+
+      &lt;rect class=&quot;blue&quot; x=&quot;55&quot; y=&quot;283&quot; width=&quot;290&quot; height=&quot;92&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;200&quot; y=&quot;311&quot;&gt;第一轮：偶数线程执行加法&lt;/text&gt;
+      &lt;g id=&quot;divergence-even-grid&quot;&gt;&lt;/g&gt;
+      &lt;text class=&quot;small&quot; x=&quot;200&quot; y=&quot;361&quot;&gt;奇数线程暂时关闭&lt;/text&gt;
+
+      &lt;rect class=&quot;orange&quot; x=&quot;375&quot; y=&quot;283&quot; width=&quot;290&quot; height=&quot;92&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;520&quot; y=&quot;311&quot;&gt;第二轮：奇数线程执行减法&lt;/text&gt;
+      &lt;g id=&quot;divergence-odd-grid&quot;&gt;&lt;/g&gt;
+      &lt;text class=&quot;small&quot; x=&quot;520&quot; y=&quot;361&quot;&gt;偶数线程暂时关闭&lt;/text&gt;
+
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;414&quot;&gt;这叫 Warp divergence：两条分支串行执行，部分线程在每一轮闲置&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;规则、相同的控制流程最适合 SIMT；复杂分支可能降低有效吞吐量&lt;/text&gt;
+    &lt;/g&gt;
+
+    &lt;g data-gpu-panel=&quot;latency&quot; style=&quot;display:none&quot;&gt;
+      &lt;rect class=&quot;teal&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;延迟隐藏：等待没有消失，而是被其他 Warp 的计算覆盖&lt;/text&gt;
+
+      &lt;text class=&quot;small&quot; x=&quot;180&quot; y=&quot;100&quot;&gt;t1&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;270&quot; y=&quot;100&quot;&gt;t2&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;100&quot;&gt;t3&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;450&quot; y=&quot;100&quot;&gt;t4&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;540&quot; y=&quot;100&quot;&gt;t5&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;630&quot; y=&quot;100&quot;&gt;t6&lt;/text&gt;
+      &lt;path class=&quot;dashed&quot; d=&quot;M 135 110 L 665 110&quot;&gt;&lt;/path&gt;
+
+      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;153&quot;&gt;Warp A&lt;/text&gt;
+      &lt;rect class=&quot;timeline-compute&quot; x=&quot;135&quot; y=&quot;128&quot; width=&quot;90&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;180&quot; y=&quot;152&quot;&gt;发起读取&lt;/text&gt;
+      &lt;rect class=&quot;timeline-wait&quot; x=&quot;225&quot; y=&quot;128&quot; width=&quot;270&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;152&quot;&gt;等待 HBM 数据&lt;/text&gt;
+      &lt;rect class=&quot;timeline-compute&quot; x=&quot;495&quot; y=&quot;128&quot; width=&quot;170&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;580&quot; y=&quot;152&quot;&gt;数据到达，计算&lt;/text&gt;
+
+      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;213&quot;&gt;Warp B&lt;/text&gt;
+      &lt;rect class=&quot;timeline-compute&quot; x=&quot;225&quot; y=&quot;188&quot; width=&quot;180&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;315&quot; y=&quot;212&quot;&gt;执行计算&lt;/text&gt;
+
+      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;273&quot;&gt;Warp C&lt;/text&gt;
+      &lt;rect class=&quot;timeline-compute&quot; x=&quot;405&quot; y=&quot;248&quot; width=&quot;90&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;450&quot; y=&quot;272&quot;&gt;计算&lt;/text&gt;
+
+      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;333&quot;&gt;Warp D&lt;/text&gt;
+      &lt;rect class=&quot;timeline-compute&quot; x=&quot;495&quot; y=&quot;308&quot; width=&quot;90&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;540&quot; y=&quot;332&quot;&gt;计算&lt;/text&gt;
+
+      &lt;path class=&quot;path&quot; d=&quot;M 180 365 L 580 365&quot;&gt;&lt;/path&gt;
+      &lt;text class=&quot;label&quot; x=&quot;380&quot; y=&quot;396&quot;&gt;SM 几乎一直有可运行的 Warp&lt;/text&gt;
+      &lt;rect class=&quot;timeline-compute&quot; x=&quot;190&quot; y=&quot;414&quot; width=&quot;25&quot; height=&quot;18&quot; rx=&quot;3&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;285&quot; y=&quot;429&quot;&gt;绿色：有用计算&lt;/text&gt;
+      &lt;rect class=&quot;timeline-wait&quot; x=&quot;400&quot; y=&quot;414&quot; width=&quot;25&quot; height=&quot;18&quot; rx=&quot;3&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;505&quot; y=&quot;429&quot;&gt;灰色：该 Warp 等待&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;前提：必须有足够多的活跃 Warp；如果所有 Warp 都在等待，SM 仍会停顿&lt;/text&gt;
+    &lt;/g&gt;
+
+    &lt;g data-gpu-panel=&quot;memory&quot; style=&quot;display:none&quot;&gt;
+      &lt;rect class=&quot;orange&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;GPU 内存层级：越靠近计算单元越快，但容量通常越小&lt;/text&gt;
+
+      &lt;text class=&quot;left&quot; x=&quot;45&quot; y=&quot;120&quot;&gt;更快 / 更小&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 105 132 L 105 380&quot;&gt;&lt;/path&gt;
+      &lt;text class=&quot;left&quot; x=&quot;45&quot; y=&quot;408&quot;&gt;更慢 / 更大&lt;/text&gt;
+
+      &lt;rect class=&quot;blue&quot; x=&quot;180&quot; y=&quot;93&quot; width=&quot;235&quot; height=&quot;55&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;118&quot;&gt;寄存器&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;139&quot;&gt;每个 Thread · 最靠近执行单元&lt;/text&gt;
+
+      &lt;rect class=&quot;green&quot; x=&quot;160&quot; y=&quot;165&quot; width=&quot;275&quot; height=&quot;61&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;192&quot;&gt;Shared Memory&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;215&quot;&gt;每个 Block · 程序主动复用数据&lt;/text&gt;
+
+      &lt;rect class=&quot;purple&quot; x=&quot;140&quot; y=&quot;243&quot; width=&quot;315&quot; height=&quot;61&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;270&quot;&gt;L1 Cache&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;293&quot;&gt;每个 SM 附近 · 自动缓存&lt;/text&gt;
+
+      &lt;rect class=&quot;teal&quot; x=&quot;120&quot; y=&quot;321&quot; width=&quot;355&quot; height=&quot;61&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;348&quot;&gt;L2 Cache&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;371&quot;&gt;整张 GPU 的 SM 共享 · B200 约 126 MB&lt;/text&gt;
+
+      &lt;rect class=&quot;pink&quot; x=&quot;500&quot; y=&quot;165&quot; width=&quot;170&quot; height=&quot;217&quot; rx=&quot;12&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;585&quot; y=&quot;203&quot;&gt;HBM3e&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;230&quot;&gt;GPU 全局内存&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;258&quot;&gt;容量大、带宽高&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;286&quot;&gt;但片外访问延迟高&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;326&quot;&gt;权重 / 激活值&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;350&quot;&gt;KV Cache / 张量&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 475 351 L 495 351&quot;&gt;&lt;/path&gt;
+
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;420&quot;&gt;8 TB/s 是总体带宽，不代表单次 HBM 读取没有等待时间&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;优化目标：从 HBM 读取一次后，在寄存器、Shared Memory 或缓存中重复使用&lt;/text&gt;
+    &lt;/g&gt;
+
+    &lt;g data-gpu-panel=&quot;bounds&quot; style=&quot;display:none&quot;&gt;
+      &lt;rect class=&quot;pink&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;422&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;性能瓶颈：代码是在“搬数据”，还是在“做计算”？&lt;/text&gt;
+
+      &lt;rect class=&quot;frame&quot; x=&quot;52&quot; y=&quot;95&quot; width=&quot;285&quot; height=&quot;270&quot; rx=&quot;13&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;195&quot; y=&quot;125&quot;&gt;内存受限：向量加法&lt;/text&gt;
+      &lt;rect class=&quot;pink&quot; x=&quot;75&quot; y=&quot;153&quot; width=&quot;75&quot; height=&quot;52&quot; rx=&quot;7&quot;&gt;&lt;/rect&gt;
+      &lt;rect class=&quot;pink&quot; x=&quot;75&quot; y=&quot;225&quot; width=&quot;75&quot; height=&quot;52&quot; rx=&quot;7&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;113&quot; y=&quot;184&quot;&gt;读 A&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;113&quot; y=&quot;256&quot;&gt;读 B&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 155 179 L 205 213&quot;&gt;&lt;/path&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 155 251 L 205 223&quot;&gt;&lt;/path&gt;
+      &lt;rect class=&quot;blue&quot; x=&quot;212&quot; y=&quot;190&quot; width=&quot;96&quot; height=&quot;58&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;260&quot; y=&quot;225&quot;&gt;1 次加法&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 260 251 L 260 289&quot;&gt;&lt;/path&gt;
+      &lt;rect class=&quot;pink&quot; x=&quot;212&quot; y=&quot;296&quot; width=&quot;96&quot; height=&quot;45&quot; rx=&quot;7&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;260&quot; y=&quot;324&quot;&gt;写回 C&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;195&quot; y=&quot;391&quot;&gt;搬运多、计算少 → 等待 HBM&lt;/text&gt;
+
+      &lt;rect class=&quot;frame&quot; x=&quot;383&quot; y=&quot;95&quot; width=&quot;285&quot; height=&quot;270&quot; rx=&quot;13&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;526&quot; y=&quot;125&quot;&gt;计算受限：矩阵乘法&lt;/text&gt;
+      &lt;rect class=&quot;pink&quot; x=&quot;410&quot; y=&quot;153&quot; width=&quot;95&quot; height=&quot;55&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;458&quot; y=&quot;177&quot;&gt;HBM&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;458&quot; y=&quot;197&quot;&gt;读取 Tile&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 510 180 L 545 180&quot;&gt;&lt;/path&gt;
+      &lt;rect class=&quot;orange&quot; x=&quot;552&quot; y=&quot;153&quot; width=&quot;90&quot; height=&quot;55&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;small&quot; x=&quot;597&quot; y=&quot;177&quot;&gt;Shared&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;597&quot; y=&quot;197&quot;&gt;保存 Tile&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 597 212 L 597 246&quot;&gt;&lt;/path&gt;
+      &lt;rect class=&quot;green&quot; x=&quot;440&quot; y=&quot;253&quot; width=&quot;174&quot; height=&quot;65&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;527&quot; y=&quot;281&quot;&gt;Tensor Core&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;527&quot; y=&quot;305&quot;&gt;同一 Tile 重用很多次&lt;/text&gt;
+      &lt;path class=&quot;path&quot; d=&quot;M 438 285 C 400 285 400 185 407 185&quot;&gt;&lt;/path&gt;
+      &lt;text class=&quot;small&quot; x=&quot;526&quot; y=&quot;343&quot;&gt;搬运一次，执行大量乘加&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;526&quot; y=&quot;391&quot;&gt;数据复用高 → 接近峰值 FLOPS&lt;/text&gt;
+
+      &lt;rect class=&quot;purple&quot; x=&quot;105&quot; y=&quot;414&quot; width=&quot;510&quot; height=&quot;35&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
+      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;438&quot;&gt;算术强度 = FLOPs ÷ 搬运字节数&lt;/text&gt;
+      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;476&quot;&gt;低算术强度通常内存受限；高算术强度更可能计算受限；随机访问也会破坏效率&lt;/text&gt;
+    &lt;/g&gt;
+  &lt;/svg&gt;
+
+  &lt;div class=&quot;status-line text-small&quot; aria-live=&quot;polite&quot;&gt;先记住主层级：GPU 包含许多 SM；SM 把线程按 32 个组成 Warp 来调度。&lt;/div&gt;
+
+  &lt;script&gt;
+    (() =&gt; {
+      const root = document.getElementById(&#x27;gpu-sm-warp-memory-explainer&#x27;);
+      if (!root) return;
+      const svgNS = &#x27;http://www.w3.org/2000/svg&#x27;;
+
+      const circle = (parent, cx, cy, className, radius = 5) =&gt; {
+        const node = document.createElementNS(svgNS, &#x27;circle&#x27;);
+        node.setAttribute(&#x27;cx&#x27;, cx);
+        node.setAttribute(&#x27;cy&#x27;, cy);
+        node.setAttribute(&#x27;r&#x27;, radius);
+        node.setAttribute(&#x27;class&#x27;, className);
+        parent.appendChild(node);
+      };
+
+      const rect = (parent, x, y, width, height, className, radius = 4) =&gt; {
+        const node = document.createElementNS(svgNS, &#x27;rect&#x27;);
+        node.setAttribute(&#x27;x&#x27;, x);
+        node.setAttribute(&#x27;y&#x27;, y);
+        node.setAttribute(&#x27;width&#x27;, width);
+        node.setAttribute(&#x27;height&#x27;, height);
+        node.setAttribute(&#x27;rx&#x27;, radius);
+        node.setAttribute(&#x27;class&#x27;, className);
+        parent.appendChild(node);
+      };
+
+      const smGrid = root.querySelector(&#x27;#hierarchy-sm-grid&#x27;);
+      if (smGrid &amp;&amp; !smGrid.childNodes.length) {
+        for (let index = 0; index &lt; 12; index += 1) {
+          rect(smGrid, 65 + (index % 3) * 41, 151 + Math.floor(index / 3) * 37, 31, 27, index === 4 ? &#x27;pink&#x27; : &#x27;green&#x27;, 4);
+        }
+      }
+
+      const threadGrid = root.querySelector(&#x27;#hierarchy-thread-grid&#x27;);
+      if (threadGrid &amp;&amp; !threadGrid.childNodes.length) {
+        for (let index = 0; index &lt; 32; index += 1) {
+          circle(threadGrid, 500 + (index % 8) * 21, 164 + Math.floor(index / 8) * 20, &#x27;thread&#x27;, 5);
+        }
+      }
+
+      const simtGrid = root.querySelector(&#x27;#simt-thread-grid&#x27;);
+      if (simtGrid &amp;&amp; !simtGrid.childNodes.length) {
+        for (let index = 0; index &lt; 32; index += 1) {
+          circle(simtGrid, 82 + index * 18, 159, &#x27;thread&#x27;, 5);
+        }
+      }
+
+      const evenGrid = root.querySelector(&#x27;#divergence-even-grid&#x27;);
+      const oddGrid = root.querySelector(&#x27;#divergence-odd-grid&#x27;);
+      if (evenGrid &amp;&amp; oddGrid &amp;&amp; !evenGrid.childNodes.length &amp;&amp; !oddGrid.childNodes.length) {
+        for (let index = 0; index &lt; 32; index += 1) {
+          circle(evenGrid, 72 + index * 8.3, 337, index % 2 === 0 ? &#x27;thread&#x27; : &#x27;thread-muted&#x27;, 3.7);
+          circle(oddGrid, 392 + index * 8.3, 337, index % 2 === 1 ? &#x27;thread&#x27; : &#x27;thread-muted&#x27;, 3.7);
+        }
+      }
+
+      const descriptions = {
+        hierarchy: &#x27;先记住主层级：GPU 包含许多 SM；SM 把线程按 32 个组成 Warp 来调度。&#x27;,
+        sm: &#x27;SM 是一座并行计算工厂：调度 Warp，调用 CUDA/Tensor Core，并使用寄存器、Shared Memory 和 L1。&#x27;,
+        simt: &#x27;SIMT 表示一个 Warp 同步执行同一指令；线程分支不同会造成 Warp divergence。&#x27;,
+        latency: &#x27;Warp 等待 HBM 时，调度器执行其他已就绪 Warp；等待仍存在，只是被有用计算覆盖。&#x27;,
+        memory: &#x27;寄存器最靠近计算单元，HBM 容量最大；数据越能在片上重复使用，访问 HBM 越少。&#x27;,
+        bounds: &#x27;搬运多、计算少容易受内存限制；数据复用高、乘加多则更可能受计算能力限制。&#x27;
+      };
+
+      const buttons = Array.from(root.querySelectorAll(&#x27;[data-gpu-view]&#x27;));
+      const panels = Array.from(root.querySelectorAll(&#x27;[data-gpu-panel]&#x27;));
+      const status = root.querySelector(&#x27;.status-line&#x27;);
+
+      buttons.forEach((button) =&gt; {
+        button.addEventListener(&#x27;click&#x27;, () =&gt; {
+          const selected = button.getAttribute(&#x27;data-gpu-view&#x27;);
+          buttons.forEach((candidate) =&gt; {
+            const active = candidate === button;
+            candidate.setAttribute(&#x27;aria-pressed&#x27;, String(active));
+            candidate.classList.toggle(&#x27;btn-primary&#x27;, active);
+          });
+          panels.forEach((panel) =&gt; {
+            panel.style.display = panel.getAttribute(&#x27;data-gpu-panel&#x27;) === selected ? &#x27;&#x27; : &#x27;none&#x27;;
+          });
+          if (status) status.textContent = descriptions[selected];
+        });
+      });
+    })();
+  &lt;/script&gt;
+&lt;/div&gt;
+
+&lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  if (window.FloatingUIDOM == null) {
+    return;
+  }
+  const { autoUpdate, computePosition, flip, offset, shift, size } =
+    window.FloatingUIDOM;
+  const tooltipPlacements = new Set([&quot;top&quot;, &quot;right&quot;, &quot;bottom&quot;, &quot;left&quot;]);
+  const tooltipId = `codex-visualization-tooltip-${
+    window.crypto?.randomUUID?.() ?? Date.now().toString(36)
+  }`;
+  const tooltipGap = 5;
+  const hoverDelay = 700;
+  const skipDelay = 300;
+  let activeTrigger = null;
+  let pendingTrigger = null;
+  let tooltip = null;
+  let openTimeout = null;
+  let autoUpdateCleanup = null;
+  let positionRequest = 0;
+  let skipDelayUntil = 0;
+
+  const getTrigger = (target) =&gt;
+    target?.nodeType === Node.ELEMENT_NODE
+      ? target.closest(&quot;[data-tooltip]&quot;)
+      : null;
+  const containsTarget = (trigger, target) =&gt;
+    target?.nodeType != null &amp;&amp; trigger.contains(target);
+  const getContent = (trigger) =&gt;
+    trigger.getAttribute(&quot;data-tooltip&quot;)?.trim() ?? &quot;&quot;;
+  const getPlacement = (trigger) =&gt; {
+    const placement = trigger.getAttribute(&quot;data-tooltip-placement&quot;);
+    return tooltipPlacements.has(placement) ? placement : &quot;top&quot;;
+  };
+  const getTooltip = () =&gt; {
+    if (tooltip == null) {
+      tooltip = document.createElement(&quot;div&quot;);
+      tooltip.id = tooltipId;
+      tooltip.className = &quot;tooltip&quot;;
+      tooltip.setAttribute(&quot;role&quot;, &quot;tooltip&quot;);
+    }
+    return tooltip;
+  };
+  const setDescribedBy = (trigger, described) =&gt; {
+    const ids = new Set(
+      (trigger.getAttribute(&quot;aria-describedby&quot;) ?? &quot;&quot;)
+        .split(/\s+/)
+        .filter(Boolean),
+    );
+    if (described) {
+      ids.add(tooltipId);
+    } else {
+      ids.delete(tooltipId);
+    }
+    if (ids.size === 0) {
+      trigger.removeAttribute(&quot;aria-describedby&quot;);
+    } else {
+      trigger.setAttribute(&quot;aria-describedby&quot;, [...ids].join(&quot; &quot;));
+    }
+  };
+  const clearOpenTimeout = () =&gt; {
+    if (openTimeout != null) {
+      window.clearTimeout(openTimeout);
+      openTimeout = null;
+    }
+    pendingTrigger = null;
+  };
+  const closeTooltip = (activateSkipDelay = true) =&gt; {
+    clearOpenTimeout();
+    positionRequest += 1;
+    autoUpdateCleanup?.();
+    autoUpdateCleanup = null;
+    if (activeTrigger == null) {
+      return;
+    }
+    setDescribedBy(activeTrigger, false);
+    activeTrigger = null;
+    tooltip?.remove();
+    if (activateSkipDelay) {
+      skipDelayUntil = Date.now() + skipDelay;
+    }
+  };
+  const updatePosition = (trigger, floating) =&gt; {
+    const request = ++positionRequest;
+    void computePosition(trigger, floating, {
+      middleware: [
+        offset(tooltipGap),
+        flip({ padding: tooltipGap }),
+        shift({ padding: tooltipGap }),
+        size({
+          padding: tooltipGap,
+          apply({ availableHeight, availableWidth, elements }) {
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-width&quot;,
+              `${Math.max(0, availableWidth)}px`,
+            );
+            elements.floating.style.setProperty(
+              &quot;--tooltip-available-height&quot;,
+              `${Math.max(0, availableHeight)}px`,
+            );
+          },
+        }),
+      ],
+      placement: getPlacement(trigger),
+      strategy: &quot;fixed&quot;,
+    })
+      .then(({ x, y }) =&gt; {
+        if (activeTrigger !== trigger || request !== positionRequest) {
+          return;
+        }
+        const scale = window.devicePixelRatio || 1;
+        floating.style.transform = `translate(${Math.round(x * scale) / scale}px, ${Math.round(y * scale) / scale}px)`;
+        floating.style.visibility = &quot;visible&quot;;
+      })
+      .catch(() =&gt; {
+        if (activeTrigger === trigger &amp;&amp; request === positionRequest) {
+          closeTooltip(false);
+        }
+      });
+  };
+  const openTooltip = (trigger) =&gt; {
+    const content = getContent(trigger);
+    if (!trigger.isConnected || content.length === 0) {
+      return;
+    }
+    clearOpenTimeout();
+    if (activeTrigger === trigger) {
+      return;
+    }
+    closeTooltip();
+    const floating = getTooltip();
+    floating.textContent = content;
+    floating.style.visibility = &quot;hidden&quot;;
+    floating.style.transform = &quot;translate(0, 0)&quot;;
+    document.body.appendChild(floating);
+    activeTrigger = trigger;
+    setDescribedBy(trigger, true);
+    autoUpdateCleanup = autoUpdate(trigger, floating, () =&gt; {
+      updatePosition(trigger, floating);
+    });
+  };
+  const requestOpen = (trigger, immediate = false) =&gt; {
+    if (
+      getContent(trigger).length === 0 ||
+      activeTrigger === trigger ||
+      pendingTrigger === trigger
+    ) {
+      return;
+    }
+    clearOpenTimeout();
+    pendingTrigger = trigger;
+    const delay =
+      immediate || activeTrigger != null || Date.now() &lt; skipDelayUntil
+        ? 0
+        : hoverDelay;
+    if (delay === 0) {
+      openTooltip(trigger);
+      return;
+    }
+    openTimeout = window.setTimeout(() =&gt; {
+      openTimeout = null;
+      pendingTrigger = null;
+      openTooltip(trigger);
+    }, delay);
+  };
+  const handlePointerOpen = (event) =&gt; {
+    if (event.pointerType === &quot;touch&quot;) {
+      return;
+    }
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    requestOpen(trigger);
+  };
+  const handleLeave = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger == null || containsTarget(trigger, event.relatedTarget)) {
+      return;
+    }
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const handleFocusIn = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (trigger?.matches(&quot;:focus-visible&quot;)) {
+      requestOpen(trigger, true);
+    }
+  };
+  const handleKeyDown = (event) =&gt; {
+    if (event.key === &quot;Escape&quot;) {
+      closeTooltip();
+    }
+  };
+  const handleContextMenu = (event) =&gt; {
+    const trigger = getTrigger(event.target);
+    if (activeTrigger === trigger || pendingTrigger === trigger) {
+      closeTooltip();
+    }
+  };
+  const destroy = () =&gt; {
+    closeTooltip(false);
+    document.removeEventListener(&quot;pointerover&quot;, handlePointerOpen);
+    document.removeEventListener(&quot;pointerout&quot;, handleLeave);
+    document.removeEventListener(&quot;focusin&quot;, handleFocusIn);
+    document.removeEventListener(&quot;focusout&quot;, handleLeave);
+    document.removeEventListener(&quot;keydown&quot;, handleKeyDown);
+    document.removeEventListener(&quot;contextmenu&quot;, handleContextMenu);
+    tooltip = null;
+  };
+
+  document.addEventListener(&quot;pointerover&quot;, handlePointerOpen);
+  document.addEventListener(&quot;pointerout&quot;, handleLeave);
+  document.addEventListener(&quot;focusin&quot;, handleFocusIn);
+  document.addEventListener(&quot;focusout&quot;, handleLeave);
+  document.addEventListener(&quot;keydown&quot;, handleKeyDown);
+  document.addEventListener(&quot;contextmenu&quot;, handleContextMenu);
+  window.addEventListener(&quot;pagehide&quot;, destroy, { once: true });
+})();
+&lt;/script&gt;
+&lt;script id=&quot;codex-visualization-lucide&quot; async src=&quot;https://unpkg.com/lucide@1.17.0/dist/umd/lucide.js&quot;&gt;&lt;/script&gt;
+&lt;script&gt;
+(() =&gt; {
+  const initialize = () =&gt; {
+    globalThis.lucide?.createIcons({ attrs: { width: 16, height: 16 } });
+  };
+  if (globalThis.lucide != null) {
+    initialize();
+    return;
+  }
+  document
+    .getElementById(&quot;codex-visualization-lucide&quot;)
+    ?.addEventListener(&quot;load&quot;, initialize, { once: true });
+})();
+&lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+"></iframe>
+</body>
+</html>

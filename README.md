@@ -15,7 +15,7 @@
 
 [打开交互式结构图](https://yeyunu.github.io/b200-gpu-anatomy/)
 
-### 三层结构预览
+### 四层结构预览
 
 #### 1. 整块 B200
 
@@ -70,6 +70,43 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 传统独立显卡需要显式复制、迁移或同步才能读到 20；统一内存 SoC 和 GB200 可以重新取得最新值。
 
 ![GPU 重新读取后的内存与缓存状态](cpu-gpu-memory-map-step-3.png)
+
+## 3. SM、Warp、线程与内存层级
+
+[打开六步交互图解](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
+
+这组图按顺序解释 GPU 的线程执行和数据供给机制：
+
+1. GPU、SM、Warp 与 Thread 的硬件调度层级
+2. SM 内部的计算单元、调度器和片上存储
+3. SIMT 执行模式与 Warp divergence
+4. 多个 Warp 如何隐藏 HBM 访问延迟
+5. 寄存器、Shared Memory、L1、L2 与 HBM 的层级
+6. 内存受限、计算受限和数据重用
+
+### 1. GPU → SM → Warp → Thread
+
+![GPU、SM、Warp 与线程层级](gpu-explainer-01-hierarchy.png)
+
+### 2. SM 内部结构
+
+![SM 内部计算和存储单元](gpu-explainer-02-sm.png)
+
+### 3. Warp 与 SIMT
+
+![SIMT 与 Warp 分支发散](gpu-explainer-03-simt.png)
+
+### 4. Warp 延迟隐藏
+
+![多个 Warp 隐藏 HBM 访问延迟](gpu-explainer-04-latency.png)
+
+### 5. GPU 内存层级
+
+![寄存器到 HBM 的 GPU 内存层级](gpu-explainer-05-memory.png)
+
+### 6. 计算受限与内存受限
+
+![计算受限、内存受限与数据重用](gpu-explainer-06-bounds.png)
 
 ## 说明
 
