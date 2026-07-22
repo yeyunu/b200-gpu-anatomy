@@ -4,11 +4,12 @@
 
 ## 1. NVIDIA Blackwell B200 分层结构图
 
-从三个层级解释 Blackwell B200：
+从四个层级解释 Blackwell B200：
 
 1. 整块 B200：两块 GPU die、HBM3e 与 NV-HBI
 2. 单块 GPU die：SM、L2 缓存、显存控制器和控制电路
 3. 单个 SM：Warp 调度器、CUDA Core、Tensor Core、寄存器与 Shared Memory/L1
+4. 单个 HBM3e 堆栈：8-Hi DRAM die、TSV 与容量计算
 
 ### 在线交互版
 
@@ -28,6 +29,10 @@
 
 ![SM 内部结构](b200-sm.png)
 
+#### 4. 放大一个 8-Hi HBM3e 堆栈
+
+![8-Hi HBM3e 堆栈结构](b200-hbm.png)
+
 ### 关键概念
 
 - B200 物理上包含两块 GPU die，但软件通常将其识别为一个 CUDA GPU 设备。
@@ -36,6 +41,7 @@
 - SM 是 GPU 执行线程和 CUDA kernel 的主要计算单元。
 - CUDA Core 负责一般数值运算，Tensor Core 专门加速矩阵乘法和 AI 计算。
 - 晶体管不是与 SM、缓存并列的功能模块；这些电路本身都由晶体管构成。
+- 一个 8-Hi HBM3e 堆栈由八层 3 GB DRAM die 垂直组成，容量为 24 GB；B200 的八个堆栈合计 192 GB。
 
 ## 2. CPU/GPU 内存与缓存架构对比
 
