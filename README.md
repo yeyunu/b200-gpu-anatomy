@@ -71,42 +71,49 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ![GPU 重新读取后的内存与缓存状态](cpu-gpu-memory-map-step-3.png)
 
-## 3. SM、Warp、线程与内存层级
+## 3. SM、Warp、线程与内存层级：128 个数求和的数据流
 
-[打开六步交互图解](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
+[打开七步交互式数据流图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-reduction-dataflow.html)
 
-这组图按顺序解释 GPU 的线程执行和数据供给机制：
+这组图用一个具体的教学例子串起本节内容：输入数组 `x` 位于 HBM，里面保存 1 到 128；GPU 使用一个包含 128 个线程的 Block 计算总和 8256。示例中的线程数量是为了方便演示，并非 Blackwell 的固定配置。
 
-1. GPU、SM、Warp 与 Thread 的硬件调度层级
-2. SM 内部的计算单元、调度器和片上存储
-3. SIMT 执行模式与 Warp divergence
-4. 多个 Warp 如何隐藏 HBM 访问延迟
-5. 寄存器、Shared Memory、L1、L2 与 HBM 的层级
-6. 内存受限、计算受限和数据重用
+1. CPU 启动 Kernel，输入和输出位于 HBM
+2. Block 被分配到一个 SM
+3. 128 个线程被组织成 4 个 Warp
+4. 每个线程读取一个数，并用其他 Warp 隐藏 HBM 等待
+5. 数据写入 Shared Memory，在 Block 内并行归约
+6. 最终结果从寄存器写回 HBM
+7. 汇总完整的数据流与内存层级
 
-### 1. GPU → SM → Warp → Thread
+### 1. 任务：把 HBM 中的 128 个数相加
 
-![GPU、SM、Warp 与线程层级](gpu-explainer-01-hierarchy.png)
+![输入数组、Kernel 配置与目标结果](gpu-dataflow-01-task.png)
 
-### 2. SM 内部结构
+### 2. Block 被分配到一个 SM
 
-![SM 内部计算和存储单元](gpu-explainer-02-sm.png)
+![GPU 中的多个 SM 与执行本例的 SM](gpu-dataflow-02-dispatch-sm.png)
 
-### 3. Warp 与 SIMT
+### 3. 128 个线程组成 4 个 Warp
 
-![SIMT 与 Warp 分支发散](gpu-explainer-03-simt.png)
+![每个 Warp 包含 32 个线程](gpu-dataflow-03-warps.png)
 
-### 4. Warp 延迟隐藏
+### 4. 读取数据与隐藏 HBM 延迟
 
-![多个 Warp 隐藏 HBM 访问延迟](gpu-explainer-04-latency.png)
+![HBM 到寄存器的数据路径与 Warp 延迟隐藏](gpu-dataflow-04-load-latency.png)
 
-### 5. GPU 内存层级
+### 5. 使用 Shared Memory 并行归约
 
-![寄存器到 HBM 的 GPU 内存层级](gpu-explainer-05-memory.png)
+![在 Shared Memory 中把 128 个数逐轮归约成一个结果](gpu-dataflow-05-shared-reduction.png)
 
-### 6. 计算受限与内存受限
+### 6. 把最终结果写回 HBM
 
-![计算受限、内存受限与数据重用](gpu-explainer-06-bounds.png)
+![最终结果从线程寄存器经片上路径写回 HBM](gpu-dataflow-06-store-result.png)
+
+### 7. 完整数据流
+
+![HBM、L2、SM、Warp、线程和片上存储之间的完整数据流](gpu-dataflow-07-overview.png)
+
+[查看原来的六步概念图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
 
 ## 4. 第二章后半章：网络、机架运营与路线图
 
