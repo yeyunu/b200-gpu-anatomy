@@ -71,49 +71,54 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ![GPU 重新读取后的内存与缓存状态](cpu-gpu-memory-map-step-3.png)
 
-## 3. SM、Warp、线程与内存层级：128 个数求和的数据流
+## 3. SM、Warp、线程与内存层级：64 个数的具体并行计算
 
-[打开七步交互式数据流图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-reduction-dataflow.html)
+[打开八步交互式并行计算图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-parallel-reduction.html)
 
-这组图用一个具体的教学例子串起本节内容：输入数组 `x` 位于 HBM，里面保存 1 到 128；GPU 使用一个包含 128 个线程的 Block 计算总和 8256。示例中的线程数量是为了方便演示，并非 Blackwell 的固定配置。
+这组图把计算过程和数据位置同时展开。教学例子使用一个包含 64 个线程的 Block，对 HBM 中的 `1…64` 求和，最终得到 `2080`。64 个线程组成两个 Warp；示例线程数用于讲解，并非 Blackwell 的固定配置。
 
-1. CPU 启动 Kernel，输入和输出位于 HBM
-2. Block 被分配到一个 SM
-3. 128 个线程被组织成 4 个 Warp
-4. 每个线程读取一个数，并用其他 Warp 隐藏 HBM 等待
-5. 数据写入 Shared Memory，在 Block 内并行归约
-6. 最终结果从寄存器写回 HBM
-7. 汇总完整的数据流与内存层级
+1. `Thread tid` 与 HBM 地址 `x[tid]` 一一对应
+2. 每个线程并行读取一个数，保存到自己的寄存器
+3. 64 个线程显式写入 Shared Memory 的 64 个槽位
+4. Warp 0 的 32 条 Lane 同时完成第一轮 32 次加法
+5. `stride` 从 16 降到 1，逐轮得到全部中间值
+6. 对照表展示每个阶段的数据实际存放位置
+7. Warp 时间线展示怎样用其他工作覆盖 HBM 等待
+8. 汇总 64 次读取、63 次加法和 1 次写回
 
-### 1. 任务：把 HBM 中的 128 个数相加
+### 1. Thread ID 与输入数据分工
 
-![输入数组、Kernel 配置与目标结果](gpu-dataflow-01-task.png)
+![64 个线程与 HBM 中 64 个输入元素的对应关系](gpu-parallel-01-mapping.png)
 
-### 2. Block 被分配到一个 SM
+### 2. 数据并行读入线程私有寄存器
 
-![GPU 中的多个 SM 与执行本例的 SM](gpu-dataflow-02-dispatch-sm.png)
+![两个 Warp 的 64 个线程分别保存自己的寄存器值](gpu-parallel-02-registers.png)
 
-### 3. 128 个线程组成 4 个 Warp
+### 3. 数据显式写入 Shared Memory
 
-![每个 Warp 包含 32 个线程](gpu-dataflow-03-warps.png)
+![寄存器值与 Shared Memory 地址和值的对应关系](gpu-parallel-03-shared-storage.png)
 
-### 4. 读取数据与隐藏 HBM 延迟
+### 4. 第一轮 32 路并行加法
 
-![HBM 到寄存器的数据路径与 Warp 延迟隐藏](gpu-dataflow-04-load-latency.png)
+![一个 Warp 的 32 条 Lane 同时执行 32 个具体加法](gpu-parallel-04-round32.png)
 
-### 5. 使用 Shared Memory 并行归约
+### 5. 后续各轮的具体计算结果
 
-![在 Shared Memory 中把 128 个数逐轮归约成一个结果](gpu-dataflow-05-shared-reduction.png)
+![stride 从 16 到 1 的每轮活跃线程、算式和中间值](gpu-parallel-05-rounds.png)
 
-### 6. 把最终结果写回 HBM
+### 6. 每个阶段的数据存放位置
 
-![最终结果从线程寄存器经片上路径写回 HBM](gpu-dataflow-06-store-result.png)
+![HBM、寄存器、Shared Memory 和输出在各阶段保存的数据](gpu-parallel-06-storage-map.png)
 
-### 7. 完整数据流
+### 7. Warp 调度与延迟隐藏时间线
 
-![HBM、L2、SM、Warp、线程和片上存储之间的完整数据流](gpu-dataflow-07-overview.png)
+![一个 Warp 等待 HBM 时另一个 Warp 继续工作的时间线](gpu-parallel-07-warp-timeline.png)
 
-[查看原来的六步概念图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
+### 8. 完整并行计算过程
+
+![从 HBM 读取到片上并行归约再写回 HBM 的完整过程](gpu-parallel-08-overview.png)
+
+[查看简化数据流版本](https://yeyunu.github.io/b200-gpu-anatomy/gpu-reduction-dataflow.html) · [查看原来的六步概念图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
 
 ## 4. 第二章后半章：网络、机架运营与路线图
 
