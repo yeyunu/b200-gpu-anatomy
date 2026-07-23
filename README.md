@@ -80,13 +80,13 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 十二个步骤都保留完整的 GPU 全局视图：CPU、同一个 HBM 内存池、GPU die、L2 和多个 SM 始终可见；再通过引线放大真正执行该 Block 的 SM 5，展示 Warp、L1、寄存器、Shared Memory 和加法单元。第 4～9 步专门拆解 Shared 到计算完成的过程。
 
 1. `Thread tid` 与 HBM 地址 `x[tid]` 一一对应
-2. 每个线程并行读取一个数，保存到自己的寄存器
+2. 每个线程都有一组私有寄存器；本步先用其中一个 `r` 保存自己的输入
 3. 64 个线程显式写入 Shared Memory 的 64 个槽位
 4. 两个 Warp 在 `__syncthreads()` 等待，确认 64 个 Shared 槽位全部写好
-5. Warp 0 的 32 条 Lane 同时从 Shared 读取两项到各自的 `a`、`b` 寄存器
-6. 一条 `add` 指令驱动 32 条 Lane，在 ALU 中同时得到 32 个 `sum`
-7. 32 个线程把自己的 `sum` 分别写回 Shared 的 `s[0…31]`
-8. `stride` 从 16 降到 1，每轮重复“读 Shared → 寄存器加法 → 写 Shared”
+5. Shared 让 T0 取得原本属于 T32 的数据；T0 用不同的 `Ra`、`Rb` 分别保存两个数
+6. Shared 不参与算术；一条 `add` 指令驱动 32 条 Lane 执行 `Ra、Rb → ALU → Rsum`
+7. 32 个线程把自己的 `Rsum` 分别写回 Shared 的 `s[0…31]`
+8. `stride` 从 16 降到 1，每轮重复“Shared 转交 → Ra/Rb → ALU → Rsum → Shared”
 9. 最后一轮由 T0 算出 `1024 + 1056 = 2080`，结果暂存在 `s[0]`
 10. 对照表展示每个阶段的数据实际存放位置
 11. Warp 时间线展示怎样用其他工作覆盖 HBM 等待
@@ -108,17 +108,17 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ![两个 Warp 都写完 Shared 后通过同步屏障](gpu-parallel-04-barrier.png)
 
-### 5. 32 条 Lane 同时从 Shared 读取配对数据
+### 5. Shared 完成跨线程数据交换
 
-![每条 Lane 把两个 Shared 操作数读入自己的 a 和 b 寄存器](gpu-parallel-05-shared-read.png)
+![T32 通过 Shared 把数据交给 T0，T0 使用 Ra 和 Rb 两个不同寄存器保存操作数](gpu-parallel-05-shared-read.png)
 
 ### 6. 一条 add 指令驱动 32 路 ALU 并行加法
 
-![32 条 Lane 分别使用寄存器操作数并行得到 32 个 sum](gpu-parallel-06-alu-parallel.png)
+![32 条 Lane 分别使用自己的 Ra 和 Rb 经过 ALU 得到 Rsum](gpu-parallel-06-alu-parallel.png)
 
 ### 7. 32 个线程把结果分别写回 Shared
 
-![每个线程把自己的 sum 写入对应的 Shared 槽位](gpu-parallel-07-shared-writeback.png)
+![每个线程把自己的 Rsum 写入对应的 Shared 槽位](gpu-parallel-07-shared-writeback.png)
 
 ### 8. stride 从 16 到 1 的后续并行轮次
 
