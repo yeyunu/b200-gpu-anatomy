@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="用 64 个数求和的具体例子，演示 HBM、L2、SM、Warp、寄存器和 Shared Memory 之间的数据流。">
+  <title>GPU 并行计算：从 HBM 到 SM，再写回 HBM</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #071220;
+      --panel: #0b1f34;
+      --text: #f6faff;
+      --muted: #a6bcd2;
+      --blue: #3799ff;
+      --cyan: #3fddd3;
+      --orange: #ff8b3d;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at 50% 10%, rgba(55, 153, 255, .18), transparent 38rem),
+        var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    }
+    main { width: min(1180px, calc(100% - 32px)); margin: 0 auto; padding: 48px 0 64px; }
+    .eyebrow { color: var(--cyan); font-weight: 700; letter-spacing: .08em; }
+    h1 { margin: 12px 0 14px; font-size: clamp(32px, 5vw, 58px); line-height: 1.12; }
+    .lead { max-width: 860px; margin: 0 0 28px; color: var(--muted); font-size: 19px; line-height: 1.7; }
+    .player {
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 22px;
+      background: #000;
+      box-shadow: 0 30px 90px rgba(0,0,0,.38);
+    }
+    video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #000; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; margin: 24px 0 36px; }
+    .button {
+      display: inline-flex;
+      align-items: center;
+      min-height: 48px;
+      padding: 0 20px;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      color: var(--text);
+      background: var(--panel);
+      text-decoration: none;
+      font-weight: 700;
+    }
+    .button.primary { color: #06111d; background: var(--blue); border-color: var(--blue); }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+    .card { padding: 20px; border-radius: 16px; background: var(--panel); border: 1px solid rgba(255,255,255,.08); }
+    .card b { display: block; margin-bottom: 8px; color: var(--orange); }
+    .card span { color: var(--muted); line-height: 1.55; }
+    footer { margin-top: 40px; color: #7894ad; }
+    @media (max-width: 800px) { .grid { grid-template-columns: 1fr 1fr; } }
+    @media (max-width: 520px) { main { padding-top: 28px; } .grid { grid-template-columns: 1fr; } }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="eyebrow">GPU PARALLEL COMPUTING · 1080P</div>
+    <h1>一笔数据，如何在 GPU 里完成并行归约？</h1>
+    <p class="lead">用 64 个数求和得到 2080 的完整例子，逐步展示数据在 HBM、L2、SM、寄存器和 Shared Memory 之间的位置，以及两个 Warp 如何并行工作和隐藏等待。</p>
+
+    <div class="player">
+      <video controls preload="metadata" poster="gpu-sm-warp-memory-video-cover.png">
+        <source src="gpu-sm-warp-memory-flow-1080p.mp4" type="video/mp4">
+        你的浏览器不支持 HTML5 视频，可以使用下方按钮下载 MP4。
+      </video>
+    </div>
+
+    <div class="actions">
+      <a class="button primary" href="gpu-sm-warp-memory-flow-1080p.mp4" download>下载 1080p MP4</a>
+      <a class="button" href="gpu-sm-warp-memory-explainer.html">打开八步交互图</a>
+      <a class="button" href="./">返回图册首页</a>
+    </div>
+
+    <section class="grid" aria-label="视频内容概要">
+      <div class="card"><b>① 数据进入</b><span>HBM → L2/L1 → 每个线程的寄存器</span></div>
+      <div class="card"><b>② 并行计算</b><span>一个 Warp 的 32 条 Lane 同时执行加法</span></div>
+      <div class="card"><b>③ 片上归约</b><span>中间结果留在 SM 5 的 Shared Memory</span></div>
+      <div class="card"><b>④ 结果写回</b><span>2080 经 L2 写入同一个 HBM 内存池</span></div>
+    </section>
+
+    <footer>时长 63 秒 · 1920×1080 · H.264 MP4 · 中文字幕</footer>
+  </main>
+</body>
+</html>

@@ -75,6 +75,8 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 [打开八步交互式并行计算图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
 
+[观看 1080p 中文动画讲解](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-video.html)
+
 这组图把计算过程和数据位置同时展开。教学例子使用一个包含 64 个线程的 Block，对 HBM 中的 `1…64` 求和，最终得到 `2080`。64 个线程组成两个 Warp；示例线程数用于讲解，并非 Blackwell 的固定配置。
 
 八个步骤都保留完整的 GPU 全局视图：CPU、同一个 HBM 内存池、GPU die、L2 和多个 SM 始终可见；再通过引线放大真正执行该 Block 的 SM 5，展示 Warp、L1、寄存器、Shared Memory 和加法单元。每一步只改变高亮位置、箭头和数据值。
