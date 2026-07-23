@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Gpu Sm Warp Memory Explainer</title>
+<title>Gpu Parallel Reduction</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
-<iframe sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" title="Gpu Sm Warp Memory Explainer" srcdoc="&lt;!doctype html&gt;
+<iframe sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" title="Gpu Parallel Reduction" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Gpu Sm Warp Memory Explainer&lt;/title&gt;
+&lt;title&gt;Gpu Parallel Reduction&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(--background) !important;
@@ -813,446 +813,468 @@ svg {
 html&gt;body{padding:0}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;div id=&quot;gpu-sm-warp-memory-explainer&quot;&gt;
-  &lt;style&gt;
-    #gpu-sm-warp-memory-explainer {
-      width: 100%;
-      color: var(--foreground);
-      display: grid;
-      gap: 12px;
-    }
-    #gpu-sm-warp-memory-explainer .diagram {
-      display: block;
-      width: 100%;
-      height: auto;
-      color: var(--foreground);
-    }
-    #gpu-sm-warp-memory-explainer .frame {
-      fill: color-mix(in srgb, var(--card) 72%, transparent);
-      stroke: var(--border);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .blue {
-      fill: color-mix(in srgb, var(--viz-series-1) 18%, transparent);
-      stroke: var(--viz-series-1);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .green {
-      fill: color-mix(in srgb, var(--viz-series-2) 18%, transparent);
-      stroke: var(--viz-series-2);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .orange {
-      fill: color-mix(in srgb, var(--viz-series-3) 18%, transparent);
-      stroke: var(--viz-series-3);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .pink {
-      fill: color-mix(in srgb, var(--viz-series-4) 18%, transparent);
-      stroke: var(--viz-series-4);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .purple {
-      fill: color-mix(in srgb, var(--viz-series-5) 18%, transparent);
-      stroke: var(--viz-series-5);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .teal {
-      fill: color-mix(in srgb, var(--viz-series-6) 18%, transparent);
-      stroke: var(--viz-series-6);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .cache {
-      fill: color-mix(in srgb, var(--viz-series-1) 13%, var(--muted));
-      stroke: var(--viz-series-1);
-      stroke-width: 2;
-    }
-    #gpu-sm-warp-memory-explainer .label {
-      fill: var(--foreground);
-      font-size: calc(var(--font-size-base) * 1.1);
-      font-weight: 500;
-      text-anchor: middle;
-    }
-    #gpu-sm-warp-memory-explainer .small {
-      fill: var(--muted-foreground);
-      font-size: calc(var(--font-size-base) * 0.9);
-      font-weight: 400;
-      text-anchor: middle;
-    }
-    #gpu-sm-warp-memory-explainer .left {
-      fill: var(--foreground);
-      font-size: calc(var(--font-size-base) * 0.98);
-      font-weight: 500;
-      text-anchor: start;
-    }
-    #gpu-sm-warp-memory-explainer .path {
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      marker-end: url(#gpu-arrow);
-    }
-    #gpu-sm-warp-memory-explainer .dashed {
-      fill: none;
-      stroke: var(--muted-foreground);
-      stroke-width: 2;
-      stroke-dasharray: 6 5;
-    }
-    #gpu-sm-warp-memory-explainer .thread {
-      fill: var(--viz-series-1);
-      stroke: var(--background);
-      stroke-width: 1;
-    }
-    #gpu-sm-warp-memory-explainer .thread-muted {
-      fill: var(--muted);
-      stroke: var(--border);
-      stroke-width: 1;
-    }
-    #gpu-sm-warp-memory-explainer .timeline-compute {
-      fill: color-mix(in srgb, var(--viz-series-2) 28%, transparent);
-      stroke: var(--viz-series-2);
-      stroke-width: 1;
-    }
-    #gpu-sm-warp-memory-explainer .timeline-wait {
-      fill: color-mix(in srgb, var(--muted) 72%, transparent);
-      stroke: var(--border);
-      stroke-width: 1;
-    }
-    #gpu-sm-warp-memory-explainer .status-line { color: var(--muted-foreground); }
-  &lt;/style&gt;
-
-  &lt;div class=&quot;viz-controls&quot; role=&quot;group&quot; aria-label=&quot;选择图解步骤&quot;&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-gpu-view=&quot;hierarchy&quot; aria-pressed=&quot;true&quot;&gt;① GPU 层级&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;sm&quot; aria-pressed=&quot;false&quot;&gt;② SM 内部&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;simt&quot; aria-pressed=&quot;false&quot;&gt;③ Warp / SIMT&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;latency&quot; aria-pressed=&quot;false&quot;&gt;④ 延迟隐藏&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;memory&quot; aria-pressed=&quot;false&quot;&gt;⑤ 内存层级&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-gpu-view=&quot;bounds&quot; aria-pressed=&quot;false&quot;&gt;⑥ 性能瓶颈&lt;/button&gt;
+&lt;div id=&quot;gpu-parallel-reduction&quot;&gt;
+  &lt;div class=&quot;viz-controls&quot; aria-label=&quot;并行求和步骤&quot;&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-view=&quot;mapping&quot; aria-pressed=&quot;true&quot;&gt;1 数据分工&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;registers&quot; aria-pressed=&quot;false&quot;&gt;2 读入寄存器&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;shared&quot; aria-pressed=&quot;false&quot;&gt;3 存入 Shared&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;round32&quot; aria-pressed=&quot;false&quot;&gt;4 32 路同时加&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;rounds&quot; aria-pressed=&quot;false&quot;&gt;5 后续计算&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;storage&quot; aria-pressed=&quot;false&quot;&gt;6 数据存放变化&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;timeline&quot; aria-pressed=&quot;false&quot;&gt;7 Warp 时间线&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;overview&quot; aria-pressed=&quot;false&quot;&gt;8 完整过程&lt;/button&gt;
   &lt;/div&gt;
-
-  &lt;svg class=&quot;diagram&quot; viewBox=&quot;0 0 720 490&quot; role=&quot;img&quot; aria-labelledby=&quot;gpu-explainer-title gpu-explainer-desc&quot;&gt;
-    &lt;title id=&quot;gpu-explainer-title&quot;&gt;GPU 的 SM、Warp、线程、延迟隐藏和内存层级&lt;/title&gt;
-    &lt;desc id=&quot;gpu-explainer-desc&quot;&gt;六步交互图解，依次展示 GPU 到线程的层级、SM 内部结构、SIMT 和分支发散、Warp 延迟隐藏、GPU 内存层级，以及计算受限和内存受限的区别。&lt;/desc&gt;
-    &lt;defs&gt;
-      &lt;marker id=&quot;gpu-arrow&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;9&quot; refY=&quot;5&quot; markerWidth=&quot;6&quot; markerHeight=&quot;6&quot; orient=&quot;auto-start-reverse&quot;&gt;
-        &lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;currentColor&quot;&gt;&lt;/path&gt;
-      &lt;/marker&gt;
-    &lt;/defs&gt;
-
-    &lt;g data-gpu-panel=&quot;hierarchy&quot;&gt;
-      &lt;rect class=&quot;frame&quot; x=&quot;25&quot; y=&quot;32&quot; width=&quot;670&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;硬件调度层级：一张 GPU 有许多 SM，每个 Warp 固定 32 个线程&lt;/text&gt;
-
-      &lt;rect class=&quot;blue&quot; x=&quot;48&quot; y=&quot;102&quot; width=&quot;155&quot; height=&quot;245&quot; rx=&quot;14&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;126&quot; y=&quot;132&quot;&gt;整张 GPU&lt;/text&gt;
-      &lt;g id=&quot;hierarchy-sm-grid&quot;&gt;&lt;/g&gt;
-      &lt;text class=&quot;small&quot; x=&quot;126&quot; y=&quot;326&quot;&gt;大量 SM 并行工作&lt;/text&gt;
-
-      &lt;path class=&quot;path&quot; d=&quot;M 208 225 L 245 225&quot;&gt;&lt;/path&gt;
-
-      &lt;rect class=&quot;green&quot; x=&quot;252&quot; y=&quot;102&quot; width=&quot;175&quot; height=&quot;245&quot; rx=&quot;14&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;340&quot; y=&quot;132&quot;&gt;放大一个 SM&lt;/text&gt;
-      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;156&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;189&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;222&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;rect class=&quot;purple&quot; x=&quot;272&quot; y=&quot;255&quot; width=&quot;135&quot; height=&quot;25&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;174&quot;&gt;Warp 0 · 32线程&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;207&quot;&gt;Warp 1 · 32线程&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;240&quot;&gt;Warp 2 · 32线程&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;273&quot;&gt;还有许多 Warp&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;340&quot; y=&quot;316&quot;&gt;调度器选择可运行 Warp&lt;/text&gt;
-
-      &lt;path class=&quot;path&quot; d=&quot;M 432 225 L 469 225&quot;&gt;&lt;/path&gt;
-
-      &lt;rect class=&quot;purple&quot; x=&quot;476&quot; y=&quot;102&quot; width=&quot;195&quot; height=&quot;245&quot; rx=&quot;14&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;574&quot; y=&quot;132&quot;&gt;放大一个 Warp&lt;/text&gt;
-      &lt;g id=&quot;hierarchy-thread-grid&quot;&gt;&lt;/g&gt;
-      &lt;text class=&quot;small&quot; x=&quot;574&quot; y=&quot;265&quot;&gt;32 个线程执行同一条指令&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;574&quot; y=&quot;289&quot;&gt;但处理各自的数据&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;574&quot; y=&quot;319&quot;&gt;Thread 0 … Thread 31&lt;/text&gt;
-
-      &lt;rect class=&quot;orange&quot; x=&quot;55&quot; y=&quot;376&quot; width=&quot;610&quot; height=&quot;38&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;401&quot;&gt;Kernel → Grid → Thread Block → Warp → Thread&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;软件创建 Block；Block 被分配给 SM；SM 再按 32 个线程组成 Warp&lt;/text&gt;
-    &lt;/g&gt;
-
-    &lt;g data-gpu-panel=&quot;sm&quot; style=&quot;display:none&quot;&gt;
-      &lt;rect class=&quot;green&quot; x=&quot;38&quot; y=&quot;32&quot; width=&quot;644&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;一个 SM：既有计算单元，也有线程调度和片上存储&lt;/text&gt;
-
-      &lt;rect class=&quot;teal&quot; x=&quot;65&quot; y=&quot;95&quot; width=&quot;250&quot; height=&quot;67&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;190&quot; y=&quot;122&quot;&gt;Warp 调度器&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;190&quot; y=&quot;147&quot;&gt;从驻留 Warp 中选择已就绪者&lt;/text&gt;
-
-      &lt;rect class=&quot;purple&quot; x=&quot;342&quot; y=&quot;95&quot; width=&quot;313&quot; height=&quot;67&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;499&quot; y=&quot;122&quot;&gt;大量 Warp 的执行状态&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;499&quot; y=&quot;147&quot;&gt;有的计算、有的等待、有的已就绪&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 315 128 L 338 128&quot;&gt;&lt;/path&gt;
-
-      &lt;rect class=&quot;blue&quot; x=&quot;65&quot; y=&quot;195&quot; width=&quot;135&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;133&quot; y=&quot;225&quot;&gt;CUDA Core&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;133&quot; y=&quot;252&quot;&gt;FP32 / INT32 等&lt;/text&gt;
-
-      &lt;rect class=&quot;pink&quot; x=&quot;218&quot; y=&quot;195&quot; width=&quot;135&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;286&quot; y=&quot;225&quot;&gt;Tensor Core&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;286&quot; y=&quot;252&quot;&gt;矩阵乘加&lt;/text&gt;
-
-      &lt;rect class=&quot;orange&quot; x=&quot;371&quot; y=&quot;195&quot; width=&quot;135&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;439&quot; y=&quot;225&quot;&gt;Load / Store&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;439&quot; y=&quot;252&quot;&gt;读取和写入数据&lt;/text&gt;
-
-      &lt;rect class=&quot;frame&quot; x=&quot;524&quot; y=&quot;195&quot; width=&quot;131&quot; height=&quot;78&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;590&quot; y=&quot;225&quot;&gt;特殊函数&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;590&quot; y=&quot;252&quot;&gt;指数、倒数等&lt;/text&gt;
-
-      &lt;rect class=&quot;cache&quot; x=&quot;65&quot; y=&quot;310&quot; width=&quot;180&quot; height=&quot;82&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;155&quot; y=&quot;341&quot;&gt;寄存器&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;155&quot; y=&quot;367&quot;&gt;每个线程自己的数据&lt;/text&gt;
-
-      &lt;rect class=&quot;orange&quot; x=&quot;270&quot; y=&quot;310&quot; width=&quot;180&quot; height=&quot;82&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;341&quot;&gt;Shared Memory&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;367&quot;&gt;同一 Block 的线程共享&lt;/text&gt;
-
-      &lt;rect class=&quot;purple&quot; x=&quot;475&quot; y=&quot;310&quot; width=&quot;180&quot; height=&quot;82&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;565&quot; y=&quot;341&quot;&gt;L1 Cache&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;565&quot; y=&quot;367&quot;&gt;SM 附近的自动缓存&lt;/text&gt;
-
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;SM 同时保存很多 Warp；调度器把它们送到不同执行单元，并尽量使用片上数据&lt;/text&gt;
-    &lt;/g&gt;
-
-    &lt;g data-gpu-panel=&quot;simt&quot; style=&quot;display:none&quot;&gt;
-      &lt;rect class=&quot;purple&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;SIMT：一个 Warp 的 32 个线程，同步执行同一条指令&lt;/text&gt;
-
-      &lt;rect class=&quot;frame&quot; x=&quot;55&quot; y=&quot;95&quot; width=&quot;610&quot; height=&quot;120&quot; rx=&quot;12&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;left&quot; x=&quot;75&quot; y=&quot;125&quot;&gt;同一条指令：&lt;/text&gt;
-      &lt;text class=&quot;label&quot; x=&quot;400&quot; y=&quot;125&quot;&gt;C[i] = A[i] + B[i]&lt;/text&gt;
-      &lt;g id=&quot;simt-thread-grid&quot;&gt;&lt;/g&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;198&quot;&gt;线程编号 i 不同，所以 32 个线程处理 32 组不同数据&lt;/text&gt;
-
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;255&quot;&gt;出现分支时：同一个 Warp 可能分两轮执行&lt;/text&gt;
-
-      &lt;rect class=&quot;blue&quot; x=&quot;55&quot; y=&quot;283&quot; width=&quot;290&quot; height=&quot;92&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;200&quot; y=&quot;311&quot;&gt;第一轮：偶数线程执行加法&lt;/text&gt;
-      &lt;g id=&quot;divergence-even-grid&quot;&gt;&lt;/g&gt;
-      &lt;text class=&quot;small&quot; x=&quot;200&quot; y=&quot;361&quot;&gt;奇数线程暂时关闭&lt;/text&gt;
-
-      &lt;rect class=&quot;orange&quot; x=&quot;375&quot; y=&quot;283&quot; width=&quot;290&quot; height=&quot;92&quot; rx=&quot;10&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;520&quot; y=&quot;311&quot;&gt;第二轮：奇数线程执行减法&lt;/text&gt;
-      &lt;g id=&quot;divergence-odd-grid&quot;&gt;&lt;/g&gt;
-      &lt;text class=&quot;small&quot; x=&quot;520&quot; y=&quot;361&quot;&gt;偶数线程暂时关闭&lt;/text&gt;
-
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;414&quot;&gt;这叫 Warp divergence：两条分支串行执行，部分线程在每一轮闲置&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;规则、相同的控制流程最适合 SIMT；复杂分支可能降低有效吞吐量&lt;/text&gt;
-    &lt;/g&gt;
-
-    &lt;g data-gpu-panel=&quot;latency&quot; style=&quot;display:none&quot;&gt;
-      &lt;rect class=&quot;teal&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;延迟隐藏：等待没有消失，而是被其他 Warp 的计算覆盖&lt;/text&gt;
-
-      &lt;text class=&quot;small&quot; x=&quot;180&quot; y=&quot;100&quot;&gt;t1&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;270&quot; y=&quot;100&quot;&gt;t2&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;100&quot;&gt;t3&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;450&quot; y=&quot;100&quot;&gt;t4&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;540&quot; y=&quot;100&quot;&gt;t5&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;630&quot; y=&quot;100&quot;&gt;t6&lt;/text&gt;
-      &lt;path class=&quot;dashed&quot; d=&quot;M 135 110 L 665 110&quot;&gt;&lt;/path&gt;
-
-      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;153&quot;&gt;Warp A&lt;/text&gt;
-      &lt;rect class=&quot;timeline-compute&quot; x=&quot;135&quot; y=&quot;128&quot; width=&quot;90&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;180&quot; y=&quot;152&quot;&gt;发起读取&lt;/text&gt;
-      &lt;rect class=&quot;timeline-wait&quot; x=&quot;225&quot; y=&quot;128&quot; width=&quot;270&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;152&quot;&gt;等待 HBM 数据&lt;/text&gt;
-      &lt;rect class=&quot;timeline-compute&quot; x=&quot;495&quot; y=&quot;128&quot; width=&quot;170&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;580&quot; y=&quot;152&quot;&gt;数据到达，计算&lt;/text&gt;
-
-      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;213&quot;&gt;Warp B&lt;/text&gt;
-      &lt;rect class=&quot;timeline-compute&quot; x=&quot;225&quot; y=&quot;188&quot; width=&quot;180&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;315&quot; y=&quot;212&quot;&gt;执行计算&lt;/text&gt;
-
-      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;273&quot;&gt;Warp C&lt;/text&gt;
-      &lt;rect class=&quot;timeline-compute&quot; x=&quot;405&quot; y=&quot;248&quot; width=&quot;90&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;450&quot; y=&quot;272&quot;&gt;计算&lt;/text&gt;
-
-      &lt;text class=&quot;left&quot; x=&quot;55&quot; y=&quot;333&quot;&gt;Warp D&lt;/text&gt;
-      &lt;rect class=&quot;timeline-compute&quot; x=&quot;495&quot; y=&quot;308&quot; width=&quot;90&quot; height=&quot;36&quot; rx=&quot;5&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;540&quot; y=&quot;332&quot;&gt;计算&lt;/text&gt;
-
-      &lt;path class=&quot;path&quot; d=&quot;M 180 365 L 580 365&quot;&gt;&lt;/path&gt;
-      &lt;text class=&quot;label&quot; x=&quot;380&quot; y=&quot;396&quot;&gt;SM 几乎一直有可运行的 Warp&lt;/text&gt;
-      &lt;rect class=&quot;timeline-compute&quot; x=&quot;190&quot; y=&quot;414&quot; width=&quot;25&quot; height=&quot;18&quot; rx=&quot;3&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;285&quot; y=&quot;429&quot;&gt;绿色：有用计算&lt;/text&gt;
-      &lt;rect class=&quot;timeline-wait&quot; x=&quot;400&quot; y=&quot;414&quot; width=&quot;25&quot; height=&quot;18&quot; rx=&quot;3&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;505&quot; y=&quot;429&quot;&gt;灰色：该 Warp 等待&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;前提：必须有足够多的活跃 Warp；如果所有 Warp 都在等待，SM 仍会停顿&lt;/text&gt;
-    &lt;/g&gt;
-
-    &lt;g data-gpu-panel=&quot;memory&quot; style=&quot;display:none&quot;&gt;
-      &lt;rect class=&quot;orange&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;405&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;GPU 内存层级：越靠近计算单元越快，但容量通常越小&lt;/text&gt;
-
-      &lt;text class=&quot;left&quot; x=&quot;45&quot; y=&quot;120&quot;&gt;更快 / 更小&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 105 132 L 105 380&quot;&gt;&lt;/path&gt;
-      &lt;text class=&quot;left&quot; x=&quot;45&quot; y=&quot;408&quot;&gt;更慢 / 更大&lt;/text&gt;
-
-      &lt;rect class=&quot;blue&quot; x=&quot;180&quot; y=&quot;93&quot; width=&quot;235&quot; height=&quot;55&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;118&quot;&gt;寄存器&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;139&quot;&gt;每个 Thread · 最靠近执行单元&lt;/text&gt;
-
-      &lt;rect class=&quot;green&quot; x=&quot;160&quot; y=&quot;165&quot; width=&quot;275&quot; height=&quot;61&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;192&quot;&gt;Shared Memory&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;215&quot;&gt;每个 Block · 程序主动复用数据&lt;/text&gt;
-
-      &lt;rect class=&quot;purple&quot; x=&quot;140&quot; y=&quot;243&quot; width=&quot;315&quot; height=&quot;61&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;270&quot;&gt;L1 Cache&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;293&quot;&gt;每个 SM 附近 · 自动缓存&lt;/text&gt;
-
-      &lt;rect class=&quot;teal&quot; x=&quot;120&quot; y=&quot;321&quot; width=&quot;355&quot; height=&quot;61&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;298&quot; y=&quot;348&quot;&gt;L2 Cache&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;298&quot; y=&quot;371&quot;&gt;整张 GPU 的 SM 共享 · B200 约 126 MB&lt;/text&gt;
-
-      &lt;rect class=&quot;pink&quot; x=&quot;500&quot; y=&quot;165&quot; width=&quot;170&quot; height=&quot;217&quot; rx=&quot;12&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;585&quot; y=&quot;203&quot;&gt;HBM3e&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;230&quot;&gt;GPU 全局内存&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;258&quot;&gt;容量大、带宽高&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;286&quot;&gt;但片外访问延迟高&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;326&quot;&gt;权重 / 激活值&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;585&quot; y=&quot;350&quot;&gt;KV Cache / 张量&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 475 351 L 495 351&quot;&gt;&lt;/path&gt;
-
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;420&quot;&gt;8 TB/s 是总体带宽，不代表单次 HBM 读取没有等待时间&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;464&quot;&gt;优化目标：从 HBM 读取一次后，在寄存器、Shared Memory 或缓存中重复使用&lt;/text&gt;
-    &lt;/g&gt;
-
-    &lt;g data-gpu-panel=&quot;bounds&quot; style=&quot;display:none&quot;&gt;
-      &lt;rect class=&quot;pink&quot; x=&quot;28&quot; y=&quot;32&quot; width=&quot;664&quot; height=&quot;422&quot; rx=&quot;22&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;65&quot;&gt;性能瓶颈：代码是在“搬数据”，还是在“做计算”？&lt;/text&gt;
-
-      &lt;rect class=&quot;frame&quot; x=&quot;52&quot; y=&quot;95&quot; width=&quot;285&quot; height=&quot;270&quot; rx=&quot;13&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;195&quot; y=&quot;125&quot;&gt;内存受限：向量加法&lt;/text&gt;
-      &lt;rect class=&quot;pink&quot; x=&quot;75&quot; y=&quot;153&quot; width=&quot;75&quot; height=&quot;52&quot; rx=&quot;7&quot;&gt;&lt;/rect&gt;
-      &lt;rect class=&quot;pink&quot; x=&quot;75&quot; y=&quot;225&quot; width=&quot;75&quot; height=&quot;52&quot; rx=&quot;7&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;113&quot; y=&quot;184&quot;&gt;读 A&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;113&quot; y=&quot;256&quot;&gt;读 B&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 155 179 L 205 213&quot;&gt;&lt;/path&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 155 251 L 205 223&quot;&gt;&lt;/path&gt;
-      &lt;rect class=&quot;blue&quot; x=&quot;212&quot; y=&quot;190&quot; width=&quot;96&quot; height=&quot;58&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;260&quot; y=&quot;225&quot;&gt;1 次加法&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 260 251 L 260 289&quot;&gt;&lt;/path&gt;
-      &lt;rect class=&quot;pink&quot; x=&quot;212&quot; y=&quot;296&quot; width=&quot;96&quot; height=&quot;45&quot; rx=&quot;7&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;260&quot; y=&quot;324&quot;&gt;写回 C&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;195&quot; y=&quot;391&quot;&gt;搬运多、计算少 → 等待 HBM&lt;/text&gt;
-
-      &lt;rect class=&quot;frame&quot; x=&quot;383&quot; y=&quot;95&quot; width=&quot;285&quot; height=&quot;270&quot; rx=&quot;13&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;526&quot; y=&quot;125&quot;&gt;计算受限：矩阵乘法&lt;/text&gt;
-      &lt;rect class=&quot;pink&quot; x=&quot;410&quot; y=&quot;153&quot; width=&quot;95&quot; height=&quot;55&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;458&quot; y=&quot;177&quot;&gt;HBM&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;458&quot; y=&quot;197&quot;&gt;读取 Tile&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 510 180 L 545 180&quot;&gt;&lt;/path&gt;
-      &lt;rect class=&quot;orange&quot; x=&quot;552&quot; y=&quot;153&quot; width=&quot;90&quot; height=&quot;55&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;small&quot; x=&quot;597&quot; y=&quot;177&quot;&gt;Shared&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;597&quot; y=&quot;197&quot;&gt;保存 Tile&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 597 212 L 597 246&quot;&gt;&lt;/path&gt;
-      &lt;rect class=&quot;green&quot; x=&quot;440&quot; y=&quot;253&quot; width=&quot;174&quot; height=&quot;65&quot; rx=&quot;9&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;527&quot; y=&quot;281&quot;&gt;Tensor Core&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;527&quot; y=&quot;305&quot;&gt;同一 Tile 重用很多次&lt;/text&gt;
-      &lt;path class=&quot;path&quot; d=&quot;M 438 285 C 400 285 400 185 407 185&quot;&gt;&lt;/path&gt;
-      &lt;text class=&quot;small&quot; x=&quot;526&quot; y=&quot;343&quot;&gt;搬运一次，执行大量乘加&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;526&quot; y=&quot;391&quot;&gt;数据复用高 → 接近峰值 FLOPS&lt;/text&gt;
-
-      &lt;rect class=&quot;purple&quot; x=&quot;105&quot; y=&quot;414&quot; width=&quot;510&quot; height=&quot;35&quot; rx=&quot;8&quot;&gt;&lt;/rect&gt;
-      &lt;text class=&quot;label&quot; x=&quot;360&quot; y=&quot;438&quot;&gt;算术强度 = FLOPs ÷ 搬运字节数&lt;/text&gt;
-      &lt;text class=&quot;small&quot; x=&quot;360&quot; y=&quot;476&quot;&gt;低算术强度通常内存受限；高算术强度更可能计算受限；随机访问也会破坏效率&lt;/text&gt;
-    &lt;/g&gt;
-  &lt;/svg&gt;
-
-  &lt;div class=&quot;status-line text-small&quot; aria-live=&quot;polite&quot;&gt;先记住主层级：GPU 包含许多 SM；SM 把线程按 32 个组成 Warp 来调度。&lt;/div&gt;
-
-  &lt;script&gt;
-    (() =&gt; {
-      const root = document.getElementById(&#x27;gpu-sm-warp-memory-explainer&#x27;);
-      if (!root) return;
-      const svgNS = &#x27;http://www.w3.org/2000/svg&#x27;;
-
-      const circle = (parent, cx, cy, className, radius = 5) =&gt; {
-        const node = document.createElementNS(svgNS, &#x27;circle&#x27;);
-        node.setAttribute(&#x27;cx&#x27;, cx);
-        node.setAttribute(&#x27;cy&#x27;, cy);
-        node.setAttribute(&#x27;r&#x27;, radius);
-        node.setAttribute(&#x27;class&#x27;, className);
-        parent.appendChild(node);
-      };
-
-      const rect = (parent, x, y, width, height, className, radius = 4) =&gt; {
-        const node = document.createElementNS(svgNS, &#x27;rect&#x27;);
-        node.setAttribute(&#x27;x&#x27;, x);
-        node.setAttribute(&#x27;y&#x27;, y);
-        node.setAttribute(&#x27;width&#x27;, width);
-        node.setAttribute(&#x27;height&#x27;, height);
-        node.setAttribute(&#x27;rx&#x27;, radius);
-        node.setAttribute(&#x27;class&#x27;, className);
-        parent.appendChild(node);
-      };
-
-      const smGrid = root.querySelector(&#x27;#hierarchy-sm-grid&#x27;);
-      if (smGrid &amp;&amp; !smGrid.childNodes.length) {
-        for (let index = 0; index &lt; 12; index += 1) {
-          rect(smGrid, 65 + (index % 3) * 41, 151 + Math.floor(index / 3) * 37, 31, 27, index === 4 ? &#x27;pink&#x27; : &#x27;green&#x27;, 4);
-        }
-      }
-
-      const threadGrid = root.querySelector(&#x27;#hierarchy-thread-grid&#x27;);
-      if (threadGrid &amp;&amp; !threadGrid.childNodes.length) {
-        for (let index = 0; index &lt; 32; index += 1) {
-          circle(threadGrid, 500 + (index % 8) * 21, 164 + Math.floor(index / 8) * 20, &#x27;thread&#x27;, 5);
-        }
-      }
-
-      const simtGrid = root.querySelector(&#x27;#simt-thread-grid&#x27;);
-      if (simtGrid &amp;&amp; !simtGrid.childNodes.length) {
-        for (let index = 0; index &lt; 32; index += 1) {
-          circle(simtGrid, 82 + index * 18, 159, &#x27;thread&#x27;, 5);
-        }
-      }
-
-      const evenGrid = root.querySelector(&#x27;#divergence-even-grid&#x27;);
-      const oddGrid = root.querySelector(&#x27;#divergence-odd-grid&#x27;);
-      if (evenGrid &amp;&amp; oddGrid &amp;&amp; !evenGrid.childNodes.length &amp;&amp; !oddGrid.childNodes.length) {
-        for (let index = 0; index &lt; 32; index += 1) {
-          circle(evenGrid, 72 + index * 8.3, 337, index % 2 === 0 ? &#x27;thread&#x27; : &#x27;thread-muted&#x27;, 3.7);
-          circle(oddGrid, 392 + index * 8.3, 337, index % 2 === 1 ? &#x27;thread&#x27; : &#x27;thread-muted&#x27;, 3.7);
-        }
-      }
-
-      const descriptions = {
-        hierarchy: &#x27;先记住主层级：GPU 包含许多 SM；SM 把线程按 32 个组成 Warp 来调度。&#x27;,
-        sm: &#x27;SM 是一座并行计算工厂：调度 Warp，调用 CUDA/Tensor Core，并使用寄存器、Shared Memory 和 L1。&#x27;,
-        simt: &#x27;SIMT 表示一个 Warp 同步执行同一指令；线程分支不同会造成 Warp divergence。&#x27;,
-        latency: &#x27;Warp 等待 HBM 时，调度器执行其他已就绪 Warp；等待仍存在，只是被有用计算覆盖。&#x27;,
-        memory: &#x27;寄存器最靠近计算单元，HBM 容量最大；数据越能在片上重复使用，访问 HBM 越少。&#x27;,
-        bounds: &#x27;搬运多、计算少容易受内存限制；数据复用高、乘加多则更可能受计算能力限制。&#x27;
-      };
-
-      const buttons = Array.from(root.querySelectorAll(&#x27;[data-gpu-view]&#x27;));
-      const panels = Array.from(root.querySelectorAll(&#x27;[data-gpu-panel]&#x27;));
-      const status = root.querySelector(&#x27;.status-line&#x27;);
-
-      buttons.forEach((button) =&gt; {
-        button.addEventListener(&#x27;click&#x27;, () =&gt; {
-          const selected = button.getAttribute(&#x27;data-gpu-view&#x27;);
-          buttons.forEach((candidate) =&gt; {
-            const active = candidate === button;
-            candidate.setAttribute(&#x27;aria-pressed&#x27;, String(active));
-            candidate.classList.toggle(&#x27;btn-primary&#x27;, active);
-          });
-          panels.forEach((panel) =&gt; {
-            panel.style.display = panel.getAttribute(&#x27;data-gpu-panel&#x27;) === selected ? &#x27;&#x27; : &#x27;none&#x27;;
-          });
-          if (status) status.textContent = descriptions[selected];
-        });
-      });
-    })();
-  &lt;/script&gt;
+  &lt;div id=&quot;gpu-parallel-stage&quot;&gt;
+    &lt;svg id=&quot;gpu-parallel-svg&quot; viewBox=&quot;0 0 1200 790&quot; role=&quot;img&quot; aria-labelledby=&quot;gpu-parallel-title gpu-parallel-desc&quot;&gt;&lt;/svg&gt;
+    &lt;div id=&quot;gpu-parallel-status&quot; class=&quot;text-small&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+  &lt;/div&gt;
 &lt;/div&gt;
+
+&lt;style&gt;
+  #gpu-parallel-reduction {
+    color: var(--foreground);
+    width: 100%;
+  }
+  #gpu-parallel-reduction .viz-controls {
+    margin-bottom: 0.75rem;
+  }
+  #gpu-parallel-svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+    font-family: inherit;
+  }
+  #gpu-parallel-status {
+    color: var(--muted-foreground);
+    min-height: 1.5rem;
+    padding-top: 0.35rem;
+    text-align: center;
+  }
+  #gpu-parallel-svg .title {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 1.28);
+    font-weight: 500;
+  }
+  #gpu-parallel-svg .kicker,
+  #gpu-parallel-svg .muted {
+    fill: var(--muted-foreground);
+    font-size: calc(var(--font-size-base) * 0.74);
+    font-weight: 400;
+  }
+  #gpu-parallel-svg .label {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 0.88);
+    font-weight: 500;
+  }
+  #gpu-parallel-svg .body {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 0.74);
+    font-weight: 400;
+  }
+  #gpu-parallel-svg .small {
+    fill: var(--muted-foreground);
+    font-size: calc(var(--font-size-base) * 0.64);
+    font-weight: 400;
+  }
+  #gpu-parallel-svg .value {
+    fill: var(--foreground);
+    font-size: calc(var(--font-size-base) * 1.04);
+    font-weight: 500;
+  }
+  #gpu-parallel-svg .frame {
+    fill: var(--card);
+    stroke: var(--border);
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .neutral {
+    fill: var(--muted);
+    stroke: var(--border);
+    stroke-width: 1.2;
+  }
+  #gpu-parallel-svg .s1 {
+    fill: color-mix(in srgb, var(--viz-series-1) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-1) 72%, var(--border));
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .s2 {
+    fill: color-mix(in srgb, var(--viz-series-2) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-2) 72%, var(--border));
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .s3 {
+    fill: color-mix(in srgb, var(--viz-series-3) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-3) 72%, var(--border));
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .s4 {
+    fill: color-mix(in srgb, var(--viz-series-4) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-4) 72%, var(--border));
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .s5 {
+    fill: color-mix(in srgb, var(--viz-series-5) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-5) 72%, var(--border));
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .s6 {
+    fill: color-mix(in srgb, var(--viz-series-6) 16%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-6) 72%, var(--border));
+    stroke-width: 1.5;
+  }
+  #gpu-parallel-svg .inactive {
+    fill: color-mix(in srgb, var(--muted) 72%, transparent);
+    stroke: var(--border);
+    stroke-width: 1;
+  }
+  #gpu-parallel-svg .line {
+    fill: none;
+    stroke: var(--border);
+    stroke-width: 2;
+  }
+  #gpu-parallel-svg .flow1 {
+    fill: none;
+    stroke: var(--viz-series-1);
+    stroke-width: 3;
+    marker-end: url(#parallel-arrow-1);
+  }
+  #gpu-parallel-svg .flow2 {
+    fill: none;
+    stroke: var(--viz-series-2);
+    stroke-width: 3;
+    marker-end: url(#parallel-arrow-2);
+  }
+  #gpu-parallel-svg .flow3 {
+    fill: none;
+    stroke: var(--viz-series-3);
+    stroke-width: 3;
+    marker-end: url(#parallel-arrow-3);
+  }
+  #gpu-parallel-svg .flow4 {
+    fill: none;
+    stroke: var(--viz-series-4);
+    stroke-width: 3;
+    marker-end: url(#parallel-arrow-4);
+  }
+  #gpu-parallel-svg .dash {
+    stroke-dasharray: 7 6;
+  }
+  #gpu-parallel-svg .badge {
+    fill: var(--primary);
+    stroke: none;
+  }
+  #gpu-parallel-svg .badge-text {
+    fill: var(--primary-foreground);
+    font-size: calc(var(--font-size-base) * 0.66);
+    font-weight: 500;
+  }
+&lt;/style&gt;
+
+&lt;script&gt;
+(() =&gt; {
+  const root = document.getElementById(&#x27;gpu-parallel-reduction&#x27;);
+  const svg = document.getElementById(&#x27;gpu-parallel-svg&#x27;);
+  const status = document.getElementById(&#x27;gpu-parallel-status&#x27;);
+  const buttons = Array.from(root.querySelectorAll(&#x27;[data-view]&#x27;));
+  const input = Array.from({length: 64}, (_, i) =&gt; i + 1);
+  const after32 = Array.from({length: 32}, (_, i) =&gt; input[i] + input[i + 32]);
+  const after16 = Array.from({length: 16}, (_, i) =&gt; after32[i] + after32[i + 16]);
+  const after8 = Array.from({length: 8}, (_, i) =&gt; after16[i] + after16[i + 8]);
+  const after4 = Array.from({length: 4}, (_, i) =&gt; after8[i] + after8[i + 4]);
+  const after2 = Array.from({length: 2}, (_, i) =&gt; after4[i] + after4[i + 2]);
+  const after1 = [after2[0] + after2[1]];
+
+  const views = {
+    mapping: {
+      index: 1,
+      title: &#x27;先分工：64 个线程各负责一个输入元素&#x27;,
+      detail: &#x27;Block 有 64 个线程，组成两个 Warp；Thread tid 负责 HBM 中的 x[tid]。&#x27;,
+      draw: drawMapping
+    },
+    registers: {
+      index: 2,
+      title: &#x27;并行读取：每个线程把自己的数放进私有寄存器&#x27;,
+      detail: &#x27;同一 Warp 的 32 个线程执行同一条 Load 指令，但使用各自的 tid 计算不同地址。&#x27;,
+      draw: drawRegisters
+    },
+    shared: {
+      index: 3,
+      title: &#x27;显式存放：64 个寄存器值写入 64 个 Shared Memory 槽位&#x27;,
+      detail: &#x27;Shared Memory 属于当前 Block；s[tid] 与线程 tid 一一对应，写完后先同步。&#x27;,
+      draw: drawShared
+    },
+    round32: {
+      index: 4,
+      title: &#x27;第一次归约：一个 Warp 的 32 条 Lane 同时做 32 次加法&#x27;,
+      detail: &#x27;同一条指令在 32 条 Lane 上并行执行：s[tid] += s[tid+32]。&#x27;,
+      draw: drawRound32
+    },
+    rounds: {
+      index: 5,
+      title: &#x27;继续归约：活跃线程逐轮减半，数值一步步汇总&#x27;,
+      detail: &#x27;每轮都先完成一批并行加法，再同步，然后把 stride 从 16 降到 1。&#x27;,
+      draw: drawRounds
+    },
+    storage: {
+      index: 6,
+      title: &#x27;数据到底存在哪里：每个阶段都有明确位置&#x27;,
+      detail: &#x27;HBM 输入保持不变；寄存器保存线程私有副本；Shared 保存中间结果；最终只写一个输出。&#x27;,
+      draw: drawStorage
+    },
+    timeline: {
+      index: 7,
+      title: &#x27;SM 的时间线：一个 Warp 等数据时，另一个 Warp 占用计算单元&#x27;,
+      detail: &#x27;Latency hiding 没有消除 HBM 延迟，只是用其他已就绪 Warp 的工作覆盖等待。&#x27;,
+      draw: drawTimeline
+    },
+    overview: {
+      index: 8,
+      title: &#x27;完整过程：64 次读取、63 次加法、1 次写回&#x27;,
+      detail: &#x27;并行来自许多 Lane 同时执行相同指令；效率来自中间结果尽量留在 SM 的片上存储。&#x27;,
+      draw: drawOverview
+    }
+  };
+
+  function esc(value) {
+    return String(value).replace(/[&amp;&lt;&gt;&quot;&#x27;]/g, ch =&gt; ({&#x27;&amp;&#x27;:&#x27;&amp;amp;&#x27;,&#x27;&lt;&#x27;:&#x27;&amp;lt;&#x27;,&#x27;&gt;&#x27;:&#x27;&amp;gt;&#x27;,&#x27;&quot;&#x27;:&#x27;&amp;quot;&#x27;,&quot;&#x27;&quot;:&#x27;&amp;#039;&#x27;}[ch]));
+  }
+
+  function defs(view) {
+    return `&lt;title id=&quot;gpu-parallel-title&quot;&gt;${esc(view.title)}&lt;/title&gt;&lt;desc id=&quot;gpu-parallel-desc&quot;&gt;${esc(view.detail)}&lt;/desc&gt;
+      &lt;defs&gt;
+        &lt;marker id=&quot;parallel-arrow-1&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-1)&quot;/&gt;&lt;/marker&gt;
+        &lt;marker id=&quot;parallel-arrow-2&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-2)&quot;/&gt;&lt;/marker&gt;
+        &lt;marker id=&quot;parallel-arrow-3&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-3)&quot;/&gt;&lt;/marker&gt;
+        &lt;marker id=&quot;parallel-arrow-4&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-4)&quot;/&gt;&lt;/marker&gt;
+      &lt;/defs&gt;`;
+  }
+
+  function header(view) {
+    return `&lt;text x=&quot;48&quot; y=&quot;39&quot; class=&quot;kicker&quot;&gt;具体计算 · ${view.index} / 8&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;76&quot; class=&quot;title&quot;&gt;${esc(view.title)}&lt;/text&gt;`;
+  }
+
+  function box(x, y, w, h, title, lines = [], cls = &#x27;frame&#x27;) {
+    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;16&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + 16}&quot; y=&quot;${y + 29}&quot; class=&quot;label&quot;&gt;${esc(title)}&lt;/text&gt;${lines.map((line, i) =&gt; `&lt;text x=&quot;${x + 16}&quot; y=&quot;${y + 56 + i * 24}&quot; class=&quot;body&quot;&gt;${esc(line)}&lt;/text&gt;`).join(&#x27;&#x27;)}`;
+  }
+
+  function arrow(x1, y1, x2, y2, label = &#x27;&#x27;, cls = &#x27;flow1&#x27;) {
+    const tx = (x1 + x2) / 2;
+    const ty = (y1 + y2) / 2 - 9;
+    return `&lt;path d=&quot;M ${x1} ${y1} L ${x2} ${y2}&quot; class=&quot;${cls}&quot;/&gt;${label ? `&lt;text x=&quot;${tx}&quot; y=&quot;${ty}&quot; text-anchor=&quot;middle&quot; class=&quot;muted&quot;&gt;${esc(label)}&lt;/text&gt;` : &#x27;&#x27;}`;
+  }
+
+  function pill(x, y, w, text) {
+    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;28&quot; rx=&quot;14&quot; class=&quot;badge&quot;/&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${y + 19}&quot; text-anchor=&quot;middle&quot; class=&quot;badge-text&quot;&gt;${esc(text)}&lt;/text&gt;`;
+  }
+
+  function footer(text) {
+    return `&lt;rect x=&quot;48&quot; y=&quot;720&quot; width=&quot;1104&quot; height=&quot;42&quot; rx=&quot;12&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;747&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`;
+  }
+
+  function memoryCells(values, startIndex, x, y, options = {}) {
+    const cols = options.cols || 32;
+    const cellW = options.cellW || 31;
+    const cellH = options.cellH || 46;
+    const prefix = options.prefix || &#x27;x&#x27;;
+    const cls = options.cls || &#x27;s1&#x27;;
+    const inactiveFrom = Number.isInteger(options.inactiveFrom) ? options.inactiveFrom : values.length;
+    let out = &#x27;&#x27;;
+    values.forEach((value, i) =&gt; {
+      const px = x + (i % cols) * cellW;
+      const py = y + Math.floor(i / cols) * (cellH + 8);
+      const active = i &lt; inactiveFrom;
+      out += `&lt;rect x=&quot;${px}&quot; y=&quot;${py}&quot; width=&quot;${cellW - 3}&quot; height=&quot;${cellH}&quot; rx=&quot;5&quot; class=&quot;${active ? cls : &#x27;inactive&#x27;}&quot;/&gt;&lt;text x=&quot;${px + (cellW - 3) / 2}&quot; y=&quot;${py + 15}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;${esc(prefix)}${startIndex + i}&lt;/text&gt;&lt;text x=&quot;${px + (cellW - 3) / 2}&quot; y=&quot;${py + 36}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(value)}&lt;/text&gt;`;
+    });
+    return out;
+  }
+
+  function registerCells(values, startIndex, x, y, cls) {
+    let out = &#x27;&#x27;;
+    values.forEach((value, i) =&gt; {
+      const px = x + i * 24;
+      out += `&lt;rect x=&quot;${px}&quot; y=&quot;${y}&quot; width=&quot;21&quot; height=&quot;56&quot; rx=&quot;5&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${px + 10.5}&quot; y=&quot;${y + 18}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;T${startIndex + i}&lt;/text&gt;&lt;text x=&quot;${px + 10.5}&quot; y=&quot;${y + 42}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${value}&lt;/text&gt;`;
+    });
+    return out;
+  }
+
+  function drawMapping(view) {
+    return `${defs(view)}${header(view)}
+      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;1104&quot; height=&quot;244&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
+      &lt;text x=&quot;72&quot; y=&quot;144&quot; class=&quot;label&quot;&gt;HBM 输入数组 x[0…63]：上面是地址，下面是数值&lt;/text&gt;
+      ${memoryCells(input.slice(0, 32), 0, 88, 166, {prefix:&#x27;x&#x27;, cls:&#x27;s1&#x27;})}
+      ${memoryCells(input.slice(32), 32, 88, 228, {prefix:&#x27;x&#x27;, cls:&#x27;s1&#x27;})}
+      &lt;rect x=&quot;48&quot; y=&quot;388&quot; width=&quot;1104&quot; height=&quot;286&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
+      &lt;text x=&quot;72&quot; y=&quot;422&quot; class=&quot;label&quot;&gt;线程分工：tid 就是线程编号&lt;/text&gt;
+      ${box(82, 454, 488, 154, &#x27;Warp 0 · Thread 0…31&#x27;, [&#x27;T0 → x[0] = 1&#x27;, &#x27;T1 → x[1] = 2&#x27;, &#x27;…&#x27;, &#x27;T31 → x[31] = 32&#x27;], &#x27;s2&#x27;)}
+      ${box(630, 454, 488, 154, &#x27;Warp 1 · Thread 32…63&#x27;, [&#x27;T32 → x[32] = 33&#x27;, &#x27;T33 → x[33] = 34&#x27;, &#x27;…&#x27;, &#x27;T63 → x[63] = 64&#x27;], &#x27;s3&#x27;)}
+      ${pill(154, 628, 344, &#x27;Warp 0：32 个线程处理前半段&#x27;)}${pill(702, 628, 344, &#x27;Warp 1：32 个线程处理后半段&#x27;)}
+      ${footer(&#x27;这一阶段没有做加法，只完成“哪个线程负责哪个地址”的映射。&#x27;)}`;
+  }
+
+  function drawRegisters(view) {
+    return `${defs(view)}${header(view)}
+      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;212&quot; height=&quot;554&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
+      &lt;text x=&quot;154&quot; y=&quot;146&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;读取路径&lt;/text&gt;
+      ${box(76, 176, 156, 76, &#x27;HBM&#x27;, [&#x27;x[0…63]&#x27;], &#x27;s1&#x27;)}
+      ${arrow(154, 252, 154, 294, &#x27;&#x27;, &#x27;flow1&#x27;)}
+      ${box(76, 294, 156, 76, &#x27;L2&#x27;, [&#x27;全 GPU 共享&#x27;], &#x27;s2&#x27;)}
+      ${arrow(154, 370, 154, 412, &#x27;&#x27;, &#x27;flow2&#x27;)}
+      ${box(76, 412, 156, 76, &#x27;L1&#x27;, [&#x27;当前 SM&#x27;], &#x27;s3&#x27;)}
+      ${arrow(154, 488, 154, 530, &#x27;&#x27;, &#x27;flow3&#x27;)}
+      ${box(76, 530, 156, 92, &#x27;寄存器&#x27;, [&#x27;每线程私有&#x27;], &#x27;s4&#x27;)}
+      &lt;rect x=&quot;300&quot; y=&quot;112&quot; width=&quot;852&quot; height=&quot;554&quot; rx=&quot;22&quot; class=&quot;s4&quot;/&gt;
+      &lt;text x=&quot;726&quot; y=&quot;146&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;SM 内：同一条 Load 指令，64 个线程使用不同地址&lt;/text&gt;
+      &lt;text x=&quot;330&quot; y=&quot;190&quot; class=&quot;label&quot;&gt;Warp 0 执行：r_tid = x[tid]&lt;/text&gt;
+      ${registerCells(input.slice(0, 32), 0, 338, 214, &#x27;s2&#x27;)}
+      &lt;text x=&quot;330&quot; y=&quot;318&quot; class=&quot;label&quot;&gt;Warp 1 执行：r_tid = x[tid]&lt;/text&gt;
+      ${registerCells(input.slice(32), 32, 338, 342, &#x27;s3&#x27;)}
+      &lt;rect x=&quot;330&quot; y=&quot;444&quot; width=&quot;792&quot; height=&quot;150&quot; rx=&quot;16&quot; class=&quot;neutral&quot;/&gt;
+      &lt;text x=&quot;726&quot; y=&quot;480&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;此刻数据在哪里？&lt;/text&gt;
+      &lt;text x=&quot;726&quot; y=&quot;520&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;T0.r=1，T1.r=2，…，T63.r=64&lt;/text&gt;
+      &lt;text x=&quot;726&quot; y=&quot;558&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;64 个线程各有一份私有寄存器值；线程不能直接读取别人的寄存器。&lt;/text&gt;
+      ${footer(&#x27;并行读取的含义：Warp 的 32 条 Lane 执行同一条 Load，但地址由各自 tid 决定。&#x27;)}`;
+  }
+
+  function drawShared(view) {
+    return `${defs(view)}${header(view)}
+      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;1104&quot; height=&quot;564&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
+      &lt;text x=&quot;72&quot; y=&quot;148&quot; class=&quot;label&quot;&gt;每个线程执行：s[tid] = r_tid&lt;/text&gt;
+      ${box(72, 176, 218, 118, &#x27;线程私有寄存器&#x27;, [&#x27;T0.r=1&#x27;, &#x27;T1.r=2&#x27;, &#x27;…&#x27;, &#x27;T63.r=64&#x27;], &#x27;s4&#x27;)}
+      ${arrow(290, 235, 394, 235, &#x27;64 个线程分别写入&#x27;, &#x27;flow4&#x27;)}
+      ${box(394, 176, 710, 118, &#x27;Shared Memory（当前 Block 共享）&#x27;, [&#x27;地址 s[0]…s[63] 与线程 tid 一一对应&#x27;, &#x27;它不是自动缓存，必须由程序显式写入&#x27;], &#x27;s5&#x27;)}
+      &lt;text x=&quot;72&quot; y=&quot;344&quot; class=&quot;label&quot;&gt;Shared Memory 的实际槽位：上面是地址，下面是当前值&lt;/text&gt;
+      ${memoryCells(input.slice(0, 32), 0, 88, 370, {prefix:&#x27;s&#x27;, cls:&#x27;s5&#x27;})}
+      ${memoryCells(input.slice(32), 32, 88, 432, {prefix:&#x27;s&#x27;, cls:&#x27;s5&#x27;})}
+      &lt;path d=&quot;M 88 528 L 1080 528&quot; class=&quot;line&quot;/&gt;
+      ${pill(388, 554, 424, &#x27;__syncthreads()：确认 64 个槽位都写完&#x27;)}
+      &lt;text x=&quot;600&quot; y=&quot;622&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;同步以后，任何参与归约的线程都可以安全读取当前 Block 的 s[0…63]。&lt;/text&gt;
+      ${footer(&#x27;现在同一份输入同时存在于 HBM 和 Shared Memory；接下来的中间结果只在 Shared 中更新。&#x27;)}`;
+  }
+
+  function drawRound32(view) {
+    let equations = &#x27;&#x27;;
+    for (let i = 0; i &lt; 32; i += 1) {
+      const col = i % 4;
+      const row = Math.floor(i / 4);
+      const x = 58 + col * 282;
+      const y = 182 + row * 50;
+      equations += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;264&quot; height=&quot;38&quot; rx=&quot;8&quot; class=&quot;s2&quot;/&gt;&lt;text x=&quot;${x + 132}&quot; y=&quot;${y + 24}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;T${i}: ${input[i]} + ${input[i + 32]} = ${after32[i]}&lt;/text&gt;`;
+    }
+    return `${defs(view)}${header(view)}
+      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;1104&quot; height=&quot;492&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
+      ${pill(370, 132, 460, &#x27;Warp 0 的 32 条 Lane 同时执行 s[tid] += s[tid+32]&#x27;)}
+      ${equations}
+      &lt;text x=&quot;72&quot; y=&quot;624&quot; class=&quot;label&quot;&gt;本轮结束后，Shared Memory 的有效前半段 s[0…31]&lt;/text&gt;
+      ${memoryCells(after32, 0, 88, 646, {prefix:&#x27;s&#x27;, cls:&#x27;s2&#x27;, cellH:42})}
+      ${footer(&#x27;“并行”就在这里：上面 32 个加法不是依次做，而是同一 Warp 的一条指令同时作用于 32 条 Lane。&#x27;)}`;
+  }
+
+  function drawRounds(view) {
+    const rows = [
+      {stride:16, threads:&#x27;T0…T15（16 个）&#x27;, eq:&#x27;34+66=100，36+68=104，…，64+96=160&#x27;, values:after16, cls:&#x27;s2&#x27;},
+      {stride:8, threads:&#x27;T0…T7（8 个）&#x27;, eq:&#x27;100+132=232，104+136=240，…，128+160=288&#x27;, values:after8, cls:&#x27;s3&#x27;},
+      {stride:4, threads:&#x27;T0…T3（4 个）&#x27;, eq:&#x27;232+264=496，240+272=512，248+280=528，256+288=544&#x27;, values:after4, cls:&#x27;s4&#x27;},
+      {stride:2, threads:&#x27;T0…T1（2 个）&#x27;, eq:&#x27;496+528=1024，512+544=1056&#x27;, values:after2, cls:&#x27;s5&#x27;},
+      {stride:1, threads:&#x27;T0（1 个）&#x27;, eq:&#x27;1024+1056=2080&#x27;, values:after1, cls:&#x27;s1&#x27;}
+    ];
+    const markup = rows.map((row, i) =&gt; {
+      const y = 156 + i * 104;
+      const values = `[${row.values.join(&#x27;, &#x27;)}]`;
+      return `&lt;rect x=&quot;58&quot; y=&quot;${y}&quot; width=&quot;1084&quot; height=&quot;88&quot; rx=&quot;14&quot; class=&quot;${row.cls}&quot;/&gt;&lt;text x=&quot;82&quot; y=&quot;${y + 28}&quot; class=&quot;label&quot;&gt;stride=${row.stride}&lt;/text&gt;&lt;text x=&quot;240&quot; y=&quot;${y + 28}&quot; class=&quot;body&quot;&gt;活跃：${row.threads}&lt;/text&gt;&lt;text x=&quot;82&quot; y=&quot;${y + 57}&quot; class=&quot;body&quot;&gt;并行计算：${row.eq}&lt;/text&gt;&lt;text x=&quot;1120&quot; y=&quot;${y + 57}&quot; text-anchor=&quot;end&quot; class=&quot;body&quot;&gt;新有效值 ${esc(values)}&lt;/text&gt;`;
+    }).join(&#x27;&#x27;);
+    return `${defs(view)}${header(view)}
+      &lt;text x=&quot;58&quot; y=&quot;124&quot; class=&quot;muted&quot;&gt;每一行代表一轮：同一行内的多个加法并行；不同行之间需要等待上一轮完成。&lt;/text&gt;
+      ${markup}
+      ${pill(360, 690, 480, &#x27;有效线程数：32 → 16 → 8 → 4 → 2 → 1&#x27;)}
+      ${footer(&#x27;线程逐轮减少会产生不活跃 Lane；这就是 SIMT 代码中需要留意的分支与利用率问题。&#x27;)}`;
+  }
+
+  function storageRow(y, phase, hbm, reg, shared, out, cls) {
+    const cells = [
+      {x:48,w:180,text:phase},
+      {x:240,w:218,text:hbm},
+      {x:470,w:218,text:reg},
+      {x:700,w:250,text:shared},
+      {x:962,w:190,text:out}
+    ];
+    return cells.map((cell, i) =&gt; `&lt;rect x=&quot;${cell.x}&quot; y=&quot;${y}&quot; width=&quot;${cell.w}&quot; height=&quot;72&quot; rx=&quot;10&quot; class=&quot;${i === 0 ? cls : &#x27;neutral&#x27;}&quot;/&gt;&lt;text x=&quot;${cell.x + cell.w / 2}&quot; y=&quot;${y + 29}&quot; text-anchor=&quot;middle&quot; class=&quot;${i === 0 ? &#x27;label&#x27; : &#x27;body&#x27;}&quot;&gt;${esc(cell.text.split(&#x27;|&#x27;)[0])}&lt;/text&gt;${cell.text.includes(&#x27;|&#x27;) ? `&lt;text x=&quot;${cell.x + cell.w / 2}&quot; y=&quot;${y + 53}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;${esc(cell.text.split(&#x27;|&#x27;)[1])}&lt;/text&gt;` : &#x27;&#x27;}`).join(&#x27;&#x27;);
+  }
+
+  function drawStorage(view) {
+    return `${defs(view)}${header(view)}
+      &lt;text x=&quot;138&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;阶段&lt;/text&gt;&lt;text x=&quot;349&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输入 x&lt;/text&gt;&lt;text x=&quot;579&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;每线程寄存器&lt;/text&gt;&lt;text x=&quot;825&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;Block 的 Shared Memory&lt;/text&gt;&lt;text x=&quot;1057&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输出 out&lt;/text&gt;
+      ${storageRow(154, &#x27;开始&#x27;, &#x27;1…64|长期存放&#x27;, &#x27;空&#x27;, &#x27;未初始化&#x27;, &#x27;空&#x27;, &#x27;s1&#x27;)}
+      ${storageRow(238, &#x27;Load 后&#x27;, &#x27;1…64|原数据仍在&#x27;, &#x27;T0.r=1…T63.r=64|64 份私有值&#x27;, &#x27;未初始化&#x27;, &#x27;空&#x27;, &#x27;s4&#x27;)}
+      ${storageRow(322, &#x27;写 Shared 后&#x27;, &#x27;1…64|原数据仍在&#x27;, &#x27;1…64|仍可存在&#x27;, &#x27;s[0…63]=1…64|Block 共享&#x27;, &#x27;空&#x27;, &#x27;s5&#x27;)}
+      ${storageRow(406, &#x27;stride=32 后&#x27;, &#x27;1…64|没有改变&#x27;, &#x27;不再是主要位置&#x27;, &#x27;s[0…31]=34,36,…,96|后半段失效&#x27;, &#x27;空&#x27;, &#x27;s2&#x27;)}
+      ${storageRow(490, &#x27;归约结束&#x27;, &#x27;1…64|没有改变&#x27;, &#x27;T0 可取得 2080&#x27;, &#x27;s[0]=2080|其余为旧中间值&#x27;, &#x27;空&#x27;, &#x27;s3&#x27;)}
+      ${storageRow(574, &#x27;Store 后&#x27;, &#x27;1…64|输入仍保留&#x27;, &#x27;T0.r=2080&#x27;, &#x27;s[0]=2080&#x27;, &#x27;out[0]=2080|最终结果&#x27;, &#x27;s1&#x27;)}
+      ${footer(&#x27;寄存器、Shared、L1/L2 和 HBM 不是一块内存的不同名字；它们有不同作用域、容量和访问代价。&#x27;)}`;
+  }
+
+  function drawTimeline(view) {
+    const x0 = 250;
+    const unit = 90;
+    let ticks = &#x27;&#x27;;
+    for (let i = 0; i &lt;= 9; i += 1) {
+      const x = x0 + i * unit;
+      ticks += `&lt;line x1=&quot;${x}&quot; y1=&quot;148&quot; x2=&quot;${x}&quot; y2=&quot;608&quot; class=&quot;line&quot;/&gt;&lt;text x=&quot;${x}&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;t${i}&lt;/text&gt;`;
+    }
+    function bar(rowY, start, end, text, cls) {
+      const x = x0 + start * unit + 4;
+      const w = (end - start) * unit - 8;
+      return `&lt;rect x=&quot;${x}&quot; y=&quot;${rowY}&quot; width=&quot;${w}&quot; height=&quot;44&quot; rx=&quot;9&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${rowY + 28}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`;
+    }
+    return `${defs(view)}${header(view)}
+      &lt;text x=&quot;60&quot; y=&quot;132&quot; class=&quot;label&quot;&gt;SM 调度时间 →&lt;/text&gt;${ticks}
+      &lt;text x=&quot;60&quot; y=&quot;206&quot; class=&quot;label&quot;&gt;Warp 0&lt;/text&gt;${bar(176,0,1,&#x27;发出 Load&#x27;,&#x27;s1&#x27;)}${bar(176,1,4,&#x27;等待 HBM&#x27;,&#x27;inactive&#x27;)}${bar(176,4,6,&#x27;写 Shared&#x27;,&#x27;s2&#x27;)}${bar(176,6,8,&#x27;32 路加法&#x27;,&#x27;s3&#x27;)}
+      &lt;text x=&quot;60&quot; y=&quot;294&quot; class=&quot;label&quot;&gt;Warp 1&lt;/text&gt;${bar(264,1,2,&#x27;发出 Load&#x27;,&#x27;s1&#x27;)}${bar(264,2,5,&#x27;等待 HBM&#x27;,&#x27;inactive&#x27;)}${bar(264,5,7,&#x27;写 Shared&#x27;,&#x27;s2&#x27;)}
+      &lt;text x=&quot;60&quot; y=&quot;382&quot; class=&quot;label&quot;&gt;其他就绪 Warp&lt;/text&gt;${bar(352,2,4,&#x27;执行其他 Block 的计算&#x27;,&#x27;s4&#x27;)}${bar(352,8,9,&#x27;继续运行&#x27;,&#x27;s4&#x27;)}
+      &lt;text x=&quot;60&quot; y=&quot;470&quot; class=&quot;label&quot;&gt;计算单元&lt;/text&gt;${bar(440,0,1,&#x27;Load&#x27;,&#x27;s1&#x27;)}${bar(440,1,2,&#x27;Load&#x27;,&#x27;s1&#x27;)}${bar(440,2,4,&#x27;有用计算&#x27;,&#x27;s4&#x27;)}${bar(440,4,7,&#x27;Store Shared&#x27;,&#x27;s2&#x27;)}${bar(440,7,9,&#x27;归约加法&#x27;,&#x27;s3&#x27;)}
+      &lt;rect x=&quot;250&quot; y=&quot;536&quot; width=&quot;810&quot; height=&quot;72&quot; rx=&quot;14&quot; class=&quot;neutral&quot;/&gt;
+      &lt;text x=&quot;655&quot; y=&quot;566&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;等待没有消失，但 SM 没有跟着一起闲着&lt;/text&gt;
+      &lt;text x=&quot;655&quot; y=&quot;592&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;调度器从许多活跃 Warp 中选择已就绪者，把 HBM 等待时间覆盖掉。&lt;/text&gt;
+      ${footer(&#x27;图中的时间长度只是概念示意；文章的重点是“一个 Warp 等待，另一个 Warp 可以运行”。&#x27;)}`;
+  }
+
+  function drawOverview(view) {
+    return `${defs(view)}${header(view)}
+      ${box(48, 132, 178, 174, &#x27;HBM 输入&#x27;, [&#x27;x[0…63]=1…64&#x27;, &#x27;64 次元素读取&#x27;, &#x27;片外、大容量&#x27;], &#x27;s1&#x27;)}
+      ${arrow(226, 219, 300, 219, &#x27;Load&#x27;, &#x27;flow1&#x27;)}
+      ${box(300, 132, 188, 174, &#x27;64 个寄存器&#x27;, [&#x27;T0.r=1&#x27;, &#x27;…&#x27;, &#x27;T63.r=64&#x27;], &#x27;s4&#x27;)}
+      ${arrow(488, 219, 562, 219, &#x27;显式写入&#x27;, &#x27;flow4&#x27;)}
+      ${box(562, 132, 262, 174, &#x27;Shared Memory&#x27;, [&#x27;s[0…63]=1…64&#x27;, &#x27;保存全部中间结果&#x27;, &#x27;当前 Block 共享&#x27;], &#x27;s5&#x27;)}
+      ${arrow(824, 219, 898, 219, &#x27;Store&#x27;, &#x27;flow2&#x27;)}
+      ${box(898, 132, 254, 174, &#x27;HBM 输出&#x27;, [&#x27;out[0]=2080&#x27;, &#x27;只写回 1 个结果&#x27;], &#x27;s2&#x27;)}
+      &lt;rect x=&quot;48&quot; y=&quot;344&quot; width=&quot;1104&quot; height=&quot;302&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
+      &lt;text x=&quot;72&quot; y=&quot;378&quot; class=&quot;label&quot;&gt;Shared Memory 中发生的 63 次加法&lt;/text&gt;
+      ${pill(82, 406, 196, &#x27;stride 32 · 32 次并行&#x27;)}${pill(292, 406, 178, &#x27;stride 16 · 16 次&#x27;)}${pill(484, 406, 160, &#x27;stride 8 · 8 次&#x27;)}${pill(658, 406, 160, &#x27;stride 4 · 4 次&#x27;)}${pill(832, 406, 142, &#x27;stride 2 · 2 次&#x27;)}${pill(988, 406, 142, &#x27;stride 1 · 1 次&#x27;)}
+      &lt;text x=&quot;600&quot; y=&quot;492&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;32 + 16 + 8 + 4 + 2 + 1 = 63 次加法&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;536&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;同一轮中的加法并行执行；下一轮必须等待上一轮产生的新中间值。&lt;/text&gt;
+      &lt;text x=&quot;600&quot; y=&quot;578&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;这个求和使用 SM 的普通算术单元；Tensor Core 主要用于矩阵乘法，不参与本例。&lt;/text&gt;
+      ${pill(398, 604, 404, &#x27;最终：1 + 2 + … + 64 = 2080&#x27;)}
+      ${footer(&#x27;一张图记住：Thread 决定数据项，Warp 提供并行执行，Shared 保存协作中间值，HBM 保存长期输入输出。&#x27;)}`;
+  }
+
+  function render(id) {
+    const selected = views[id] ? id : &#x27;mapping&#x27;;
+    const view = views[selected];
+    svg.innerHTML = view.draw(view);
+    status.textContent = view.detail;
+    buttons.forEach(button =&gt; {
+      const active = button.dataset.view === selected;
+      button.setAttribute(&#x27;aria-pressed&#x27;, String(active));
+      button.classList.toggle(&#x27;btn-primary&#x27;, active);
+    });
+    if (window.location.hash !== `#${selected}`) history.replaceState(null, &#x27;&#x27;, `#${selected}`);
+  }
+
+  buttons.forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; render(button.dataset.view)));
+  window.addEventListener(&#x27;hashchange&#x27;, () =&gt; render(window.location.hash.slice(1)));
+  const initial = window.location.hash.slice(1);
+  render(views[initial] ? initial : &#x27;mapping&#x27;);
+})();
+&lt;/script&gt;
 
 &lt;script src=&quot;https://unpkg.com/@floating-ui/core@1.7.3/dist/floating-ui.core.umd.min.js&quot;&gt;&lt;/script&gt;
 &lt;script src=&quot;https://unpkg.com/@floating-ui/dom@1.7.4/dist/floating-ui.dom.umd.min.js&quot;&gt;&lt;/script&gt;

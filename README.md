@@ -73,7 +73,7 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ## 3. SM、Warp、线程与内存层级：64 个数的具体并行计算
 
-[打开八步交互式并行计算图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-parallel-reduction.html)
+[打开八步交互式并行计算图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
 
 这组图把计算过程和数据位置同时展开。教学例子使用一个包含 64 个线程的 Block，对 HBM 中的 `1…64` 求和，最终得到 `2080`。64 个线程组成两个 Warp；示例线程数用于讲解，并非 Blackwell 的固定配置。
 
@@ -118,7 +118,6 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ![从 HBM 读取到片上并行归约再写回 HBM 的完整过程](gpu-parallel-08-overview.png)
 
-[查看简化数据流版本](https://yeyunu.github.io/b200-gpu-anatomy/gpu-reduction-dataflow.html) · [查看原来的六步概念图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
 
 ## 4. 第二章后半章：网络、机架运营与路线图
 
