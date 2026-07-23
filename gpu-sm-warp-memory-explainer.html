@@ -5,18 +5,18 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="referrer" content="no-referrer">
 <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src 'unsafe-inline' blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'">
-<title>Gpu Parallel Reduction</title>
+<title>Gpu Parallel Memory Locations</title>
 <style>:root{color-scheme:light dark;background:light-dark(rgb(255 255 255), rgb(24 24 24))}html,body{margin:0}body{box-sizing:border-box;padding:1rem;background:inherit}iframe{display:block;width:100%;max-width:736px;height:calc(100vh - 2rem);margin:0 auto;border:0}</style>
 </head>
 <body>
-<iframe sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" title="Gpu Parallel Reduction" srcdoc="&lt;!doctype html&gt;
+<iframe sandbox="allow-scripts allow-same-origin" referrerpolicy="no-referrer" title="Gpu Parallel Memory Locations" srcdoc="&lt;!doctype html&gt;
 &lt;html lang=&quot;en&quot;&gt;
 &lt;head&gt;
 &lt;meta charset=&quot;utf-8&quot;&gt;
 &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1&quot;&gt;
 &lt;meta name=&quot;referrer&quot; content=&quot;no-referrer&quot;&gt;
 &lt;meta http-equiv=&quot;Content-Security-Policy&quot; content=&quot;default-src &#x27;none&#x27;; script-src &#x27;unsafe-inline&#x27; &#x27;unsafe-eval&#x27; &#x27;wasm-unsafe-eval&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; style-src &#x27;unsafe-inline&#x27; blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; img-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; font-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; media-src blob: data: https://cdnjs.cloudflare.com https://cdn.jsdelivr.net https://esm.sh https://fonts.bunny.net https://fonts.googleapis.com https://fonts.gstatic.com https://unpkg.com; worker-src blob:; connect-src blob: data:; frame-src &#x27;none&#x27;; object-src &#x27;none&#x27;; base-uri &#x27;none&#x27;; form-action &#x27;none&#x27;&quot;&gt;
-&lt;title&gt;Gpu Parallel Reduction&lt;/title&gt;
+&lt;title&gt;Gpu Parallel Memory Locations&lt;/title&gt;
 &lt;style&gt;:root {
   color-scheme: light dark;
   background-color: var(--background) !important;
@@ -813,157 +813,157 @@ svg {
 html&gt;body{padding:0}&lt;/style&gt;
 &lt;/head&gt;
 &lt;body&gt;
-&lt;div id=&quot;gpu-parallel-reduction&quot;&gt;
+&lt;div id=&quot;gpu-parallel-memory-locations&quot;&gt;
   &lt;div class=&quot;viz-controls&quot; aria-label=&quot;并行求和步骤&quot;&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-view=&quot;mapping&quot; aria-pressed=&quot;true&quot;&gt;1 数据分工&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;registers&quot; aria-pressed=&quot;false&quot;&gt;2 读入寄存器&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;shared&quot; aria-pressed=&quot;false&quot;&gt;3 存入 Shared&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;round32&quot; aria-pressed=&quot;false&quot;&gt;4 32 路同时加&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;rounds&quot; aria-pressed=&quot;false&quot;&gt;5 后续计算&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;storage&quot; aria-pressed=&quot;false&quot;&gt;6 数据存放变化&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;timeline&quot; aria-pressed=&quot;false&quot;&gt;7 Warp 时间线&lt;/button&gt;
-    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-view=&quot;overview&quot; aria-pressed=&quot;false&quot;&gt;8 完整过程&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn btn-primary&quot; data-location-step=&quot;mapping&quot; aria-pressed=&quot;true&quot;&gt;1 HBM 中的输入&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;registers&quot; aria-pressed=&quot;false&quot;&gt;2 读到寄存器&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;shared&quot; aria-pressed=&quot;false&quot;&gt;3 写入 Shared&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;round32&quot; aria-pressed=&quot;false&quot;&gt;4 SM 内并行加&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;rounds&quot; aria-pressed=&quot;false&quot;&gt;5 SM 内继续归约&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;storage&quot; aria-pressed=&quot;false&quot;&gt;6 各阶段位置表&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;timeline&quot; aria-pressed=&quot;false&quot;&gt;7 Warp 时间线&lt;/button&gt;
+    &lt;button type=&quot;button&quot; class=&quot;btn&quot; data-location-step=&quot;overview&quot; aria-pressed=&quot;false&quot;&gt;8 写回 HBM&lt;/button&gt;
   &lt;/div&gt;
-  &lt;div id=&quot;gpu-parallel-stage&quot;&gt;
-    &lt;svg id=&quot;gpu-parallel-svg&quot; viewBox=&quot;0 0 1200 790&quot; role=&quot;img&quot; aria-labelledby=&quot;gpu-parallel-title gpu-parallel-desc&quot;&gt;&lt;/svg&gt;
-    &lt;div id=&quot;gpu-parallel-status&quot; class=&quot;text-small&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
+  &lt;div id=&quot;gpu-location-stage&quot;&gt;
+    &lt;svg id=&quot;gpu-location-svg&quot; viewBox=&quot;0 0 1200 960&quot; role=&quot;img&quot; aria-labelledby=&quot;gpu-location-title gpu-location-desc&quot;&gt;&lt;/svg&gt;
+    &lt;div id=&quot;gpu-location-status&quot; class=&quot;text-small&quot; aria-live=&quot;polite&quot;&gt;&lt;/div&gt;
   &lt;/div&gt;
 &lt;/div&gt;
 
 &lt;style&gt;
-  #gpu-parallel-reduction {
+  #gpu-parallel-memory-locations {
     color: var(--foreground);
     width: 100%;
   }
-  #gpu-parallel-reduction .viz-controls {
+  #gpu-parallel-memory-locations .viz-controls {
     margin-bottom: 0.75rem;
   }
-  #gpu-parallel-svg {
+  #gpu-location-svg {
     display: block;
     width: 100%;
     height: auto;
     overflow: visible;
     font-family: inherit;
   }
-  #gpu-parallel-status {
+  #gpu-location-status {
     color: var(--muted-foreground);
     min-height: 1.5rem;
     padding-top: 0.35rem;
     text-align: center;
   }
-  #gpu-parallel-svg .title {
+  #gpu-location-svg .title {
     fill: var(--foreground);
-    font-size: calc(var(--font-size-base) * 1.28);
+    font-size: calc(var(--font-size-base) * 1.26);
     font-weight: 500;
   }
-  #gpu-parallel-svg .kicker,
-  #gpu-parallel-svg .muted {
+  #gpu-location-svg .kicker,
+  #gpu-location-svg .muted {
     fill: var(--muted-foreground);
-    font-size: calc(var(--font-size-base) * 0.74);
+    font-size: calc(var(--font-size-base) * 0.73);
     font-weight: 400;
   }
-  #gpu-parallel-svg .label {
+  #gpu-location-svg .label {
     fill: var(--foreground);
-    font-size: calc(var(--font-size-base) * 0.88);
+    font-size: calc(var(--font-size-base) * 0.86);
     font-weight: 500;
   }
-  #gpu-parallel-svg .body {
+  #gpu-location-svg .body {
     fill: var(--foreground);
-    font-size: calc(var(--font-size-base) * 0.74);
+    font-size: calc(var(--font-size-base) * 0.72);
     font-weight: 400;
   }
-  #gpu-parallel-svg .small {
+  #gpu-location-svg .small {
     fill: var(--muted-foreground);
-    font-size: calc(var(--font-size-base) * 0.64);
+    font-size: calc(var(--font-size-base) * 0.62);
     font-weight: 400;
   }
-  #gpu-parallel-svg .value {
+  #gpu-location-svg .value {
     fill: var(--foreground);
-    font-size: calc(var(--font-size-base) * 1.04);
+    font-size: calc(var(--font-size-base) * 1.02);
     font-weight: 500;
   }
-  #gpu-parallel-svg .frame {
+  #gpu-location-svg .frame {
     fill: var(--card);
     stroke: var(--border);
     stroke-width: 1.5;
   }
-  #gpu-parallel-svg .neutral {
+  #gpu-location-svg .neutral {
     fill: var(--muted);
     stroke: var(--border);
     stroke-width: 1.2;
   }
-  #gpu-parallel-svg .s1 {
-    fill: color-mix(in srgb, var(--viz-series-1) 16%, transparent);
-    stroke: color-mix(in srgb, var(--viz-series-1) 72%, var(--border));
-    stroke-width: 1.5;
+  #gpu-location-svg .s1 {
+    fill: color-mix(in srgb, var(--viz-series-1) 17%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-1) 74%, var(--border));
+    stroke-width: 1.6;
   }
-  #gpu-parallel-svg .s2 {
-    fill: color-mix(in srgb, var(--viz-series-2) 16%, transparent);
-    stroke: color-mix(in srgb, var(--viz-series-2) 72%, var(--border));
-    stroke-width: 1.5;
+  #gpu-location-svg .s2 {
+    fill: color-mix(in srgb, var(--viz-series-2) 17%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-2) 74%, var(--border));
+    stroke-width: 1.6;
   }
-  #gpu-parallel-svg .s3 {
-    fill: color-mix(in srgb, var(--viz-series-3) 16%, transparent);
-    stroke: color-mix(in srgb, var(--viz-series-3) 72%, var(--border));
-    stroke-width: 1.5;
+  #gpu-location-svg .s3 {
+    fill: color-mix(in srgb, var(--viz-series-3) 17%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-3) 74%, var(--border));
+    stroke-width: 1.6;
   }
-  #gpu-parallel-svg .s4 {
-    fill: color-mix(in srgb, var(--viz-series-4) 16%, transparent);
-    stroke: color-mix(in srgb, var(--viz-series-4) 72%, var(--border));
-    stroke-width: 1.5;
+  #gpu-location-svg .s4 {
+    fill: color-mix(in srgb, var(--viz-series-4) 17%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-4) 74%, var(--border));
+    stroke-width: 1.6;
   }
-  #gpu-parallel-svg .s5 {
-    fill: color-mix(in srgb, var(--viz-series-5) 16%, transparent);
-    stroke: color-mix(in srgb, var(--viz-series-5) 72%, var(--border));
-    stroke-width: 1.5;
+  #gpu-location-svg .s5 {
+    fill: color-mix(in srgb, var(--viz-series-5) 17%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-5) 74%, var(--border));
+    stroke-width: 1.6;
   }
-  #gpu-parallel-svg .s6 {
-    fill: color-mix(in srgb, var(--viz-series-6) 16%, transparent);
-    stroke: color-mix(in srgb, var(--viz-series-6) 72%, var(--border));
-    stroke-width: 1.5;
+  #gpu-location-svg .s6 {
+    fill: color-mix(in srgb, var(--viz-series-6) 17%, transparent);
+    stroke: color-mix(in srgb, var(--viz-series-6) 74%, var(--border));
+    stroke-width: 1.6;
   }
-  #gpu-parallel-svg .inactive {
-    fill: color-mix(in srgb, var(--muted) 72%, transparent);
+  #gpu-location-svg .inactive {
+    fill: color-mix(in srgb, var(--muted) 78%, transparent);
     stroke: var(--border);
-    stroke-width: 1;
+    stroke-width: 1.1;
   }
-  #gpu-parallel-svg .line {
+  #gpu-location-svg .line {
     fill: none;
     stroke: var(--border);
     stroke-width: 2;
   }
-  #gpu-parallel-svg .flow1 {
+  #gpu-location-svg .path1 {
     fill: none;
     stroke: var(--viz-series-1);
     stroke-width: 3;
-    marker-end: url(#parallel-arrow-1);
+    marker-end: url(#location-arrow-1);
   }
-  #gpu-parallel-svg .flow2 {
+  #gpu-location-svg .path2 {
     fill: none;
     stroke: var(--viz-series-2);
     stroke-width: 3;
-    marker-end: url(#parallel-arrow-2);
+    marker-end: url(#location-arrow-2);
   }
-  #gpu-parallel-svg .flow3 {
+  #gpu-location-svg .path3 {
     fill: none;
     stroke: var(--viz-series-3);
     stroke-width: 3;
-    marker-end: url(#parallel-arrow-3);
+    marker-end: url(#location-arrow-3);
   }
-  #gpu-parallel-svg .flow4 {
+  #gpu-location-svg .path4 {
     fill: none;
     stroke: var(--viz-series-4);
     stroke-width: 3;
-    marker-end: url(#parallel-arrow-4);
+    marker-end: url(#location-arrow-4);
   }
-  #gpu-parallel-svg .dash {
+  #gpu-location-svg .dash {
     stroke-dasharray: 7 6;
   }
-  #gpu-parallel-svg .badge {
+  #gpu-location-svg .badge {
     fill: var(--primary);
     stroke: none;
   }
-  #gpu-parallel-svg .badge-text {
+  #gpu-location-svg .badge-text {
     fill: var(--primary-foreground);
     font-size: calc(var(--font-size-base) * 0.66);
     font-weight: 500;
@@ -972,65 +972,72 @@ html&gt;body{padding:0}&lt;/style&gt;
 
 &lt;script&gt;
 (() =&gt; {
-  const root = document.getElementById(&#x27;gpu-parallel-reduction&#x27;);
-  const svg = document.getElementById(&#x27;gpu-parallel-svg&#x27;);
-  const status = document.getElementById(&#x27;gpu-parallel-status&#x27;);
-  const buttons = Array.from(root.querySelectorAll(&#x27;[data-view]&#x27;));
+  const root = document.getElementById(&#x27;gpu-parallel-memory-locations&#x27;);
+  const svg = document.getElementById(&#x27;gpu-location-svg&#x27;);
+  const status = document.getElementById(&#x27;gpu-location-status&#x27;);
+  const buttons = Array.from(root.querySelectorAll(&#x27;[data-location-step]&#x27;));
   const input = Array.from({length: 64}, (_, i) =&gt; i + 1);
   const after32 = Array.from({length: 32}, (_, i) =&gt; input[i] + input[i + 32]);
   const after16 = Array.from({length: 16}, (_, i) =&gt; after32[i] + after32[i + 16]);
   const after8 = Array.from({length: 8}, (_, i) =&gt; after16[i] + after16[i + 8]);
   const after4 = Array.from({length: 4}, (_, i) =&gt; after8[i] + after8[i + 4]);
   const after2 = Array.from({length: 2}, (_, i) =&gt; after4[i] + after4[i + 2]);
-  const after1 = [after2[0] + after2[1]];
 
   const views = {
     mapping: {
       index: 1,
-      title: &#x27;先分工：64 个线程各负责一个输入元素&#x27;,
-      detail: &#x27;Block 有 64 个线程，组成两个 Warp；Thread tid 负责 HBM 中的 x[tid]。&#x27;,
+      title: &#x27;起点：输入只在 HBM，线程还没有拿到数据&#x27;,
+      detail: &#x27;HBM 位于 GPU die 外；此时 x[0…63]=1…64，SM 内的寄存器和 Shared Memory 还是空的。&#x27;,
+      state: {active:[&#x27;hbmIn&#x27;], hbmIn:&#x27;x[0…63]|= 1…64&#x27;, l2:&#x27;可能缓存副本&#x27;, l1:&#x27;可能缓存副本&#x27;, reg:&#x27;空&#x27;, shared:&#x27;未初始化&#x27;, alu:&#x27;空闲&#x27;, hbmOut:&#x27;空&#x27;, paths:[]},
       draw: drawMapping
     },
     registers: {
       index: 2,
-      title: &#x27;并行读取：每个线程把自己的数放进私有寄存器&#x27;,
-      detail: &#x27;同一 Warp 的 32 个线程执行同一条 Load 指令，但使用各自的 tid 计算不同地址。&#x27;,
+      title: &#x27;Load：数据穿过缓存层级，最终落进每个线程的寄存器&#x27;,
+      detail: &#x27;HBM、L2、L1 是访问路径；程序真正得到的是 SM 内每线程私有的寄存器值。&#x27;,
+      state: {active:[&#x27;hbmIn&#x27;,&#x27;l2&#x27;,&#x27;l1&#x27;,&#x27;reg&#x27;], hbmIn:&#x27;原始 x|仍然保留&#x27;, l2:&#x27;可能暂存|缓存行&#x27;, l1:&#x27;可能暂存|缓存行&#x27;, reg:&#x27;T0.r=1|… T63.r=64&#x27;, shared:&#x27;未初始化&#x27;, alu:&#x27;Load/Store&#x27;, hbmOut:&#x27;空&#x27;, paths:[&#x27;load&#x27;]},
       draw: drawRegisters
     },
     shared: {
       index: 3,
-      title: &#x27;显式存放：64 个寄存器值写入 64 个 Shared Memory 槽位&#x27;,
-      detail: &#x27;Shared Memory 属于当前 Block；s[tid] 与线程 tid 一一对应，写完后先同步。&#x27;,
+      title: &#x27;协作准备：线程把寄存器值显式写进 SM 内的 Shared Memory&#x27;,
+      detail: &#x27;Shared Memory 与 L1 都在 SM 内，但 Shared 由程序明确寻址；写完后 Block 内线程同步。&#x27;,
+      state: {active:[&#x27;reg&#x27;,&#x27;shared&#x27;], hbmIn:&#x27;原始 x|仍然保留&#x27;, l2:&#x27;可能有副本&#x27;, l1:&#x27;缓存路径&#x27;, reg:&#x27;r_tid|= 1…64&#x27;, shared:&#x27;s[0…63]|= 1…64&#x27;, alu:&#x27;Store Shared&#x27;, hbmOut:&#x27;空&#x27;, paths:[&#x27;toShared&#x27;]},
       draw: drawShared
     },
     round32: {
       index: 4,
-      title: &#x27;第一次归约：一个 Warp 的 32 条 Lane 同时做 32 次加法&#x27;,
-      detail: &#x27;同一条指令在 32 条 Lane 上并行执行：s[tid] += s[tid+32]。&#x27;,
+      title: &#x27;第一轮加法完全发生在 SM 内：Shared → 加法单元 → Shared&#x27;,
+      detail: &#x27;Warp 0 的 32 条 Lane 同时读两个 Shared 槽位，执行普通加法，再把 32 个结果写回 Shared。&#x27;,
+      state: {active:[&#x27;shared&#x27;,&#x27;alu&#x27;], hbmIn:&#x27;原始 x|没有改变&#x27;, l2:&#x27;本轮不用&#x27;, l1:&#x27;本轮不用&#x27;, reg:&#x27;临时操作数&#x27;, shared:&#x27;s[0…31]|= 34,36…96&#x27;, alu:&#x27;32 条 Lane|同时加法&#x27;, hbmOut:&#x27;空&#x27;, paths:[&#x27;compute&#x27;]},
       draw: drawRound32
     },
     rounds: {
       index: 5,
-      title: &#x27;继续归约：活跃线程逐轮减半，数值一步步汇总&#x27;,
-      detail: &#x27;每轮都先完成一批并行加法，再同步，然后把 stride 从 16 降到 1。&#x27;,
+      title: &#x27;后续归约仍在 SM 内：只更新 Shared Memory 的有效前缀&#x27;,
+      detail: &#x27;每轮从 Shared 读取中间值、在 SM 算术单元相加、再写回 Shared；HBM 不参与中间轮次。&#x27;,
+      state: {active:[&#x27;shared&#x27;,&#x27;alu&#x27;], hbmIn:&#x27;原始 x|没有改变&#x27;, l2:&#x27;本轮不用&#x27;, l1:&#x27;本轮不用&#x27;, reg:&#x27;临时操作数&#x27;, shared:&#x27;s[0]|最终变成 2080&#x27;, alu:&#x27;16→8→4|→2→1 路&#x27;, hbmOut:&#x27;空&#x27;, paths:[&#x27;compute&#x27;]},
       draw: drawRounds
     },
     storage: {
       index: 6,
-      title: &#x27;数据到底存在哪里：每个阶段都有明确位置&#x27;,
-      detail: &#x27;HBM 输入保持不变；寄存器保存线程私有副本；Shared 保存中间结果；最终只写一个输出。&#x27;,
+      title: &#x27;位置总表：区分长期数据、线程私有值和 Block 中间值&#x27;,
+      detail: &#x27;HBM 保存长期输入输出；寄存器归线程所有；Shared 归 Block 所有；L1/L2 只是硬件管理的缓存副本。&#x27;,
+      state: {active:[&#x27;hbmIn&#x27;,&#x27;reg&#x27;,&#x27;shared&#x27;], hbmIn:&#x27;输入 1…64&#x27;, l2:&#x27;硬件缓存|非确定位置&#x27;, l1:&#x27;硬件缓存|非确定位置&#x27;, reg:&#x27;每线程私有&#x27;, shared:&#x27;Block 共享|中间结果&#x27;, alu:&#x27;执行加法&#x27;, hbmOut:&#x27;尚未写回&#x27;, paths:[]},
       draw: drawStorage
     },
     timeline: {
       index: 7,
-      title: &#x27;SM 的时间线：一个 Warp 等数据时，另一个 Warp 占用计算单元&#x27;,
-      detail: &#x27;Latency hiding 没有消除 HBM 延迟，只是用其他已就绪 Warp 的工作覆盖等待。&#x27;,
+      title: &#x27;Latency hiding：等待发生在内存路径，计算发生在 SM 执行单元&#x27;,
+      detail: &#x27;某个 Warp 等待 HBM→缓存→寄存器的 Load 时，SM 调度器可以让另一个已就绪 Warp 使用算术单元。&#x27;,
+      state: {active:[&#x27;hbmIn&#x27;,&#x27;l2&#x27;,&#x27;l1&#x27;,&#x27;reg&#x27;,&#x27;alu&#x27;], hbmIn:&#x27;Load 来源&#x27;, l2:&#x27;缓存路径&#x27;, l1:&#x27;SM 本地缓存&#x27;, reg:&#x27;数据到达后|Warp 就绪&#x27;, shared:&#x27;随后写入&#x27;, alu:&#x27;运行其他|已就绪 Warp&#x27;, hbmOut:&#x27;空&#x27;, paths:[&#x27;load&#x27;]},
       draw: drawTimeline
     },
     overview: {
       index: 8,
-      title: &#x27;完整过程：64 次读取、63 次加法、1 次写回&#x27;,
-      detail: &#x27;并行来自许多 Lane 同时执行相同指令；效率来自中间结果尽量留在 SM 的片上存储。&#x27;,
+      title: &#x27;终点：T0 从 Shared 取得 2080，经 L2 路径写入 HBM 输出&#x27;,
+      detail: &#x27;输入 HBM 仍保存 1…64；最终结果 out[0]=2080 位于 HBM；中间结果曾经位于 SM 的 Shared。&#x27;,
+      state: {active:[&#x27;hbmIn&#x27;,&#x27;shared&#x27;,&#x27;reg&#x27;,&#x27;l2&#x27;,&#x27;hbmOut&#x27;], hbmIn:&#x27;x[0…63]|仍是 1…64&#x27;, l2:&#x27;Store 路径&#x27;, l1:&#x27;本步非关键&#x27;, reg:&#x27;T0.r|= 2080&#x27;, shared:&#x27;s[0]|= 2080&#x27;, alu:&#x27;完成&#x27;, hbmOut:&#x27;out[0]|= 2080&#x27;, paths:[&#x27;store&#x27;]},
       draw: drawOverview
     }
   };
@@ -1040,27 +1047,56 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   function defs(view) {
-    return `&lt;title id=&quot;gpu-parallel-title&quot;&gt;${esc(view.title)}&lt;/title&gt;&lt;desc id=&quot;gpu-parallel-desc&quot;&gt;${esc(view.detail)}&lt;/desc&gt;
-      &lt;defs&gt;
-        &lt;marker id=&quot;parallel-arrow-1&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-1)&quot;/&gt;&lt;/marker&gt;
-        &lt;marker id=&quot;parallel-arrow-2&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-2)&quot;/&gt;&lt;/marker&gt;
-        &lt;marker id=&quot;parallel-arrow-3&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-3)&quot;/&gt;&lt;/marker&gt;
-        &lt;marker id=&quot;parallel-arrow-4&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto-start-reverse&quot;&gt;&lt;path d=&quot;M 0 0 L 10 5 L 0 10 z&quot; fill=&quot;var(--viz-series-4)&quot;/&gt;&lt;/marker&gt;
-      &lt;/defs&gt;`;
+    return `&lt;title id=&quot;gpu-location-title&quot;&gt;${esc(view.title)}&lt;/title&gt;&lt;desc id=&quot;gpu-location-desc&quot;&gt;${esc(view.detail)}&lt;/desc&gt;&lt;defs&gt;
+      &lt;marker id=&quot;location-arrow-1&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0 0 L10 5 L0 10 z&quot; fill=&quot;var(--viz-series-1)&quot;/&gt;&lt;/marker&gt;
+      &lt;marker id=&quot;location-arrow-2&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0 0 L10 5 L0 10 z&quot; fill=&quot;var(--viz-series-2)&quot;/&gt;&lt;/marker&gt;
+      &lt;marker id=&quot;location-arrow-3&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0 0 L10 5 L0 10 z&quot; fill=&quot;var(--viz-series-3)&quot;/&gt;&lt;/marker&gt;
+      &lt;marker id=&quot;location-arrow-4&quot; viewBox=&quot;0 0 10 10&quot; refX=&quot;8&quot; refY=&quot;5&quot; markerWidth=&quot;7&quot; markerHeight=&quot;7&quot; orient=&quot;auto&quot;&gt;&lt;path d=&quot;M0 0 L10 5 L0 10 z&quot; fill=&quot;var(--viz-series-4)&quot;/&gt;&lt;/marker&gt;
+    &lt;/defs&gt;`;
   }
 
   function header(view) {
-    return `&lt;text x=&quot;48&quot; y=&quot;39&quot; class=&quot;kicker&quot;&gt;具体计算 · ${view.index} / 8&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;76&quot; class=&quot;title&quot;&gt;${esc(view.title)}&lt;/text&gt;`;
+    return `&lt;text x=&quot;48&quot; y=&quot;38&quot; class=&quot;kicker&quot;&gt;固定位置地图 · ${view.index} / 8&lt;/text&gt;&lt;text x=&quot;48&quot; y=&quot;75&quot; class=&quot;title&quot;&gt;${esc(view.title)}&lt;/text&gt;`;
   }
 
-  function box(x, y, w, h, title, lines = [], cls = &#x27;frame&#x27;) {
-    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;16&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + 16}&quot; y=&quot;${y + 29}&quot; class=&quot;label&quot;&gt;${esc(title)}&lt;/text&gt;${lines.map((line, i) =&gt; `&lt;text x=&quot;${x + 16}&quot; y=&quot;${y + 56 + i * 24}&quot; class=&quot;body&quot;&gt;${esc(line)}&lt;/text&gt;`).join(&#x27;&#x27;)}`;
+  function multiline(x, y, text, cls = &#x27;body&#x27;, anchor = &#x27;middle&#x27;, gap = 22) {
+    return String(text).split(&#x27;|&#x27;).map((line, i) =&gt; `&lt;text x=&quot;${x}&quot; y=&quot;${y + i * gap}&quot; text-anchor=&quot;${anchor}&quot; class=&quot;${cls}&quot;&gt;${esc(line)}&lt;/text&gt;`).join(&#x27;&#x27;);
   }
 
-  function arrow(x1, y1, x2, y2, label = &#x27;&#x27;, cls = &#x27;flow1&#x27;) {
-    const tx = (x1 + x2) / 2;
-    const ty = (y1 + y2) / 2 - 9;
-    return `&lt;path d=&quot;M ${x1} ${y1} L ${x2} ${y2}&quot; class=&quot;${cls}&quot;/&gt;${label ? `&lt;text x=&quot;${tx}&quot; y=&quot;${ty}&quot; text-anchor=&quot;middle&quot; class=&quot;muted&quot;&gt;${esc(label)}&lt;/text&gt;` : &#x27;&#x27;}`;
+  function node(x, y, w, h, title, value, id, state, defaultCls) {
+    const active = state.active.includes(id);
+    const cls = active ? defaultCls : &#x27;inactive&#x27;;
+    return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;${h}&quot; rx=&quot;12&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${y + 25}&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;${esc(title)}&lt;/text&gt;${multiline(x + w / 2, y + 52, value, active ? &#x27;body&#x27; : &#x27;small&#x27;)}`;
+  }
+
+  function locationMap(view) {
+    const s = view.state;
+    let paths = &#x27;&#x27;;
+    if (s.paths.includes(&#x27;load&#x27;)) {
+      paths += `&lt;path d=&quot;M 218 216 L 286 216&quot; class=&quot;path1&quot;/&gt;&lt;path d=&quot;M 600 198 C 600 216 410 216 410 258&quot; class=&quot;path2&quot;/&gt;&lt;path d=&quot;M 458 304 L 486 304&quot; class=&quot;path3&quot;/&gt;`;
+    }
+    if (s.paths.includes(&#x27;toShared&#x27;)) {
+      paths += `&lt;path d=&quot;M 596 304 L 624 304&quot; class=&quot;path4&quot;/&gt;`;
+    }
+    if (s.paths.includes(&#x27;compute&#x27;)) {
+      paths += `&lt;path d=&quot;M 754 292 C 762 270 770 270 778 292&quot; class=&quot;path3&quot;/&gt;&lt;path d=&quot;M 778 330 C 770 354 762 354 754 330&quot; class=&quot;path3&quot;/&gt;`;
+    }
+    if (s.paths.includes(&#x27;store&#x27;)) {
+      paths += `&lt;path d=&quot;M 690 258 C 690 226 650 218 650 198&quot; class=&quot;path4&quot;/&gt;&lt;path d=&quot;M 914 216 L 982 216&quot; class=&quot;path2&quot;/&gt;`;
+    }
+    return `&lt;rect x=&quot;246&quot; y=&quot;104&quot; width=&quot;710&quot; height=&quot;286&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;&lt;text x=&quot;266&quot; y=&quot;132&quot; class=&quot;label&quot;&gt;GPU die 内部&lt;/text&gt;
+      ${node(48, 148, 170, 136, &#x27;HBM 输入&#x27;, s.hbmIn, &#x27;hbmIn&#x27;, s, &#x27;s1&#x27;)}
+      &lt;text x=&quot;133&quot; y=&quot;310&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;GPU die 外 · 片外显存&lt;/text&gt;
+      ${node(286, 142, 628, 56, &#x27;L2 Cache&#x27;, s.l2, &#x27;l2&#x27;, s, &#x27;s2&#x27;)}
+      &lt;text x=&quot;600&quot; y=&quot;214&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;GPU die 内、SM 外 · 所有 SM 共享&lt;/text&gt;
+      &lt;rect x=&quot;338&quot; y=&quot;232&quot; width=&quot;524&quot; height=&quot;136&quot; rx=&quot;18&quot; class=&quot;frame&quot;/&gt;&lt;text x=&quot;358&quot; y=&quot;254&quot; class=&quot;label&quot;&gt;一个 SM 内部&lt;/text&gt;
+      ${node(362, 270, 96, 76, &#x27;L1&#x27;, s.l1, &#x27;l1&#x27;, s, &#x27;s3&#x27;)}
+      ${node(486, 270, 110, 76, &#x27;寄存器&#x27;, s.reg, &#x27;reg&#x27;, s, &#x27;s4&#x27;)}
+      ${node(624, 270, 130, 76, &#x27;Shared&#x27;, s.shared, &#x27;shared&#x27;, s, &#x27;s5&#x27;)}
+      ${node(778, 270, 60, 76, &#x27;＋&#x27;, s.alu, &#x27;alu&#x27;, s, &#x27;s6&#x27;)}
+      &lt;text x=&quot;600&quot; y=&quot;382&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;L1、寄存器、Shared Memory、算术单元都位于 SM 内&lt;/text&gt;
+      ${node(982, 148, 170, 136, &#x27;HBM 输出&#x27;, s.hbmOut, &#x27;hbmOut&#x27;, s, &#x27;s1&#x27;)}
+      &lt;text x=&quot;1067&quot; y=&quot;310&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;GPU die 外 · 最终结果&lt;/text&gt;${paths}`;
   }
 
   function pill(x, y, w, text) {
@@ -1068,211 +1104,123 @@ html&gt;body{padding:0}&lt;/style&gt;
   }
 
   function footer(text) {
-    return `&lt;rect x=&quot;48&quot; y=&quot;720&quot; width=&quot;1104&quot; height=&quot;42&quot; rx=&quot;12&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;747&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`;
+    return `&lt;rect x=&quot;48&quot; y=&quot;896&quot; width=&quot;1104&quot; height=&quot;40&quot; rx=&quot;11&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;922&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`;
   }
 
-  function memoryCells(values, startIndex, x, y, options = {}) {
-    const cols = options.cols || 32;
-    const cellW = options.cellW || 31;
-    const cellH = options.cellH || 46;
-    const prefix = options.prefix || &#x27;x&#x27;;
-    const cls = options.cls || &#x27;s1&#x27;;
-    const inactiveFrom = Number.isInteger(options.inactiveFrom) ? options.inactiveFrom : values.length;
-    let out = &#x27;&#x27;;
-    values.forEach((value, i) =&gt; {
+  function cells(values, startIndex, x, y, prefix, cls, cols = 32, cellW = 31, cellH = 43) {
+    return values.map((value, i) =&gt; {
       const px = x + (i % cols) * cellW;
-      const py = y + Math.floor(i / cols) * (cellH + 8);
-      const active = i &lt; inactiveFrom;
-      out += `&lt;rect x=&quot;${px}&quot; y=&quot;${py}&quot; width=&quot;${cellW - 3}&quot; height=&quot;${cellH}&quot; rx=&quot;5&quot; class=&quot;${active ? cls : &#x27;inactive&#x27;}&quot;/&gt;&lt;text x=&quot;${px + (cellW - 3) / 2}&quot; y=&quot;${py + 15}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;${esc(prefix)}${startIndex + i}&lt;/text&gt;&lt;text x=&quot;${px + (cellW - 3) / 2}&quot; y=&quot;${py + 36}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(value)}&lt;/text&gt;`;
-    });
-    return out;
+      const py = y + Math.floor(i / cols) * (cellH + 7);
+      return `&lt;rect x=&quot;${px}&quot; y=&quot;${py}&quot; width=&quot;${cellW - 3}&quot; height=&quot;${cellH}&quot; rx=&quot;5&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${px + (cellW - 3) / 2}&quot; y=&quot;${py + 14}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;${prefix}${startIndex + i}&lt;/text&gt;&lt;text x=&quot;${px + (cellW - 3) / 2}&quot; y=&quot;${py + 34}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${value}&lt;/text&gt;`;
+    }).join(&#x27;&#x27;);
   }
 
-  function registerCells(values, startIndex, x, y, cls) {
-    let out = &#x27;&#x27;;
-    values.forEach((value, i) =&gt; {
-      const px = x + i * 24;
-      out += `&lt;rect x=&quot;${px}&quot; y=&quot;${y}&quot; width=&quot;21&quot; height=&quot;56&quot; rx=&quot;5&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${px + 10.5}&quot; y=&quot;${y + 18}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;T${startIndex + i}&lt;/text&gt;&lt;text x=&quot;${px + 10.5}&quot; y=&quot;${y + 42}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${value}&lt;/text&gt;`;
-    });
-    return out;
+  function detailFrame() {
+    return `&lt;rect x=&quot;48&quot; y=&quot;414&quot; width=&quot;1104&quot; height=&quot;458&quot; rx=&quot;20&quot; class=&quot;frame&quot;/&gt;`;
   }
 
   function drawMapping(view) {
-    return `${defs(view)}${header(view)}
-      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;1104&quot; height=&quot;244&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
-      &lt;text x=&quot;72&quot; y=&quot;144&quot; class=&quot;label&quot;&gt;HBM 输入数组 x[0…63]：上面是地址，下面是数值&lt;/text&gt;
-      ${memoryCells(input.slice(0, 32), 0, 88, 166, {prefix:&#x27;x&#x27;, cls:&#x27;s1&#x27;})}
-      ${memoryCells(input.slice(32), 32, 88, 228, {prefix:&#x27;x&#x27;, cls:&#x27;s1&#x27;})}
-      &lt;rect x=&quot;48&quot; y=&quot;388&quot; width=&quot;1104&quot; height=&quot;286&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
-      &lt;text x=&quot;72&quot; y=&quot;422&quot; class=&quot;label&quot;&gt;线程分工：tid 就是线程编号&lt;/text&gt;
-      ${box(82, 454, 488, 154, &#x27;Warp 0 · Thread 0…31&#x27;, [&#x27;T0 → x[0] = 1&#x27;, &#x27;T1 → x[1] = 2&#x27;, &#x27;…&#x27;, &#x27;T31 → x[31] = 32&#x27;], &#x27;s2&#x27;)}
-      ${box(630, 454, 488, 154, &#x27;Warp 1 · Thread 32…63&#x27;, [&#x27;T32 → x[32] = 33&#x27;, &#x27;T33 → x[33] = 34&#x27;, &#x27;…&#x27;, &#x27;T63 → x[63] = 64&#x27;], &#x27;s3&#x27;)}
-      ${pill(154, 628, 344, &#x27;Warp 0：32 个线程处理前半段&#x27;)}${pill(702, 628, 344, &#x27;Warp 1：32 个线程处理后半段&#x27;)}
-      ${footer(&#x27;这一阶段没有做加法，只完成“哪个线程负责哪个地址”的映射。&#x27;)}`;
+    return `${detailFrame()}&lt;text x=&quot;72&quot; y=&quot;446&quot; class=&quot;label&quot;&gt;HBM 输入的地址和值&lt;/text&gt;${cells(input.slice(0,32),0,88,470,&#x27;x&#x27;,&#x27;s1&#x27;)}${cells(input.slice(32),32,88,524,&#x27;x&#x27;,&#x27;s1&#x27;)}
+      &lt;text x=&quot;72&quot; y=&quot;618&quot; class=&quot;label&quot;&gt;线程只记录分工，还没有数据副本&lt;/text&gt;
+      &lt;rect x=&quot;72&quot; y=&quot;646&quot; width=&quot;500&quot; height=&quot;150&quot; rx=&quot;15&quot; class=&quot;s2&quot;/&gt;&lt;text x=&quot;322&quot; y=&quot;677&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;Warp 0 · T0…T31&lt;/text&gt;&lt;text x=&quot;96&quot; y=&quot;715&quot; class=&quot;body&quot;&gt;T0 将读取 x[0]=1&lt;/text&gt;&lt;text x=&quot;96&quot; y=&quot;744&quot; class=&quot;body&quot;&gt;T1 将读取 x[1]=2&lt;/text&gt;&lt;text x=&quot;96&quot; y=&quot;773&quot; class=&quot;body&quot;&gt;… T31 将读取 x[31]=32&lt;/text&gt;
+      &lt;rect x=&quot;628&quot; y=&quot;646&quot; width=&quot;500&quot; height=&quot;150&quot; rx=&quot;15&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;878&quot; y=&quot;677&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;Warp 1 · T32…T63&lt;/text&gt;&lt;text x=&quot;652&quot; y=&quot;715&quot; class=&quot;body&quot;&gt;T32 将读取 x[32]=33&lt;/text&gt;&lt;text x=&quot;652&quot; y=&quot;744&quot; class=&quot;body&quot;&gt;T33 将读取 x[33]=34&lt;/text&gt;&lt;text x=&quot;652&quot; y=&quot;773&quot; class=&quot;body&quot;&gt;… T63 将读取 x[63]=64&lt;/text&gt;
+      ${pill(382,820,436,&#x27;当前位置：只有 HBM 输入包含有效数据&#x27;)}${footer(&#x27;蓝色高亮就是本步的数据主要位置；灰色部件此时没有程序可见的数据。&#x27;)}`;
   }
 
   function drawRegisters(view) {
-    return `${defs(view)}${header(view)}
-      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;212&quot; height=&quot;554&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
-      &lt;text x=&quot;154&quot; y=&quot;146&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;读取路径&lt;/text&gt;
-      ${box(76, 176, 156, 76, &#x27;HBM&#x27;, [&#x27;x[0…63]&#x27;], &#x27;s1&#x27;)}
-      ${arrow(154, 252, 154, 294, &#x27;&#x27;, &#x27;flow1&#x27;)}
-      ${box(76, 294, 156, 76, &#x27;L2&#x27;, [&#x27;全 GPU 共享&#x27;], &#x27;s2&#x27;)}
-      ${arrow(154, 370, 154, 412, &#x27;&#x27;, &#x27;flow2&#x27;)}
-      ${box(76, 412, 156, 76, &#x27;L1&#x27;, [&#x27;当前 SM&#x27;], &#x27;s3&#x27;)}
-      ${arrow(154, 488, 154, 530, &#x27;&#x27;, &#x27;flow3&#x27;)}
-      ${box(76, 530, 156, 92, &#x27;寄存器&#x27;, [&#x27;每线程私有&#x27;], &#x27;s4&#x27;)}
-      &lt;rect x=&quot;300&quot; y=&quot;112&quot; width=&quot;852&quot; height=&quot;554&quot; rx=&quot;22&quot; class=&quot;s4&quot;/&gt;
-      &lt;text x=&quot;726&quot; y=&quot;146&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;SM 内：同一条 Load 指令，64 个线程使用不同地址&lt;/text&gt;
-      &lt;text x=&quot;330&quot; y=&quot;190&quot; class=&quot;label&quot;&gt;Warp 0 执行：r_tid = x[tid]&lt;/text&gt;
-      ${registerCells(input.slice(0, 32), 0, 338, 214, &#x27;s2&#x27;)}
-      &lt;text x=&quot;330&quot; y=&quot;318&quot; class=&quot;label&quot;&gt;Warp 1 执行：r_tid = x[tid]&lt;/text&gt;
-      ${registerCells(input.slice(32), 32, 338, 342, &#x27;s3&#x27;)}
-      &lt;rect x=&quot;330&quot; y=&quot;444&quot; width=&quot;792&quot; height=&quot;150&quot; rx=&quot;16&quot; class=&quot;neutral&quot;/&gt;
-      &lt;text x=&quot;726&quot; y=&quot;480&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;此刻数据在哪里？&lt;/text&gt;
-      &lt;text x=&quot;726&quot; y=&quot;520&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;T0.r=1，T1.r=2，…，T63.r=64&lt;/text&gt;
-      &lt;text x=&quot;726&quot; y=&quot;558&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;64 个线程各有一份私有寄存器值；线程不能直接读取别人的寄存器。&lt;/text&gt;
-      ${footer(&#x27;并行读取的含义：Warp 的 32 条 Lane 执行同一条 Load，但地址由各自 tid 决定。&#x27;)}`;
+    return `${detailFrame()}&lt;text x=&quot;72&quot; y=&quot;446&quot; class=&quot;label&quot;&gt;Load 完成后的 64 个线程私有寄存器&lt;/text&gt;
+      &lt;text x=&quot;72&quot; y=&quot;482&quot; class=&quot;body&quot;&gt;Warp 0：同一条 Load 指令，T0…T31 分别得到 r=1…32&lt;/text&gt;${cells(input.slice(0,32),0,88,500,&#x27;T&#x27;,&#x27;s2&#x27;)}
+      &lt;text x=&quot;72&quot; y=&quot;582&quot; class=&quot;body&quot;&gt;Warp 1：同一条 Load 指令，T32…T63 分别得到 r=33…64&lt;/text&gt;${cells(input.slice(32),32,88,600,&#x27;T&#x27;,&#x27;s3&#x27;)}
+      &lt;rect x=&quot;72&quot; y=&quot;690&quot; width=&quot;1056&quot; height=&quot;120&quot; rx=&quot;15&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;724&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;位置区别&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;758&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;L2/L1 可能保留硬件缓存副本，但 CUDA 线程实际使用的是 SM 内寄存器 r_tid。&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;788&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;寄存器属于单个线程：T0 不能把 T1.r 当成自己的寄存器直接读取。&lt;/text&gt;
+      ${footer(&#x27;路径：HBM（die 外）→ L2（die 内、SM 外）→ L1（SM 内）→ 寄存器（SM 内、每线程私有）。&#x27;)}`;
   }
 
   function drawShared(view) {
-    return `${defs(view)}${header(view)}
-      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;1104&quot; height=&quot;564&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
-      &lt;text x=&quot;72&quot; y=&quot;148&quot; class=&quot;label&quot;&gt;每个线程执行：s[tid] = r_tid&lt;/text&gt;
-      ${box(72, 176, 218, 118, &#x27;线程私有寄存器&#x27;, [&#x27;T0.r=1&#x27;, &#x27;T1.r=2&#x27;, &#x27;…&#x27;, &#x27;T63.r=64&#x27;], &#x27;s4&#x27;)}
-      ${arrow(290, 235, 394, 235, &#x27;64 个线程分别写入&#x27;, &#x27;flow4&#x27;)}
-      ${box(394, 176, 710, 118, &#x27;Shared Memory（当前 Block 共享）&#x27;, [&#x27;地址 s[0]…s[63] 与线程 tid 一一对应&#x27;, &#x27;它不是自动缓存，必须由程序显式写入&#x27;], &#x27;s5&#x27;)}
-      &lt;text x=&quot;72&quot; y=&quot;344&quot; class=&quot;label&quot;&gt;Shared Memory 的实际槽位：上面是地址，下面是当前值&lt;/text&gt;
-      ${memoryCells(input.slice(0, 32), 0, 88, 370, {prefix:&#x27;s&#x27;, cls:&#x27;s5&#x27;})}
-      ${memoryCells(input.slice(32), 32, 88, 432, {prefix:&#x27;s&#x27;, cls:&#x27;s5&#x27;})}
-      &lt;path d=&quot;M 88 528 L 1080 528&quot; class=&quot;line&quot;/&gt;
-      ${pill(388, 554, 424, &#x27;__syncthreads()：确认 64 个槽位都写完&#x27;)}
-      &lt;text x=&quot;600&quot; y=&quot;622&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;同步以后，任何参与归约的线程都可以安全读取当前 Block 的 s[0…63]。&lt;/text&gt;
-      ${footer(&#x27;现在同一份输入同时存在于 HBM 和 Shared Memory；接下来的中间结果只在 Shared 中更新。&#x27;)}`;
+    return `${detailFrame()}&lt;text x=&quot;72&quot; y=&quot;446&quot; class=&quot;label&quot;&gt;执行 s[tid] = r_tid 以后，数据位于 SM 内 Shared Memory&lt;/text&gt;
+      ${cells(input.slice(0,32),0,88,476,&#x27;s&#x27;,&#x27;s5&#x27;)}${cells(input.slice(32),32,88,530,&#x27;s&#x27;,&#x27;s5&#x27;)}
+      &lt;rect x=&quot;72&quot; y=&quot;620&quot; width=&quot;1056&quot; height=&quot;168&quot; rx=&quot;15&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;655&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;此刻同时存在两类副本&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;692&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;HBM：原始输入 x[0…63]=1…64，仍然没有改变。&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;726&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;SM 内 Shared：s[0…63]=1…64，供当前 Block 的线程协作读取。&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;760&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;__syncthreads() 确保所有 Shared 槽位都写完后再开始归约。&lt;/text&gt;
+      ${pill(374,820,452,&#x27;当前位置：中间工作副本在当前 SM 的 Shared&#x27;)}${footer(&#x27;Shared Memory 不是 HBM，也不是自动缓存；它是 SM 内、由程序显式管理的 Block 共享存储。&#x27;)}`;
   }
 
   function drawRound32(view) {
-    let equations = &#x27;&#x27;;
-    for (let i = 0; i &lt; 32; i += 1) {
-      const col = i % 4;
-      const row = Math.floor(i / 4);
-      const x = 58 + col * 282;
-      const y = 182 + row * 50;
-      equations += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;264&quot; height=&quot;38&quot; rx=&quot;8&quot; class=&quot;s2&quot;/&gt;&lt;text x=&quot;${x + 132}&quot; y=&quot;${y + 24}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;T${i}: ${input[i]} + ${input[i + 32]} = ${after32[i]}&lt;/text&gt;`;
+    let eq = &#x27;&#x27;;
+    for (let i=0;i&lt;32;i+=1) {
+      const col=i%4, row=Math.floor(i/4), x=62+col*276, y=458+row*43;
+      eq += `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;258&quot; height=&quot;34&quot; rx=&quot;7&quot; class=&quot;s6&quot;/&gt;&lt;text x=&quot;${x+129}&quot; y=&quot;${y+22}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;T${i}: s${i} ${input[i]} + s${i+32} ${input[i+32]} = ${after32[i]}&lt;/text&gt;`;
     }
-    return `${defs(view)}${header(view)}
-      &lt;rect x=&quot;48&quot; y=&quot;112&quot; width=&quot;1104&quot; height=&quot;492&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
-      ${pill(370, 132, 460, &#x27;Warp 0 的 32 条 Lane 同时执行 s[tid] += s[tid+32]&#x27;)}
-      ${equations}
-      &lt;text x=&quot;72&quot; y=&quot;624&quot; class=&quot;label&quot;&gt;本轮结束后，Shared Memory 的有效前半段 s[0…31]&lt;/text&gt;
-      ${memoryCells(after32, 0, 88, 646, {prefix:&#x27;s&#x27;, cls:&#x27;s2&#x27;, cellH:42})}
-      ${footer(&#x27;“并行”就在这里：上面 32 个加法不是依次做，而是同一 Warp 的一条指令同时作用于 32 条 Lane。&#x27;)}`;
+    return `${detailFrame()}${pill(346,426,508,&#x27;SM 内：Shared 读两个数 → 32 条 Lane 加法 → 写回 Shared&#x27;)}${eq}
+      &lt;text x=&quot;72&quot; y=&quot;824&quot; class=&quot;label&quot;&gt;写回位置：Shared Memory 的 s[0…31] = 34, 36, 38, …, 96&lt;/text&gt;
+      ${footer(&#x27;这 32 个加法全部发生在一个 SM 内；本轮不访问 HBM，也不需要经过 L2。&#x27;)}`;
   }
 
   function drawRounds(view) {
-    const rows = [
-      {stride:16, threads:&#x27;T0…T15（16 个）&#x27;, eq:&#x27;34+66=100，36+68=104，…，64+96=160&#x27;, values:after16, cls:&#x27;s2&#x27;},
-      {stride:8, threads:&#x27;T0…T7（8 个）&#x27;, eq:&#x27;100+132=232，104+136=240，…，128+160=288&#x27;, values:after8, cls:&#x27;s3&#x27;},
-      {stride:4, threads:&#x27;T0…T3（4 个）&#x27;, eq:&#x27;232+264=496，240+272=512，248+280=528，256+288=544&#x27;, values:after4, cls:&#x27;s4&#x27;},
-      {stride:2, threads:&#x27;T0…T1（2 个）&#x27;, eq:&#x27;496+528=1024，512+544=1056&#x27;, values:after2, cls:&#x27;s5&#x27;},
-      {stride:1, threads:&#x27;T0（1 个）&#x27;, eq:&#x27;1024+1056=2080&#x27;, values:after1, cls:&#x27;s1&#x27;}
+    const rows=[
+      [&#x27;stride=16&#x27;,&#x27;16 个线程并行&#x27;,&#x27;34+66=100，36+68=104，…，64+96=160&#x27;,&#x27;s[0…15] = 100,104,…,160&#x27;,&#x27;s2&#x27;],
+      [&#x27;stride=8&#x27;,&#x27;8 个线程并行&#x27;,&#x27;100+132=232，104+136=240，…，128+160=288&#x27;,&#x27;s[0…7] = 232,240,…,288&#x27;,&#x27;s3&#x27;],
+      [&#x27;stride=4&#x27;,&#x27;4 个线程并行&#x27;,&#x27;232+264=496，240+272=512，248+280=528，256+288=544&#x27;,&#x27;s[0…3] = 496,512,528,544&#x27;,&#x27;s4&#x27;],
+      [&#x27;stride=2&#x27;,&#x27;2 个线程并行&#x27;,&#x27;496+528=1024，512+544=1056&#x27;,&#x27;s[0…1] = 1024,1056&#x27;,&#x27;s5&#x27;],
+      [&#x27;stride=1&#x27;,&#x27;1 个线程&#x27;,&#x27;1024+1056=2080&#x27;,&#x27;s[0] = 2080&#x27;,&#x27;s1&#x27;]
     ];
-    const markup = rows.map((row, i) =&gt; {
-      const y = 156 + i * 104;
-      const values = `[${row.values.join(&#x27;, &#x27;)}]`;
-      return `&lt;rect x=&quot;58&quot; y=&quot;${y}&quot; width=&quot;1084&quot; height=&quot;88&quot; rx=&quot;14&quot; class=&quot;${row.cls}&quot;/&gt;&lt;text x=&quot;82&quot; y=&quot;${y + 28}&quot; class=&quot;label&quot;&gt;stride=${row.stride}&lt;/text&gt;&lt;text x=&quot;240&quot; y=&quot;${y + 28}&quot; class=&quot;body&quot;&gt;活跃：${row.threads}&lt;/text&gt;&lt;text x=&quot;82&quot; y=&quot;${y + 57}&quot; class=&quot;body&quot;&gt;并行计算：${row.eq}&lt;/text&gt;&lt;text x=&quot;1120&quot; y=&quot;${y + 57}&quot; text-anchor=&quot;end&quot; class=&quot;body&quot;&gt;新有效值 ${esc(values)}&lt;/text&gt;`;
-    }).join(&#x27;&#x27;);
-    return `${defs(view)}${header(view)}
-      &lt;text x=&quot;58&quot; y=&quot;124&quot; class=&quot;muted&quot;&gt;每一行代表一轮：同一行内的多个加法并行；不同行之间需要等待上一轮完成。&lt;/text&gt;
-      ${markup}
-      ${pill(360, 690, 480, &#x27;有效线程数：32 → 16 → 8 → 4 → 2 → 1&#x27;)}
-      ${footer(&#x27;线程逐轮减少会产生不活跃 Lane；这就是 SIMT 代码中需要留意的分支与利用率问题。&#x27;)}`;
-  }
-
-  function storageRow(y, phase, hbm, reg, shared, out, cls) {
-    const cells = [
-      {x:48,w:180,text:phase},
-      {x:240,w:218,text:hbm},
-      {x:470,w:218,text:reg},
-      {x:700,w:250,text:shared},
-      {x:962,w:190,text:out}
-    ];
-    return cells.map((cell, i) =&gt; `&lt;rect x=&quot;${cell.x}&quot; y=&quot;${y}&quot; width=&quot;${cell.w}&quot; height=&quot;72&quot; rx=&quot;10&quot; class=&quot;${i === 0 ? cls : &#x27;neutral&#x27;}&quot;/&gt;&lt;text x=&quot;${cell.x + cell.w / 2}&quot; y=&quot;${y + 29}&quot; text-anchor=&quot;middle&quot; class=&quot;${i === 0 ? &#x27;label&#x27; : &#x27;body&#x27;}&quot;&gt;${esc(cell.text.split(&#x27;|&#x27;)[0])}&lt;/text&gt;${cell.text.includes(&#x27;|&#x27;) ? `&lt;text x=&quot;${cell.x + cell.w / 2}&quot; y=&quot;${y + 53}&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;${esc(cell.text.split(&#x27;|&#x27;)[1])}&lt;/text&gt;` : &#x27;&#x27;}`).join(&#x27;&#x27;);
+    const content=rows.map((r,i)=&gt;{const y=446+i*82;return `&lt;rect x=&quot;62&quot; y=&quot;${y}&quot; width=&quot;1076&quot; height=&quot;68&quot; rx=&quot;12&quot; class=&quot;${r[4]}&quot;/&gt;&lt;text x=&quot;84&quot; y=&quot;${y+25}&quot; class=&quot;label&quot;&gt;${r[0]}&lt;/text&gt;&lt;text x=&quot;240&quot; y=&quot;${y+25}&quot; class=&quot;body&quot;&gt;${r[1]}&lt;/text&gt;&lt;text x=&quot;84&quot; y=&quot;${y+52}&quot; class=&quot;body&quot;&gt;${r[2]}&lt;/text&gt;&lt;text x=&quot;1116&quot; y=&quot;${y+52}&quot; text-anchor=&quot;end&quot; class=&quot;body&quot;&gt;写回 Shared：${r[3]}&lt;/text&gt;`}).join(&#x27;&#x27;);
+    return `${detailFrame()}${content}${pill(374,862,452,&#x27;当前位置始终没变：中间结果一直在 SM 内 Shared&#x27;)}${footer(&#x27;每轮都循环“Shared → SM 加法单元 → Shared”；只有有效槽位数和活跃 Lane 数在减少。&#x27;)}`;
   }
 
   function drawStorage(view) {
-    return `${defs(view)}${header(view)}
-      &lt;text x=&quot;138&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;阶段&lt;/text&gt;&lt;text x=&quot;349&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输入 x&lt;/text&gt;&lt;text x=&quot;579&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;每线程寄存器&lt;/text&gt;&lt;text x=&quot;825&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;Block 的 Shared Memory&lt;/text&gt;&lt;text x=&quot;1057&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输出 out&lt;/text&gt;
-      ${storageRow(154, &#x27;开始&#x27;, &#x27;1…64|长期存放&#x27;, &#x27;空&#x27;, &#x27;未初始化&#x27;, &#x27;空&#x27;, &#x27;s1&#x27;)}
-      ${storageRow(238, &#x27;Load 后&#x27;, &#x27;1…64|原数据仍在&#x27;, &#x27;T0.r=1…T63.r=64|64 份私有值&#x27;, &#x27;未初始化&#x27;, &#x27;空&#x27;, &#x27;s4&#x27;)}
-      ${storageRow(322, &#x27;写 Shared 后&#x27;, &#x27;1…64|原数据仍在&#x27;, &#x27;1…64|仍可存在&#x27;, &#x27;s[0…63]=1…64|Block 共享&#x27;, &#x27;空&#x27;, &#x27;s5&#x27;)}
-      ${storageRow(406, &#x27;stride=32 后&#x27;, &#x27;1…64|没有改变&#x27;, &#x27;不再是主要位置&#x27;, &#x27;s[0…31]=34,36,…,96|后半段失效&#x27;, &#x27;空&#x27;, &#x27;s2&#x27;)}
-      ${storageRow(490, &#x27;归约结束&#x27;, &#x27;1…64|没有改变&#x27;, &#x27;T0 可取得 2080&#x27;, &#x27;s[0]=2080|其余为旧中间值&#x27;, &#x27;空&#x27;, &#x27;s3&#x27;)}
-      ${storageRow(574, &#x27;Store 后&#x27;, &#x27;1…64|输入仍保留&#x27;, &#x27;T0.r=2080&#x27;, &#x27;s[0]=2080&#x27;, &#x27;out[0]=2080|最终结果&#x27;, &#x27;s1&#x27;)}
-      ${footer(&#x27;寄存器、Shared、L1/L2 和 HBM 不是一块内存的不同名字；它们有不同作用域、容量和访问代价。&#x27;)}`;
+    const data=[
+      [&#x27;开始&#x27;,&#x27;HBM x=1…64&#x27;,&#x27;空&#x27;,&#x27;未初始化&#x27;,&#x27;空&#x27;],
+      [&#x27;Load 后&#x27;,&#x27;HBM x=1…64&#x27;,&#x27;T0.r=1…T63.r=64&#x27;,&#x27;未初始化&#x27;,&#x27;空&#x27;],
+      [&#x27;写 Shared 后&#x27;,&#x27;HBM x=1…64&#x27;,&#x27;每线程仍可有副本&#x27;,&#x27;s[0…63]=1…64&#x27;,&#x27;空&#x27;],
+      [&#x27;归约中&#x27;,&#x27;HBM x=1…64&#x27;,&#x27;临时操作数&#x27;,&#x27;Shared 有效前缀逐轮缩短&#x27;,&#x27;空&#x27;],
+      [&#x27;归约结束&#x27;,&#x27;HBM x=1…64&#x27;,&#x27;T0 可读 2080&#x27;,&#x27;s[0]=2080&#x27;,&#x27;空&#x27;],
+      [&#x27;Store 后&#x27;,&#x27;HBM x=1…64&#x27;,&#x27;T0.r=2080&#x27;,&#x27;s[0]=2080&#x27;,&#x27;out[0]=2080&#x27;]
+    ];
+    let rows=&#x27;&#x27;;
+    data.forEach((r,i)=&gt;{const y=482+i*59;const xs=[54,206,472,720,966],ws=[140,254,236,234,180];r.forEach((v,j)=&gt;{rows+=`&lt;rect x=&quot;${xs[j]}&quot; y=&quot;${y}&quot; width=&quot;${ws[j]}&quot; height=&quot;50&quot; rx=&quot;8&quot; class=&quot;${j===0?&#x27;s2&#x27;:&#x27;neutral&#x27;}&quot;/&gt;&lt;text x=&quot;${xs[j]+ws[j]/2}&quot; y=&quot;${y+31}&quot; text-anchor=&quot;middle&quot; class=&quot;${j===0?&#x27;label&#x27;:&#x27;body&#x27;}&quot;&gt;${esc(v)}&lt;/text&gt;`})});
+    return `${detailFrame()}&lt;text x=&quot;124&quot; y=&quot;456&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;阶段&lt;/text&gt;&lt;text x=&quot;333&quot; y=&quot;456&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输入&lt;/text&gt;&lt;text x=&quot;590&quot; y=&quot;456&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;SM 内寄存器&lt;/text&gt;&lt;text x=&quot;837&quot; y=&quot;456&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;SM 内 Shared&lt;/text&gt;&lt;text x=&quot;1056&quot; y=&quot;456&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输出&lt;/text&gt;${rows}
+      &lt;rect x=&quot;54&quot; y=&quot;848&quot; width=&quot;1092&quot; height=&quot;32&quot; rx=&quot;8&quot; class=&quot;s3&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;869&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;L1/L2 未列为“确定存放位置”：它们由硬件管理，可能持有缓存副本，但程序不应依赖某个值一定在缓存里。&lt;/text&gt;${footer(&#x27;真正需要追踪的程序可见位置：HBM、每线程寄存器、每 Block Shared Memory。&#x27;)}`;
   }
 
   function drawTimeline(view) {
-    const x0 = 250;
-    const unit = 90;
-    let ticks = &#x27;&#x27;;
-    for (let i = 0; i &lt;= 9; i += 1) {
-      const x = x0 + i * unit;
-      ticks += `&lt;line x1=&quot;${x}&quot; y1=&quot;148&quot; x2=&quot;${x}&quot; y2=&quot;608&quot; class=&quot;line&quot;/&gt;&lt;text x=&quot;${x}&quot; y=&quot;132&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;t${i}&lt;/text&gt;`;
-    }
-    function bar(rowY, start, end, text, cls) {
-      const x = x0 + start * unit + 4;
-      const w = (end - start) * unit - 8;
-      return `&lt;rect x=&quot;${x}&quot; y=&quot;${rowY}&quot; width=&quot;${w}&quot; height=&quot;44&quot; rx=&quot;9&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x + w / 2}&quot; y=&quot;${rowY + 28}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`;
-    }
-    return `${defs(view)}${header(view)}
-      &lt;text x=&quot;60&quot; y=&quot;132&quot; class=&quot;label&quot;&gt;SM 调度时间 →&lt;/text&gt;${ticks}
-      &lt;text x=&quot;60&quot; y=&quot;206&quot; class=&quot;label&quot;&gt;Warp 0&lt;/text&gt;${bar(176,0,1,&#x27;发出 Load&#x27;,&#x27;s1&#x27;)}${bar(176,1,4,&#x27;等待 HBM&#x27;,&#x27;inactive&#x27;)}${bar(176,4,6,&#x27;写 Shared&#x27;,&#x27;s2&#x27;)}${bar(176,6,8,&#x27;32 路加法&#x27;,&#x27;s3&#x27;)}
-      &lt;text x=&quot;60&quot; y=&quot;294&quot; class=&quot;label&quot;&gt;Warp 1&lt;/text&gt;${bar(264,1,2,&#x27;发出 Load&#x27;,&#x27;s1&#x27;)}${bar(264,2,5,&#x27;等待 HBM&#x27;,&#x27;inactive&#x27;)}${bar(264,5,7,&#x27;写 Shared&#x27;,&#x27;s2&#x27;)}
-      &lt;text x=&quot;60&quot; y=&quot;382&quot; class=&quot;label&quot;&gt;其他就绪 Warp&lt;/text&gt;${bar(352,2,4,&#x27;执行其他 Block 的计算&#x27;,&#x27;s4&#x27;)}${bar(352,8,9,&#x27;继续运行&#x27;,&#x27;s4&#x27;)}
-      &lt;text x=&quot;60&quot; y=&quot;470&quot; class=&quot;label&quot;&gt;计算单元&lt;/text&gt;${bar(440,0,1,&#x27;Load&#x27;,&#x27;s1&#x27;)}${bar(440,1,2,&#x27;Load&#x27;,&#x27;s1&#x27;)}${bar(440,2,4,&#x27;有用计算&#x27;,&#x27;s4&#x27;)}${bar(440,4,7,&#x27;Store Shared&#x27;,&#x27;s2&#x27;)}${bar(440,7,9,&#x27;归约加法&#x27;,&#x27;s3&#x27;)}
-      &lt;rect x=&quot;250&quot; y=&quot;536&quot; width=&quot;810&quot; height=&quot;72&quot; rx=&quot;14&quot; class=&quot;neutral&quot;/&gt;
-      &lt;text x=&quot;655&quot; y=&quot;566&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;等待没有消失，但 SM 没有跟着一起闲着&lt;/text&gt;
-      &lt;text x=&quot;655&quot; y=&quot;592&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;调度器从许多活跃 Warp 中选择已就绪者，把 HBM 等待时间覆盖掉。&lt;/text&gt;
-      ${footer(&#x27;图中的时间长度只是概念示意；文章的重点是“一个 Warp 等待，另一个 Warp 可以运行”。&#x27;)}`;
+    const x0=252,unit=92;
+    let grid=&#x27;&#x27;;
+    for(let i=0;i&lt;=9;i+=1){const x=x0+i*unit;grid+=`&lt;line x1=&quot;${x}&quot; y1=&quot;466&quot; x2=&quot;${x}&quot; y2=&quot;800&quot; class=&quot;line&quot;/&gt;&lt;text x=&quot;${x}&quot; y=&quot;450&quot; text-anchor=&quot;middle&quot; class=&quot;small&quot;&gt;t${i}&lt;/text&gt;`}
+    function bar(y,start,end,text,cls){const x=x0+start*unit+4,w=(end-start)*unit-8;return `&lt;rect x=&quot;${x}&quot; y=&quot;${y}&quot; width=&quot;${w}&quot; height=&quot;42&quot; rx=&quot;8&quot; class=&quot;${cls}&quot;/&gt;&lt;text x=&quot;${x+w/2}&quot; y=&quot;${y+27}&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;${esc(text)}&lt;/text&gt;`}
+    return `${detailFrame()}${grid}&lt;text x=&quot;62&quot; y=&quot;504&quot; class=&quot;label&quot;&gt;Warp 0&lt;/text&gt;${bar(476,0,1,&#x27;Load&#x27;,&#x27;s1&#x27;)}${bar(476,1,4,&#x27;等待 HBM / Cache&#x27;,&#x27;inactive&#x27;)}${bar(476,4,6,&#x27;寄存器就绪&#x27;,&#x27;s4&#x27;)}${bar(476,6,8,&#x27;Shared 归约&#x27;,&#x27;s6&#x27;)}
+      &lt;text x=&quot;62&quot; y=&quot;580&quot; class=&quot;label&quot;&gt;Warp 1&lt;/text&gt;${bar(552,1,2,&#x27;Load&#x27;,&#x27;s1&#x27;)}${bar(552,2,5,&#x27;等待 HBM / Cache&#x27;,&#x27;inactive&#x27;)}${bar(552,5,7,&#x27;寄存器就绪&#x27;,&#x27;s4&#x27;)}
+      &lt;text x=&quot;62&quot; y=&quot;656&quot; class=&quot;label&quot;&gt;其他 Warp&lt;/text&gt;${bar(628,2,4,&#x27;使用 SM 算术单元&#x27;,&#x27;s6&#x27;)}${bar(628,8,9,&#x27;继续计算&#x27;,&#x27;s6&#x27;)}
+      &lt;text x=&quot;62&quot; y=&quot;732&quot; class=&quot;label&quot;&gt;数据位置&lt;/text&gt;${bar(704,0,2,&#x27;HBM / 缓存路径&#x27;,&#x27;s1&#x27;)}${bar(704,2,5,&#x27;传输中 / 等待&#x27;,&#x27;inactive&#x27;)}${bar(704,5,7,&#x27;寄存器&#x27;,&#x27;s4&#x27;)}${bar(704,7,9,&#x27;Shared&#x27;,&#x27;s5&#x27;)}
+      &lt;rect x=&quot;252&quot; y=&quot;818&quot; width=&quot;828&quot; height=&quot;52&quot; rx=&quot;11&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;666&quot; y=&quot;850&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;上面的 Warp 等待与下面的 SM 计算可以重叠，因此等待存在但计算单元不一定空闲。&lt;/text&gt;${footer(&#x27;位置与时间要分开看：数据在内存路径上等待时，SM 可以执行另一个已就绪 Warp。&#x27;)}`;
   }
 
   function drawOverview(view) {
-    return `${defs(view)}${header(view)}
-      ${box(48, 132, 178, 174, &#x27;HBM 输入&#x27;, [&#x27;x[0…63]=1…64&#x27;, &#x27;64 次元素读取&#x27;, &#x27;片外、大容量&#x27;], &#x27;s1&#x27;)}
-      ${arrow(226, 219, 300, 219, &#x27;Load&#x27;, &#x27;flow1&#x27;)}
-      ${box(300, 132, 188, 174, &#x27;64 个寄存器&#x27;, [&#x27;T0.r=1&#x27;, &#x27;…&#x27;, &#x27;T63.r=64&#x27;], &#x27;s4&#x27;)}
-      ${arrow(488, 219, 562, 219, &#x27;显式写入&#x27;, &#x27;flow4&#x27;)}
-      ${box(562, 132, 262, 174, &#x27;Shared Memory&#x27;, [&#x27;s[0…63]=1…64&#x27;, &#x27;保存全部中间结果&#x27;, &#x27;当前 Block 共享&#x27;], &#x27;s5&#x27;)}
-      ${arrow(824, 219, 898, 219, &#x27;Store&#x27;, &#x27;flow2&#x27;)}
-      ${box(898, 132, 254, 174, &#x27;HBM 输出&#x27;, [&#x27;out[0]=2080&#x27;, &#x27;只写回 1 个结果&#x27;], &#x27;s2&#x27;)}
-      &lt;rect x=&quot;48&quot; y=&quot;344&quot; width=&quot;1104&quot; height=&quot;302&quot; rx=&quot;22&quot; class=&quot;frame&quot;/&gt;
-      &lt;text x=&quot;72&quot; y=&quot;378&quot; class=&quot;label&quot;&gt;Shared Memory 中发生的 63 次加法&lt;/text&gt;
-      ${pill(82, 406, 196, &#x27;stride 32 · 32 次并行&#x27;)}${pill(292, 406, 178, &#x27;stride 16 · 16 次&#x27;)}${pill(484, 406, 160, &#x27;stride 8 · 8 次&#x27;)}${pill(658, 406, 160, &#x27;stride 4 · 4 次&#x27;)}${pill(832, 406, 142, &#x27;stride 2 · 2 次&#x27;)}${pill(988, 406, 142, &#x27;stride 1 · 1 次&#x27;)}
-      &lt;text x=&quot;600&quot; y=&quot;492&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;32 + 16 + 8 + 4 + 2 + 1 = 63 次加法&lt;/text&gt;
-      &lt;text x=&quot;600&quot; y=&quot;536&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;同一轮中的加法并行执行；下一轮必须等待上一轮产生的新中间值。&lt;/text&gt;
-      &lt;text x=&quot;600&quot; y=&quot;578&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;这个求和使用 SM 的普通算术单元；Tensor Core 主要用于矩阵乘法，不参与本例。&lt;/text&gt;
-      ${pill(398, 604, 404, &#x27;最终：1 + 2 + … + 64 = 2080&#x27;)}
-      ${footer(&#x27;一张图记住：Thread 决定数据项，Warp 提供并行执行，Shared 保存协作中间值，HBM 保存长期输入输出。&#x27;)}`;
+    return `${detailFrame()}&lt;text x=&quot;72&quot; y=&quot;446&quot; class=&quot;label&quot;&gt;最终位置核对&lt;/text&gt;
+      &lt;rect x=&quot;72&quot; y=&quot;476&quot; width=&quot;250&quot; height=&quot;144&quot; rx=&quot;15&quot; class=&quot;s1&quot;/&gt;&lt;text x=&quot;197&quot; y=&quot;510&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输入&lt;/text&gt;&lt;text x=&quot;197&quot; y=&quot;550&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;x[0…63] = 1…64&lt;/text&gt;&lt;text x=&quot;197&quot; y=&quot;584&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;原始数据没有被归约覆盖&lt;/text&gt;
+      &lt;rect x=&quot;362&quot; y=&quot;476&quot; width=&quot;476&quot; height=&quot;144&quot; rx=&quot;15&quot; class=&quot;s5&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;510&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;SM 内的工作区&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;550&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;Shared s[0] = 2080&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;584&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;64 个输入曾在这里经过 63 次加法逐步汇总&lt;/text&gt;
+      &lt;rect x=&quot;878&quot; y=&quot;476&quot; width=&quot;250&quot; height=&quot;144&quot; rx=&quot;15&quot; class=&quot;s2&quot;/&gt;&lt;text x=&quot;1003&quot; y=&quot;510&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;HBM 输出&lt;/text&gt;&lt;text x=&quot;1003&quot; y=&quot;550&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;out[0] = 2080&lt;/text&gt;&lt;text x=&quot;1003&quot; y=&quot;584&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;由 T0 执行 Store 写回&lt;/text&gt;
+      &lt;path d=&quot;M 322 548 L 350 548&quot; class=&quot;path1&quot;/&gt;&lt;path d=&quot;M 838 548 L 866 548&quot; class=&quot;path2&quot;/&gt;
+      &lt;rect x=&quot;72&quot; y=&quot;660&quot; width=&quot;1056&quot; height=&quot;160&quot; rx=&quot;15&quot; class=&quot;neutral&quot;/&gt;&lt;text x=&quot;600&quot; y=&quot;697&quot; text-anchor=&quot;middle&quot; class=&quot;label&quot;&gt;全过程的位置变化&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;738&quot; text-anchor=&quot;middle&quot; class=&quot;value&quot;&gt;HBM 输入 → SM 内寄存器 → SM 内 Shared → SM 内加法单元 → Shared → 寄存器 → HBM 输出&lt;/text&gt;&lt;text x=&quot;600&quot; y=&quot;778&quot; text-anchor=&quot;middle&quot; class=&quot;body&quot;&gt;L2/L1 位于访问路径上，可能缓存数据；它们不是程序显式保存中间结果的工作数组。&lt;/text&gt;
+      ${pill(398,842,404,&#x27;1 + 2 + … + 64 = 2080&#x27;)}${footer(&#x27;最重要的空间关系：HBM 在 SM 外；寄存器、Shared、L1 和执行单元都在 SM 内。&#x27;)}`;
   }
 
   function render(id) {
-    const selected = views[id] ? id : &#x27;mapping&#x27;;
-    const view = views[selected];
-    svg.innerHTML = view.draw(view);
-    status.textContent = view.detail;
-    buttons.forEach(button =&gt; {
-      const active = button.dataset.view === selected;
-      button.setAttribute(&#x27;aria-pressed&#x27;, String(active));
-      button.classList.toggle(&#x27;btn-primary&#x27;, active);
-    });
-    if (window.location.hash !== `#${selected}`) history.replaceState(null, &#x27;&#x27;, `#${selected}`);
+    const selected=views[id]?id:&#x27;mapping&#x27;;
+    const view=views[selected];
+    svg.innerHTML=defs(view)+header(view)+locationMap(view)+view.draw(view);
+    status.textContent=view.detail;
+    buttons.forEach(button=&gt;{const active=button.dataset.locationStep===selected;button.setAttribute(&#x27;aria-pressed&#x27;,String(active));button.classList.toggle(&#x27;btn-primary&#x27;,active)});
+    if(window.location.hash!==`#${selected}`)history.replaceState(null,&#x27;&#x27;,`#${selected}`);
   }
 
-  buttons.forEach(button =&gt; button.addEventListener(&#x27;click&#x27;, () =&gt; render(button.dataset.view)));
-  window.addEventListener(&#x27;hashchange&#x27;, () =&gt; render(window.location.hash.slice(1)));
-  const initial = window.location.hash.slice(1);
-  render(views[initial] ? initial : &#x27;mapping&#x27;);
+  buttons.forEach(button=&gt;button.addEventListener(&#x27;click&#x27;,()=&gt;render(button.dataset.locationStep)));
+  window.addEventListener(&#x27;hashchange&#x27;,()=&gt;render(window.location.hash.slice(1)));
+  let parentStep=&#x27;&#x27;;
+  try {
+    parentStep=new URLSearchParams(window.parent.location.search).get(&#x27;step&#x27;)||&#x27;&#x27;;
+  } catch (error) {
+    parentStep=&#x27;&#x27;;
+  }
+  const initial=parentStep||window.location.hash.slice(1);
+  render(views[initial]?initial:&#x27;mapping&#x27;);
 })();
 &lt;/script&gt;
 
