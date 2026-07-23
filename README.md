@@ -73,22 +73,24 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ## 3. SM、Warp、线程与内存层级：64 个数的具体并行计算
 
-[打开八步交互式并行计算图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
-
-[观看 1080p 中文动画讲解](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-video.html)
+[打开十二步交互式并行计算图](https://yeyunu.github.io/b200-gpu-anatomy/gpu-sm-warp-memory-explainer.html)
 
 这组图把计算过程和数据位置同时展开。教学例子使用一个包含 64 个线程的 Block，对 HBM 中的 `1…64` 求和，最终得到 `2080`。64 个线程组成两个 Warp；示例线程数用于讲解，并非 Blackwell 的固定配置。
 
-八个步骤都保留完整的 GPU 全局视图：CPU、同一个 HBM 内存池、GPU die、L2 和多个 SM 始终可见；再通过引线放大真正执行该 Block 的 SM 5，展示 Warp、L1、寄存器、Shared Memory 和加法单元。每一步只改变高亮位置、箭头和数据值。
+十二个步骤都保留完整的 GPU 全局视图：CPU、同一个 HBM 内存池、GPU die、L2 和多个 SM 始终可见；再通过引线放大真正执行该 Block 的 SM 5，展示 Warp、L1、寄存器、Shared Memory 和加法单元。第 4～9 步专门拆解 Shared 到计算完成的过程。
 
 1. `Thread tid` 与 HBM 地址 `x[tid]` 一一对应
 2. 每个线程并行读取一个数，保存到自己的寄存器
 3. 64 个线程显式写入 Shared Memory 的 64 个槽位
-4. Warp 0 的 32 条 Lane 同时完成第一轮 32 次加法
-5. `stride` 从 16 降到 1，逐轮得到全部中间值
-6. 对照表展示每个阶段的数据实际存放位置
-7. Warp 时间线展示怎样用其他工作覆盖 HBM 等待
-8. 汇总 64 次读取、63 次加法和 1 次写回
+4. 两个 Warp 在 `__syncthreads()` 等待，确认 64 个 Shared 槽位全部写好
+5. Warp 0 的 32 条 Lane 同时从 Shared 读取两项到各自的 `a`、`b` 寄存器
+6. 一条 `add` 指令驱动 32 条 Lane，在 ALU 中同时得到 32 个 `sum`
+7. 32 个线程把自己的 `sum` 分别写回 Shared 的 `s[0…31]`
+8. `stride` 从 16 降到 1，每轮重复“读 Shared → 寄存器加法 → 写 Shared”
+9. 最后一轮由 T0 算出 `1024 + 1056 = 2080`，结果暂存在 `s[0]`
+10. 对照表展示每个阶段的数据实际存放位置
+11. Warp 时间线展示怎样用其他工作覆盖 HBM 等待
+12. 最终由 T0 把 `2080` 写回 HBM 输出区
 
 ### 1. Thread ID 与输入数据分工
 
@@ -102,25 +104,41 @@ CPU 和 GPU 都读取 `x`，因此各自附近的缓存中都有一份值为 10 
 
 ![寄存器值与 Shared Memory 地址和值的对应关系](gpu-parallel-03-shared-storage.png)
 
-### 4. 第一轮 32 路并行加法
+### 4. Shared 写入后的同步屏障
 
-![一个 Warp 的 32 条 Lane 同时执行 32 个具体加法](gpu-parallel-04-round32.png)
+![两个 Warp 都写完 Shared 后通过同步屏障](gpu-parallel-04-barrier.png)
 
-### 5. 后续各轮的具体计算结果
+### 5. 32 条 Lane 同时从 Shared 读取配对数据
 
-![stride 从 16 到 1 的每轮活跃线程、算式和中间值](gpu-parallel-05-rounds.png)
+![每条 Lane 把两个 Shared 操作数读入自己的 a 和 b 寄存器](gpu-parallel-05-shared-read.png)
 
-### 6. 每个阶段的数据存放位置
+### 6. 一条 add 指令驱动 32 路 ALU 并行加法
 
-![HBM、寄存器、Shared Memory 和输出在各阶段保存的数据](gpu-parallel-06-storage-map.png)
+![32 条 Lane 分别使用寄存器操作数并行得到 32 个 sum](gpu-parallel-06-alu-parallel.png)
 
-### 7. Warp 调度与延迟隐藏时间线
+### 7. 32 个线程把结果分别写回 Shared
 
-![一个 Warp 等待 HBM 时另一个 Warp 继续工作的时间线](gpu-parallel-07-warp-timeline.png)
+![每个线程把自己的 sum 写入对应的 Shared 槽位](gpu-parallel-07-shared-writeback.png)
 
-### 8. 完整并行计算过程
+### 8. stride 从 16 到 1 的后续并行轮次
 
-![从 HBM 读取到片上并行归约再写回 HBM 的完整过程](gpu-parallel-08-overview.png)
+![每轮活跃 Lane、具体算式和 Shared 有效结果范围](gpu-parallel-08-rounds.png)
+
+### 9. 最后一轮得到 2080
+
+![T0 从 Shared 取出 1024 和 1056 并通过 ALU 得到 2080](gpu-parallel-09-final-result.png)
+
+### 10. 每个阶段的数据存放位置
+
+![HBM、寄存器、Shared Memory 和输出在各阶段保存的数据](gpu-parallel-10-storage-map.png)
+
+### 11. Warp 调度与延迟隐藏时间线
+
+![一个 Warp 等待 HBM 时另一个 Warp 继续工作的时间线](gpu-parallel-11-warp-timeline.png)
+
+### 12. 完整并行计算过程
+
+![从 HBM 读取到片上并行归约再写回 HBM 的完整过程](gpu-parallel-12-overview.png)
 
 
 ## 4. 第二章后半章：网络、机架运营与路线图
